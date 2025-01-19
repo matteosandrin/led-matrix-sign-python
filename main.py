@@ -2,16 +2,12 @@ import json
 import time
 import threading
 import queue
-import ntplib
-from datetime import datetime, timezone
-import pytz
+from datetime import datetime
 from enum import Enum
 import RPi.GPIO as GPIO
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from PIL import Image, ImageDraw, ImageFont
-import requests
 from typing import Optional, List
 from mbta import MBTA
+from display import Display
 import config
 
 # Enum definitions
@@ -28,11 +24,6 @@ class UIMessageType(Enum):
     MBTA_CHANGE_STATION = 2
 
 # Constants
-PANEL_WIDTH = 32
-PANEL_HEIGHT = 32
-PANEL_COUNT = 5
-SCREEN_WIDTH = PANEL_WIDTH * PANEL_COUNT
-SCREEN_HEIGHT = PANEL_HEIGHT
 BUTTON_PIN = 18
 REFRESH_RATE = 0.1  # seconds
 SIGN_MODE_KEY = "sign_mode"
@@ -44,43 +35,6 @@ provider_queue = queue.Queue(maxsize=32)
 render_queue = queue.Queue(maxsize=32)
 
 current_mode = SignMode.MBTA
-
-class Display:
-    def __init__(self):
-        # Configure RGB matrix
-        options = RGBMatrixOptions()
-        options.rows = PANEL_HEIGHT
-        options.cols = PANEL_WIDTH
-        options.chain_length = PANEL_COUNT
-        options.brightness = 50
-        options.hardware_mapping = "adafruit-hat"
-
-        options.gpio_slowdown = 3
-        
-        self.matrix = RGBMatrix(options=options)
-        self.canvas = self.matrix.CreateFrameCanvas()
-        self.font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 10)
-        
-    def render_text_content(self, text):
-        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
-        draw = ImageDraw.Draw(image)
-        draw.text((0, 0), text, font=self.font, fill=(255, 255, 255))
-        self.canvas.SetImage(image)
-        self.canvas = self.matrix.SwapOnVSync(self.canvas)
-
-class Server:
-    def __init__(self):
-        # Implement web server functionality if needed
-        pass
-
-class MBTA:
-    def __init__(self):
-        self.api_key = "YOUR_MBTA_API_KEY"
-        self.base_url = "https://api-v3.mbta.com"
-        
-    def get_predictions(self):
-        # Implement MBTA API calls
-        pass
 
 def setup_gpio():
     GPIO.setmode(GPIO.BCM)
@@ -99,7 +53,8 @@ def render_task():
             message = render_queue.get(timeout=REFRESH_RATE)
             if message.get("type") == "text":
                 display.render_text_content(message["content"])
-            # Add other render types as needed
+            if message.get("type") == "mbta":
+                display.render_mbta_content(message["content"])
         except queue.Empty:
             continue
 
@@ -121,6 +76,10 @@ def mbta_provider_task():
             status, predictions = mbta.get_predictions_both_directions()
             print(status)
             print(predictions)
+            render_queue.put({
+                "type": "mbta",
+                "content": predictions
+            })
             time.sleep(5)
 
 def main():

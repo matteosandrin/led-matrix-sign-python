@@ -1,6 +1,6 @@
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum, auto
 from dataclasses import dataclass
 import requests
@@ -153,7 +153,7 @@ class MBTA:
     def _diff_with_local_time(self, timestring: str) -> int:
         """Calculate difference in seconds between given time and local time"""
         prediction_time = datetime.fromisoformat(timestring.replace('Z', '+00:00'))
-        local_time = datetime.now()
+        local_time = datetime.now(timezone.utc)
         return int((prediction_time - local_time).total_seconds())
 
     def _determine_display_string(self, arr_diff: int, dep_diff: int, status: Optional[str]) -> str:
