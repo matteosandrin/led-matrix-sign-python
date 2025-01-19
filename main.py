@@ -12,6 +12,8 @@ from PIL import Image, ImageDraw, ImageFont
 import requests
 from typing import Optional, List
 from mbta import MBTA
+import config
+
 # Enum definitions
 class SignMode(Enum):
     TEST = 0
@@ -113,7 +115,7 @@ def clock_provider_task():
         time.sleep(REFRESH_RATE)
 
 def mbta_provider_task():
-    mbta = MBTA(api_key="")
+    mbta = MBTA(api_key=config.MBTA_API_KEY)
     while True:
         if current_mode == SignMode.MBTA:
             status, predictions = mbta.get_predictions_both_directions()
