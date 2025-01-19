@@ -113,7 +113,7 @@ def clock_provider_task():
         time.sleep(REFRESH_RATE)
 
 def mbta_provider_task():
-    mbta = MBTA(api_key="f1e81aa704714101bda640244cb3f395")
+    mbta = MBTA(api_key="")
     while True:
         if current_mode == SignMode.MBTA:
             status, predictions = mbta.get_predictions_both_directions()
