@@ -73,12 +73,11 @@ def mbta_provider_task():
     mbta = MBTA(api_key=config.MBTA_API_KEY)
     while True:
         if current_mode == SignMode.MBTA:
-            status, predictions = mbta.get_predictions_both_directions()
-            print(status)
-            print(predictions)
+            result = mbta.get_predictions_both_directions()
+            print(result)
             render_queue.put({
                 "type": "mbta",
-                "content": predictions
+                "content": result
             })
             time.sleep(5)
 
