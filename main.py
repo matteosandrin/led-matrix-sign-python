@@ -9,6 +9,7 @@ from mbta import MBTA, TrainStation
 from display import Display
 from server import Server
 from common import SignMode, UIMessageType
+from broadcaster import StatusBroadcaster
 import config
 
 
@@ -23,7 +24,9 @@ ui_queue = queue.Queue(maxsize=16)
 provider_queue = queue.Queue(maxsize=32)
 render_queue = queue.Queue(maxsize=32)
 
-current_mode = SignMode.MBTA
+mode_broadcaster = StatusBroadcaster()
+mode_broadcaster.set_status(DEFAULT_SIGN_MODE)
+
 mbta = MBTA(api_key=config.MBTA_API_KEY)
 
 def setup_gpio():
@@ -38,7 +41,6 @@ def button_callback(channel):
     ui_queue.put({"type": UIMessageType.MODE_SHIFT})
 
 def ui_task():
-    global current_mode
     while True:
         try:
             message = ui_queue.get(timeout=REFRESH_RATE)
@@ -46,17 +48,18 @@ def ui_task():
             if message["type"] == UIMessageType.MODE_SHIFT:
                 # Cycle through modes
                 modes = list(SignMode)
+                current_mode = mode_broadcaster.get_status()
                 current_index = modes.index(current_mode)
                 next_index = (current_index + 1) % len(modes)
-                current_mode = modes[next_index]
-                print(f"Mode changed to: {current_mode}")
+                mode_broadcaster.set_status(modes[next_index])
+                print(f"Mode changed to: {modes[next_index]}")
             
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
                 new_mode = message.get("mode")
                 if new_mode in SignMode:
-                    current_mode = new_mode
-                    print(f"Mode changed to: {current_mode}")
+                    mode_broadcaster.set_status(new_mode)
+                    print(f"Mode changed to: {new_mode}")
             
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
@@ -88,6 +91,7 @@ def render_task():
 
 def clock_provider_task():
     while True:
+        current_mode = mode_broadcaster.get_status()
         if current_mode == SignMode.CLOCK:
             now = datetime.now()
             time_str = now.strftime("%A, %B %d %Y\n%H:%M:%S")
@@ -100,7 +104,7 @@ def clock_provider_task():
 
 def mbta_provider_task():
     while True:
-        if current_mode == SignMode.MBTA:
+        if mode_broadcaster.get_status() == SignMode.MBTA:
             result = mbta.get_predictions_both_directions()
             print(result)
             render_queue.put({
@@ -112,7 +116,7 @@ def mbta_provider_task():
             time.sleep(REFRESH_RATE)
 
 def web_server_task():
-    server = Server(ui_queue)
+    server = Server(ui_queue, mode_broadcaster)
     server.web_server_task()
 
 

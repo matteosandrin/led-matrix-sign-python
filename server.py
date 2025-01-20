@@ -1,22 +1,26 @@
 from queue import Queue
 from flask import Flask, render_template, request
 from mbta import TrainStation, MBTA
+from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
 
 class Server:
-    def __init__(self, ui_queue: Queue):
+    def __init__(self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster):
         self.app = Flask(__name__)
         self.ui_queue = ui_queue
-        
+        self.mode_broadcaster = mode_broadcaster
         # Register routes
         self.app.route('/')(self.index)
         self.app.route('/set/mode')(self.set_mode_route)
         self.app.route('/set/station')(self.set_station_route)
 
     def index(self):
+        modes = list(SignMode)
+        current_mode = self.mode_broadcaster.get_status()
+        current_mode_index = modes.index(current_mode)
         stations = [MBTA.train_station_to_str(station) for station in TrainStation]
         sign_modes = [mode.name for mode in SignMode]
-        return render_template('index.html', stations=stations, sign_modes=sign_modes)
+        return render_template('index.html', stations=stations, sign_modes=sign_modes, current_mode=current_mode_index)
 
     def set_mode_route(self):
         value = request.args.get('id')

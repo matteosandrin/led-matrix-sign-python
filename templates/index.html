@@ -16,7 +16,7 @@
     <h2>Set sign mode</h2>
     <select name="id">
       {% for mode in sign_modes %}
-        <option value="{{ loop.index0 }}">{{ mode }}</option>
+        <option value="{{ loop.index0 }}" {% if current_mode == loop.index0 %}selected{% endif %}>{{ mode }}</option>
       {% endfor %}
     </select>
     <input type="submit" value="Set sign mode">
