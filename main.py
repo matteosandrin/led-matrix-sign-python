@@ -8,17 +8,9 @@ import RPi.GPIO as GPIO
 from typing import Optional, List
 from mbta import MBTA
 from display import Display
+from server import web_server_task
+from common import SignMode
 import config
-
-# Enum definitions
-
-
-class SignMode(Enum):
-    TEST = 0
-    MBTA = 1
-    CLOCK = 2
-    MUSIC = 3
-    MAX = 4
 
 
 class UIMessageType(Enum):
@@ -101,11 +93,12 @@ def main():
     render_thread = threading.Thread(target=render_task, daemon=True)
     clock_thread = threading.Thread(target=clock_provider_task, daemon=True)
     mbta_thread = threading.Thread(target=mbta_provider_task, daemon=True)
+    web_server_thread = threading.Thread(target=web_server_task, daemon=True)
 
     render_thread.start()
     clock_thread.start()
     mbta_thread.start()
-
+    web_server_thread.start()
     try:
         while True:
             time.sleep(1)

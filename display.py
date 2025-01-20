@@ -29,24 +29,23 @@ class Display:
         self.font = ImageFont.truetype(os.path.join(
             CURRENT_FOLDER, "fonts/MBTASans-Regular.otf"), 8)
 
-        self.colors = {
-            "amber": (255, 191, 0),
-            "black": (0, 0, 0)
-        }
+        self.color_amber = (255, 191, 0)
+        self.color_black = (0, 0, 0)
+
+    def _update_display(self, image: Image):
+        self.canvas.SetImage(image)
+        self.canvas = self.matrix.SwapOnVSync(self.canvas)
 
     def render_text_content(self, text: str):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
         draw = ImageDraw.Draw(image)
         draw.text((0, 0), text, font=self.font, fill=(255, 255, 255))
-        self.canvas.SetImage(image)
-        self.canvas = self.matrix.SwapOnVSync(self.canvas)
+        self._update_display(image)
 
     def render_mbta_content(self, content: Tuple[PredictionStatus, List[Prediction]]):
-        AMBER = self.colors["amber"]
-        BLACK = self.colors["black"]
-
         # Create new image with black background
-        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), BLACK)
+        image = Image.new(
+            'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), self.color_black)
         draw = ImageDraw.Draw(image)
         status, predictions = content
 
@@ -61,20 +60,22 @@ class Display:
             p1, p2 = predictions[0], predictions[1]
 
             # Draw first prediction line
-            draw.text((0, 0), p1.label, font=self.font, fill=AMBER)
+            draw.text((0, 0), p1.label, font=self.font, fill=self.color_amber)
             value_width = draw.textlength(p1.value, font=self.font)
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
-            draw.text((x_pos, 0), p1.value, font=self.font, fill=AMBER)
+            draw.text((x_pos, 0), p1.value, font=self.font,
+                      fill=self.color_amber)
 
             # Draw second prediction line
-            draw.text((0, 16), p2.label, font=self.font, fill=AMBER)
+            draw.text((0, 16), p2.label, font=self.font, fill=self.color_amber)
             value_width = draw.textlength(p2.value, font=self.font)
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
-            draw.text((x_pos, 16), p2.value, font=self.font, fill=AMBER)
+            draw.text((x_pos, 16), p2.value,
+                      font=self.font, fill=self.color_amber)
 
             # Draw cached data indicator if needed
             if status == PredictionStatus.ERROR_SHOW_CACHED:
-                draw.point((SCREEN_WIDTH - 1, 0), fill=AMBER)
+                draw.point((SCREEN_WIDTH - 1, 0), fill=self.color_amber)
 
         elif status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
                         PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2,
@@ -83,18 +84,14 @@ class Display:
             return
         else:
             draw.text((0, 0), "Failed to fetch MBTA data",
-                      font=self.font, fill=AMBER)
+                      font=self.font, fill=self.color_amber)
 
-        # Update display
-        self.canvas.SetImage(image)
-        self.canvas = self.matrix.SwapOnVSync(self.canvas)
+        self._update_display(image)
 
     def render_mbta_banner_content(self, status: PredictionStatus, predictions: List[Prediction]):
-        AMBER = self.colors["amber"]
-        BLACK = self.colors["black"]
-
         # Create new image with black background
-        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), BLACK)
+        image = Image.new(
+            'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), self.color_black)
         draw = ImageDraw.Draw(image)
 
         if status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
@@ -112,12 +109,11 @@ class Display:
             x1 = (SCREEN_WIDTH - width1) // 2
             x2 = (SCREEN_WIDTH - width2) // 2
 
-            draw.text((x1, 0), line1, font=self.font, fill=AMBER)
-            draw.text((x2, 16), line2, font=self.font, fill=AMBER)
+            draw.text((x1, 0), line1, font=self.font, fill=self.color_amber)
+            draw.text((x2, 16), line2, font=self.font, fill=self.color_amber)
 
         elif status == PredictionStatus.OK_SHOW_STATION_BANNER:
-            draw.text((0, 0), predictions[0].label, font=self.font, fill=AMBER)
+            draw.text((0, 0), predictions[0].label,
+                      font=self.font, fill=self.color_amber)
 
-        # Update display
-        self.canvas.SetImage(image)
-        self.canvas = self.matrix.SwapOnVSync(self.canvas)
+        self._update_display(image)

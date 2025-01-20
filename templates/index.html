@@ -1,0 +1,34 @@
+<!DOCTYPE html/>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+  <style>
+    body {
+      font-family: system-ui, Roboto, Helvetica;
+    }
+  </style>
+  <title>LED Matrix Display</title>
+</head>
+<body>
+  <h1>LED Matrix Display</h1>
+  <form method="GET" action="/mode">
+    <h2>Set sign mode</h2>
+    <select name="id">
+      {% for mode in sign_modes %}
+        <option value="{{ loop.index0 }}">{{ mode }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Set sign mode">
+  </form>
+  <form method="GET" action="/set">
+    <h2>Set MBTA station</h2>
+    <input name="key" type="hidden" value="station">
+    <select name="value">
+      {% for station in stations %}
+        <option value="{{ loop.index0 }}">{{ station }}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Set station">
+  </form>
+</body>
