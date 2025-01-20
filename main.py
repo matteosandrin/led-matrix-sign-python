@@ -11,6 +11,8 @@ from display import Display
 import config
 
 # Enum definitions
+
+
 class SignMode(Enum):
     TEST = 0
     MBTA = 1
@@ -18,10 +20,12 @@ class SignMode(Enum):
     MUSIC = 3
     MAX = 4
 
+
 class UIMessageType(Enum):
     MODE_SHIFT = 0
     MODE_CHANGE = 1
     MBTA_CHANGE_STATION = 2
+
 
 # Constants
 BUTTON_PIN = 18
@@ -36,15 +40,18 @@ render_queue = queue.Queue(maxsize=32)
 
 current_mode = SignMode.MBTA
 
+
 def setup_gpio():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, 
-                         callback=button_callback, 
-                         bouncetime=300)
+    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING,
+                          callback=button_callback,
+                          bouncetime=300)
+
 
 def button_callback(channel):
     ui_queue.put({"type": UIMessageType.MODE_SHIFT})
+
 
 def render_task():
     display = Display()
@@ -58,6 +65,7 @@ def render_task():
         except queue.Empty:
             continue
 
+
 def clock_provider_task():
     while True:
         if current_mode == SignMode.CLOCK:
@@ -68,6 +76,7 @@ def clock_provider_task():
                 "content": time_str
             })
         time.sleep(REFRESH_RATE)
+
 
 def mbta_provider_task():
     mbta = MBTA(api_key=config.MBTA_API_KEY)
@@ -83,10 +92,11 @@ def mbta_provider_task():
         else:
             time.sleep(REFRESH_RATE)
 
+
 def main():
     # Setup
     setup_gpio()
-    
+
     # Start threads
     render_thread = threading.Thread(target=render_task, daemon=True)
     clock_thread = threading.Thread(target=clock_provider_task, daemon=True)
@@ -95,12 +105,13 @@ def main():
     render_thread.start()
     clock_thread.start()
     mbta_thread.start()
-    
+
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
         GPIO.cleanup()
+
 
 if __name__ == "__main__":
     main()
