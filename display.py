@@ -2,12 +2,14 @@ from typing import List, Tuple
 from mbta import Prediction, PredictionStatus
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
+import os
 
 PANEL_WIDTH = 32
 PANEL_HEIGHT = 32
 PANEL_COUNT = 5
 SCREEN_WIDTH = PANEL_WIDTH * PANEL_COUNT
 SCREEN_HEIGHT = PANEL_HEIGHT
+CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 class Display:
     def __init__(self):
@@ -23,7 +25,7 @@ class Display:
         
         self.matrix = RGBMatrix(options=options)
         self.canvas = self.matrix.CreateFrameCanvas()
-        self.font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 16)
+        self.font = ImageFont.truetype(os.path.join(CURRENT_FOLDER, "fonts/MBTASans-Regular.otf"), 8)
         
     def render_text_content(self, text: str):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
