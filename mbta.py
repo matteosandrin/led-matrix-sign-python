@@ -11,14 +11,7 @@ DIRECTION_SOUTHBOUND = 0
 DIRECTION_NORTHBOUND = 1
 MBTA_MAX_ERROR_COUNT = 3
 
-MBTA_REQUEST = (
-    "https://api-v3.mbta.com/predictions?"
-    "api_key={api_key}&"
-    "filter[stop]={station_code}&"
-    "filter[route]=Red&"
-    "fields[prediction]=arrival_time,departure_time,status,direction_id&"
-    "include=trip"
-)
+MBTA_PREDICTIONS_URL = "https://api-v3.mbta.com/predictions"
 
 @dataclass
 class Prediction:
@@ -103,11 +96,13 @@ class MBTA:
 
     def _fetch_predictions(self) -> Optional[dict]:
         try:
-            url = MBTA_REQUEST.format(
-                api_key=self.api_key,
-                station_code=self.station.value
-            )
-            response = requests.get(url)
+            response = requests.get(MBTA_PREDICTIONS_URL, params={
+                "api_key": self.api_key,
+                "filter[stop]": self.station.value,
+                "filter[route]": "Red",
+                "fields[prediction]": "arrival_time,departure_time,status,direction_id",
+                "include": "trip"
+            })
             response.raise_for_status()
             return response.json()
         except Exception as e:
