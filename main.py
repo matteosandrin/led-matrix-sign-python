@@ -116,7 +116,7 @@ def mbta_provider_task():
             time.sleep(REFRESH_RATE)
 
 def web_server_task():
-    server = Server(ui_queue, mode_broadcaster)
+    server = Server(ui_queue, mode_broadcaster, mbta.station_broadcaster)
     server.web_server_task()
 
 

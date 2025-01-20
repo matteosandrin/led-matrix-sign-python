@@ -21,13 +21,15 @@
     </select>
     <input type="submit" value="Set sign mode">
   </form>
-  <form method="GET" action="/set/station">
-    <h2>Set MBTA station</h2>
-    <select name="id">
+  {% if current_mode == 1 %} <!-- SignMode.MBTA -->
+    <form method="GET" action="/set/station">
+      <h2>Set MBTA station</h2>
+      <select name="id">
       {% for station in stations %}
-        <option value="{{ loop.index0 }}">{{ station }}</option>
+        <option value="{{ loop.index0 }}" {% if current_station == loop.index0 %}selected{% endif %}>{{ station }}</option>
       {% endfor %}
-    </select>
-    <input type="submit" value="Set station">
-  </form>
+      </select>
+      <input type="submit" value="Set station">
+    </form>
+  {% endif %}
 </body>

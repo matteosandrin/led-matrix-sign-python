@@ -5,6 +5,7 @@ from enum import Enum, auto
 from dataclasses import dataclass
 import requests
 from typing import List, Dict, Optional
+from broadcaster import StatusBroadcaster
 
 # Constants
 DIRECTION_SOUTHBOUND = 0
@@ -43,14 +44,20 @@ class TrainStation(Enum):
     SOUTH_STATION = "place-sstat"
     TEST = "test"
 
+DEFAULT_TRAIN_STATION = TrainStation.HARVARD
+
 
 class MBTA:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.latest_predictions = [Prediction(), Prediction()]
         self.error_count = 0
-        self.station = TrainStation.HARVARD
-        self.has_station_changed = False
+        self.station_broadcaster = StatusBroadcaster()
+        self.station_broadcaster.set_status(DEFAULT_TRAIN_STATION)
+
+    @property
+    def station(self) -> TrainStation:
+        return self.station_broadcaster.get_status()
 
     def get_predictions(self, num_predictions: int, directions: List[int],
                         nth_positions: List[int]) -> tuple[PredictionStatus, List[Prediction]]:
@@ -228,8 +235,7 @@ class MBTA:
         dst[1].value = ""
 
     def set_station(self, station: TrainStation) -> None:
-        self.station = station
-        self.has_station_changed = True
+        self.station_broadcaster.set_status(station)
         self._get_placeholder_predictions(self.latest_predictions)
 
     @staticmethod
