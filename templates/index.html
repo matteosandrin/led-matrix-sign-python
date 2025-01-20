@@ -12,7 +12,7 @@
 </head>
 <body>
   <h1>LED Matrix Display</h1>
-  <form method="GET" action="/mode">
+  <form method="GET" action="/set/mode">
     <h2>Set sign mode</h2>
     <select name="id">
       {% for mode in sign_modes %}
@@ -21,10 +21,9 @@
     </select>
     <input type="submit" value="Set sign mode">
   </form>
-  <form method="GET" action="/set">
+  <form method="GET" action="/set/station">
     <h2>Set MBTA station</h2>
-    <input name="key" type="hidden" value="station">
-    <select name="value">
+    <select name="id">
       {% for station in stations %}
         <option value="{{ loop.index0 }}">{{ station }}</option>
       {% endfor %}
