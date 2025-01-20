@@ -80,6 +80,8 @@ def mbta_provider_task():
                 "content": result
             })
             time.sleep(5)
+        else:
+            time.sleep(REFRESH_RATE)
 
 def main():
     # Setup
