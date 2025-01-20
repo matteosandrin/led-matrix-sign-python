@@ -29,6 +29,11 @@ class Display:
         self.font = ImageFont.truetype(os.path.join(
             CURRENT_FOLDER, "fonts/MBTASans-Regular.otf"), 8)
 
+        self.colors = {
+            "amber": (255, 191, 0),
+            "black": (0, 0, 0)
+        }
+
     def render_text_content(self, text: str):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
         draw = ImageDraw.Draw(image)
@@ -37,9 +42,8 @@ class Display:
         self.canvas = self.matrix.SwapOnVSync(self.canvas)
 
     def render_mbta_content(self, content: Tuple[PredictionStatus, List[Prediction]]):
-        # Define colors
-        AMBER = (255, 191, 0)
-        BLACK = (0, 0, 0)
+        AMBER = self.colors["amber"]
+        BLACK = self.colors["black"]
 
         # Create new image with black background
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), BLACK)
@@ -73,7 +77,28 @@ class Display:
                 draw.point((SCREEN_WIDTH - 1, 0), fill=AMBER)
 
         elif status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
-                        PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2]:
+                        PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2,
+                        PredictionStatus.OK_SHOW_STATION_BANNER]:
+            self.render_mbta_banner_content(status, predictions)
+            return
+        else:
+            draw.text((0, 0), "Failed to fetch MBTA data",
+                      font=self.font, fill=AMBER)
+
+        # Update display
+        self.canvas.SetImage(image)
+        self.canvas = self.matrix.SwapOnVSync(self.canvas)
+
+    def render_mbta_banner_content(self, status: PredictionStatus, predictions: List[Prediction]):
+        AMBER = self.colors["amber"]
+        BLACK = self.colors["black"]
+
+        # Create new image with black background
+        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), BLACK)
+        draw = ImageDraw.Draw(image)
+
+        if status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
+                      PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2]:
             slot = 0
             if status == PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2:
                 slot = 1
@@ -92,10 +117,6 @@ class Display:
 
         elif status == PredictionStatus.OK_SHOW_STATION_BANNER:
             draw.text((0, 0), predictions[0].label, font=self.font, fill=AMBER)
-
-        else:
-            draw.text((0, 0), "Failed to fetch MBTA data",
-                      font=self.font, fill=AMBER)
 
         # Update display
         self.canvas.SetImage(image)
