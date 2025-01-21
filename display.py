@@ -1,5 +1,7 @@
+from io import BytesIO
 from typing import List, Tuple
 from mbta import Prediction, PredictionStatus
+from music import Song, SpotifyResponse
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 import os
@@ -117,3 +119,78 @@ class Display:
                       font=self.font, fill=self.color_amber)
 
         self._update_display(image)
+
+    def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
+        status, song = content
+
+        # Create new image with black background
+        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), self.color_black)
+        draw = ImageDraw.Draw(image)
+        
+        if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED]:
+            # Draw progress bar
+            progress_bar_width = SCREEN_WIDTH - 32
+            progress = song.progress_ms / song.duration_ms
+            current_bar_width = int(progress_bar_width * progress)
+            
+            # Draw progress bar background
+            draw.rectangle(
+                [(32, SCREEN_HEIGHT - 2), (32 + progress_bar_width, SCREEN_HEIGHT)],
+                fill=(255, 255, 255)
+            )
+            
+            # Draw progress bar fill
+            if current_bar_width > 0:
+                draw.rectangle(
+                    [(32, SCREEN_HEIGHT - 2), (32 + current_bar_width, SCREEN_HEIGHT)],
+                    fill=(29, 185, 84)  # Spotify green
+                )
+            
+            # Draw time progress
+            progress_time = self._format_time(song.progress_ms // 1000, False)
+            time_to_end = self._format_time((song.duration_ms - song.progress_ms) // 1000, True)
+            
+            # Use smaller font for time display
+            small_font = ImageFont.truetype(os.path.join(
+                CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7)
+
+            # Draw song title and artist
+            draw.text((32+1, 0), song.title, font=small_font, fill=(255, 255, 255))
+            draw.text((32+1, 8), song.artist, font=small_font, fill=(255, 255, 255))
+            # Draw progress time (left side)
+            progress_time_y = SCREEN_HEIGHT - 8
+            draw.text((32 + 1, progress_time_y), progress_time, 
+                    font=small_font, fill=(29, 185, 84))
+            
+            # Draw time to end (right side)
+            time_to_end_width = draw.textlength(time_to_end, font=small_font)
+            draw.text((SCREEN_WIDTH - time_to_end_width - 1, progress_time_y), 
+                    time_to_end, font=small_font, fill=(29, 185, 84))
+            
+            # Draw album art if available
+            if song.cover.data is not None:
+                album_art = Image.open(BytesIO(song.cover.data), formats=['JPEG'])
+                album_art = album_art.resize((32, 32))
+                image.paste(album_art, (0, 0, 32, 32))
+
+            self._update_display(image)
+            
+        elif status == SpotifyResponse.EMPTY:
+            draw.text((0, 0), "Nothing is playing", 
+                    font=self.font, fill=(29, 185, 84))
+            self._update_display(image)
+        else:
+            draw.text((0, 0), "Error querying the spotify API", 
+                    font=self.font, fill=(29, 185, 84))
+            self._update_display(image)
+
+    def _format_time(self, seconds: int, is_negative: bool) -> str:
+        """Helper function to format time strings"""
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+        
+        if hours > 0:
+            return f"{'-' if is_negative else ''}{hours:02d}:{minutes:02d}:{seconds:02d}"
+        return f"{'-' if is_negative else ''}{minutes:02d}:{seconds:02d}"
+

@@ -10,6 +10,7 @@ from display import Display
 from server import Server
 from common import SignMode, UIMessageType
 from broadcaster import StatusBroadcaster
+from music import Spotify, SpotifyResponse
 import config
 
 
@@ -85,6 +86,8 @@ def render_task():
                 display.render_text_content(message["content"])
             if message.get("type") == "mbta":
                 display.render_mbta_content(message["content"])
+            if message.get("type") == "music":
+                display.render_music_content(message["content"])
         except queue.Empty:
             continue
 
@@ -115,6 +118,37 @@ def mbta_provider_task():
         else:
             time.sleep(REFRESH_RATE)
 
+
+def music_provider_task():
+    spotify = Spotify()
+    spotify.setup()
+    while True:
+        if mode_broadcaster.get_status() == SignMode.MUSIC:
+            status, currently_playing = spotify.get_currently_playing()
+            print(f"Music status: {status}")
+            print(f"Currently playing: {currently_playing}")
+            if status == SpotifyResponse.OK:
+                if spotify.is_current_song_new(currently_playing):
+                    status, img = spotify.get_album_cover(currently_playing)
+                    if status == SpotifyResponse.OK:
+                        currently_playing.cover.data = img
+                        print(f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
+                    spotify.update_current_song(currently_playing)
+                else:
+                    currently_playing.cover.data = spotify.get_current_song().cover.data
+            elif status == SpotifyResponse.OK_SHOW_CACHED:
+                currently_playing = spotify.get_current_song()
+            else:
+                spotify.clear_current_song()
+            render_queue.put({
+                "type": "music",
+                "content": (status, currently_playing)
+            })
+            time.sleep(1)
+        else:
+            time.sleep(REFRESH_RATE)
+
+
 def web_server_task():
     server = Server(ui_queue, mode_broadcaster, mbta.station_broadcaster)
     server.web_server_task()
@@ -129,12 +163,14 @@ def main():
     render_thread = threading.Thread(target=render_task, daemon=True)
     clock_thread = threading.Thread(target=clock_provider_task, daemon=True)
     mbta_thread = threading.Thread(target=mbta_provider_task, daemon=True)
+    music_thread = threading.Thread(target=music_provider_task, daemon=True)
     web_server_thread = threading.Thread(target=web_server_task, daemon=True)
 
     ui_thread.start()
     render_thread.start()
     clock_thread.start()
     mbta_thread.start()
+    music_thread.start()
     web_server_thread.start()
     
     try:
