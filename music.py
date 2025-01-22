@@ -8,7 +8,6 @@ from dataclasses import dataclass, field
 SPOTIFY_REFRESH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 SPOTIFY_CURRENTLY_PLAYING_URL = "https://api.spotify.com/v1/me/player/currently-playing"
 SPOTIFY_TOKEN_REFRESH_RATE = 30 * 60 * 1000  # 30 minutes in milliseconds
-ALBUM_COVER_IMG_BUF_SIZE = 16384  # Adjust as needed
 
 
 @dataclass
@@ -41,7 +40,6 @@ class Spotify:
         self.access_token = ""
         self.last_refresh_time = 0
         self.current_song = Song()
-        self.album_cover_jpg = bytearray(ALBUM_COVER_IMG_BUF_SIZE)
         self.session = requests.Session()
         self.secrets = {
             "client_id": client_id,
