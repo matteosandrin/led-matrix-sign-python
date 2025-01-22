@@ -2,7 +2,7 @@ from queue import Queue
 from flask import Flask, render_template, request
 from mbta import TrainStation, MBTA
 from broadcaster import StatusBroadcaster
-from common import SignMode, UIMessageType
+from common import config,SignMode, UIMessageType
 
 
 class Server:
@@ -20,14 +20,19 @@ class Server:
         current_mode = self.mode_broadcaster.get_status()
         current_mode_index = list(SignMode).index(current_mode)
         sign_modes = [mode.name for mode in SignMode]
+        params = {
+            "sign_modes": sign_modes,
+            "current_mode": current_mode_index,
+            "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX
+        }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
             current_station_index = list(TrainStation).index(current_station)
 
             stations = [MBTA.train_station_to_str(station) for station in TrainStation]
-            return render_template('index.html', stations=stations, sign_modes=sign_modes, current_mode=current_mode_index, current_station=current_station_index)
-        else:
-            return render_template('index.html', sign_modes=sign_modes, current_mode=current_mode_index)
+            params["stations"] = stations
+            params["current_station"] = current_station_index
+        return render_template('index.html', **params)
 
     def set_mode_route(self):
         value = request.args.get('id')
