@@ -1,5 +1,12 @@
+try:
+    from config import config
+except ImportError:
+    print("ERROR: Config file not found. Please create a config/config.py file.")
+    print("       Start by copying config/config.example.py to config/config.py")
+    exit(1)
 from enum import Enum
 
+__all__ = ["config","SignMode", "UIMessageType"]
 
 class SignMode(Enum):
     TEST = 0

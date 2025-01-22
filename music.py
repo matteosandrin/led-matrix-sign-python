@@ -5,13 +5,6 @@ from typing import Optional, Dict, Any
 import requests
 from dataclasses import dataclass, field
 
-# Import your spotify credentials and certificate from separate files
-from config import (
-    SPOTIFY_CLIENT_ID,
-    SPOTIFY_CLIENT_SECRET,
-    SPOTIFY_REFRESH_TOKEN,
-)
-
 SPOTIFY_REFRESH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 SPOTIFY_CURRENTLY_PLAYING_URL = "https://api.spotify.com/v1/me/player/currently-playing"
 SPOTIFY_TOKEN_REFRESH_RATE = 30 * 60 * 1000  # 30 minutes in milliseconds
@@ -44,19 +37,24 @@ class SpotifyResponse:
 
 
 class Spotify:
-    def __init__(self):
+    def __init__(self, client_id: str, client_secret: str, refresh_token: str):
         self.access_token = ""
         self.last_refresh_time = 0
         self.current_song = Song()
         self.album_cover_jpg = bytearray(ALBUM_COVER_IMG_BUF_SIZE)
         self.session = requests.Session()
+        self.secrets = {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "refresh_token": refresh_token
+        }
 
     def setup(self):
         self.refresh_token()
         self.clear_current_song()
 
     def get_refresh_bearer_token(self) -> str:
-        bearer = f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}"
+        bearer = f"{self.secrets['client_id']}:{self.secrets['client_secret']}"
         bearer_bytes = bearer.encode('ascii')
         base64_bytes = base64.b64encode(bearer_bytes)
         return f"Basic {base64_bytes.decode('ascii')}"
@@ -78,7 +76,7 @@ class Spotify:
         }
         data = {
             "grant_type": "refresh_token",
-            "refresh_token": SPOTIFY_REFRESH_TOKEN
+            "refresh_token": self.secrets["refresh_token"]
         }
 
         try:

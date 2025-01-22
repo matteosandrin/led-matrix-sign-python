@@ -1,3 +1,4 @@
+from common import config, SignMode, UIMessageType
 import time
 import threading
 import queue
@@ -8,10 +9,8 @@ from typing import Optional, List
 from mbta import MBTA, TrainStation
 from display import Display
 from server import Server
-from common import SignMode, UIMessageType
 from broadcaster import StatusBroadcaster
 from music import Spotify, SpotifyResponse
-import config
 
 
 # Constants
@@ -120,7 +119,7 @@ def mbta_provider_task():
 
 
 def music_provider_task():
-    spotify = Spotify()
+    spotify = Spotify(config.SPOTIFY_CLIENT_ID, config.SPOTIFY_CLIENT_SECRET, config.SPOTIFY_REFRESH_TOKEN)
     spotify.setup()
     while True:
         if mode_broadcaster.get_status() == SignMode.MUSIC:
