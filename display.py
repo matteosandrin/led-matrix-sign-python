@@ -1,8 +1,12 @@
+from common import config
+if config.EMULATE_RGB_MATRIX:
+    from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+else:
+    from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from io import BytesIO
 from typing import List, Tuple
 from mbta import Prediction, PredictionStatus
 from music import Song, SpotifyResponse
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 import os
 

@@ -1,10 +1,13 @@
 from common import config, SignMode, UIMessageType
+if config.EMULATE_RGB_MATRIX:
+    from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
+else:
+    import RPi.GPIO as GPIO
 import time
 import threading
 import queue
 from datetime import datetime
 from enum import Enum
-import RPi.GPIO as GPIO
 from typing import Optional, List
 from mbta import MBTA, TrainStation
 from display import Display
@@ -155,7 +158,8 @@ def web_server_task():
 
 def main():
     # Setup
-    setup_gpio()
+    if not config.EMULATE_RGB_MATRIX:
+        setup_gpio()
 
     # Start threads
     ui_thread = threading.Thread(target=ui_task, daemon=True)
@@ -176,7 +180,8 @@ def main():
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        GPIO.cleanup()
+        if not config.EMULATE_RGB_MATRIX:
+            GPIO.cleanup()
 
 
 if __name__ == "__main__":
