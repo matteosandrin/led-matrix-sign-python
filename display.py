@@ -196,11 +196,11 @@ class Display:
             
         elif status == SpotifyResponse.EMPTY:
             draw.text((0, 0), "Nothing is playing", 
-                    font=self.font, fill=(29, 185, 84))
+                    font=self.default_font, fill=(29, 185, 84))
             self._update_display(image)
         else:
             draw.text((0, 0), "Error querying the spotify API", 
-                    font=self.font, fill=(29, 185, 84))
+                    font=self.default_font, fill=(29, 185, 84))
             self._update_display(image)
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:
