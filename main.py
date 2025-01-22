@@ -56,14 +56,22 @@ def ui_task():
                 next_index = (current_index + 1) % len(modes)
                 mode_broadcaster.set_status(modes[next_index])
                 print(f"Mode changed to: {modes[next_index]}")
-            
+                # clear the display
+                render_queue.put({
+                    "type": RenderMessageType.TEXT,
+                    "content": ""
+                })
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
                 new_mode = message.get("mode")
                 if new_mode in SignMode:
                     mode_broadcaster.set_status(new_mode)
                     print(f"Mode changed to: {new_mode}")
-            
+                    # clear the display
+                    render_queue.put({
+                        "type": RenderMessageType.TEXT,
+                        "content": ""
+                    })
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
                 new_station = message.get("station")
@@ -80,7 +88,7 @@ def ui_task():
                     "type": RenderMessageType.TEXT,
                     "content": new_message
                 })
-            
+ 
         except queue.Empty:
             time.sleep(REFRESH_RATE)
             continue
