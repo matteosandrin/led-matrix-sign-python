@@ -1,4 +1,4 @@
-from common import config, SignMode, UIMessageType
+from common import config, SignMode, UIMessageType, RenderMessageType
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
@@ -71,9 +71,15 @@ def ui_task():
                     mbta.set_station(new_station)
                     print(f"Station changed to: {new_station}")
                     render_queue.put({
-                        "type": "text",
+                        "type": RenderMessageType.TEXT,
                         "content": MBTA.train_station_to_str(new_station)
                     })
+            elif message["type"] == UIMessageType.TEST:
+                new_message = message.get("content")
+                render_queue.put({
+                    "type": RenderMessageType.TEXT,
+                    "content": new_message
+                })
             
         except queue.Empty:
             time.sleep(REFRESH_RATE)
@@ -84,11 +90,11 @@ def render_task():
     while True:
         try:
             message = render_queue.get(timeout=REFRESH_RATE)
-            if message.get("type") == "text":
+            if message.get("type") == RenderMessageType.TEXT:
                 display.render_text_content(message["content"])
-            if message.get("type") == "mbta":
+            if message.get("type") == RenderMessageType.MBTA:
                 display.render_mbta_content(message["content"])
-            if message.get("type") == "music":
+            if message.get("type") == RenderMessageType.MUSIC:
                 display.render_music_content(message["content"])
         except queue.Empty:
             continue
@@ -101,7 +107,7 @@ def clock_provider_task():
             now = datetime.now()
             time_str = now.strftime("%A, %B %d %Y\n%H:%M:%S")
             render_queue.put({
-                "type": "text",
+                "type": RenderMessageType.TEXT,
                 "content": time_str
             })
         time.sleep(REFRESH_RATE)
@@ -113,7 +119,7 @@ def mbta_provider_task():
             result = mbta.get_predictions_both_directions()
             print(result)
             render_queue.put({
-                "type": "mbta",
+                "type": RenderMessageType.MBTA,
                 "content": result
             })
             time.sleep(5)
@@ -143,7 +149,7 @@ def music_provider_task():
             else:
                 spotify.clear_current_song()
             render_queue.put({
-                "type": "music",
+                "type": RenderMessageType.MUSIC,
                 "content": (status, currently_playing)
             })
             time.sleep(1)

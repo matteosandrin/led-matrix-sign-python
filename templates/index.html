@@ -43,4 +43,11 @@
       <input type="submit" value="Set station">
     </form>
   {% endif %}
+  {% if current_mode == 0 %} <!-- SignMode.TEST -->
+    <form method="GET" action="/set/test">
+      <h2>Set test message</h2>
+      <input type="text" name="msg" value="">
+      <input type="submit" value="Set message">
+    </form>
+  {% endif %}
 </body>

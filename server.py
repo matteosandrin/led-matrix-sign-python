@@ -15,6 +15,7 @@ class Server:
         self.app.route('/')(self.index)
         self.app.route('/set/mode')(self.set_mode_route)
         self.app.route('/set/station')(self.set_station_route)
+        self.app.route('/set/test')(self.set_test_message_route)
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
@@ -56,6 +57,13 @@ class Server:
         except Exception as e:
             return render_template('result.html', message=f'Invalid station: {value}')
 
+    def set_test_message_route(self):
+        value = request.args.get('msg')
+        if value is None:
+            return render_template('result.html', message='Message not provided')
+        self.set_test_message(value)
+        return render_template('result.html', message=f'Message set to {value}')
+
     def web_server_task(self):
         self.app.run(host='0.0.0.0', port=5000,
                      debug=False, use_reloader=False)
@@ -66,3 +74,6 @@ class Server:
     def set_station(self, station: TrainStation):
         self.ui_queue.put(
             {"type": UIMessageType.MBTA_CHANGE_STATION, "station": station})
+
+    def set_test_message(self, message: str):
+        self.ui_queue.put({"type": UIMessageType.TEST, "content": message})

@@ -15,6 +15,12 @@ class SignMode(Enum):
     MUSIC = 3
 
 class UIMessageType(Enum):
-    MODE_SHIFT = 0
-    MODE_CHANGE = 1
-    MBTA_CHANGE_STATION = 2
+    TEST = 0
+    MODE_SHIFT = 1
+    MODE_CHANGE = 2
+    MBTA_CHANGE_STATION = 3
+
+class RenderMessageType(Enum):
+    TEXT = 0
+    MBTA = 1
+    MUSIC = 2
