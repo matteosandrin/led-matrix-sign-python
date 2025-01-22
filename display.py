@@ -52,9 +52,14 @@ class Display:
         }
         self.default_font = self.fonts["silkscreen"]
 
+    def _get_draw_context_antialiased(self, image: Image):
+        draw = ImageDraw.Draw(image)
+        draw.fontmode = "1" # turn off antialiasing
+        return draw
+
     def render_text_content(self, text: str):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
-        draw = ImageDraw.Draw(image)
+        draw = self._get_draw_context_antialiased(image)
         draw.text((0, 0), text, font=self.default_font, fill=(255, 255, 255))
         self._update_display(image)
 
@@ -62,7 +67,7 @@ class Display:
         # Create new image with black background
         image = Image.new(
             'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), self.color_black)
-        draw = ImageDraw.Draw(image)
+        draw = self._get_draw_context_antialiased(image)
         status, predictions = content
 
         if status in [PredictionStatus.OK,
@@ -108,7 +113,7 @@ class Display:
         # Create new image with black background
         image = Image.new(
             'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), self.color_black)
-        draw = ImageDraw.Draw(image)
+        draw = self._get_draw_context_antialiased(image)
         mbta_font = self.fonts["mbta"]
 
         if status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
@@ -140,8 +145,8 @@ class Display:
 
         # Create new image with black background
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), self.color_black)
-        draw = ImageDraw.Draw(image)
-        
+        draw = self._get_draw_context_antialiased(image)
+
         if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED]:
             # Draw progress bar
             progress_bar_width = SCREEN_WIDTH - 32
