@@ -32,8 +32,7 @@ class Display:
 
         self.matrix = RGBMatrix(options=options)
         self.canvas = self.matrix.CreateFrameCanvas()
-        self.font = ImageFont.truetype(os.path.join(
-            CURRENT_FOLDER, "fonts/MBTASans-Regular.otf"), 8)
+        self._load_fonts()
 
         self.color_amber = (255, 191, 0)
         self.color_black = (0, 0, 0)
@@ -41,11 +40,22 @@ class Display:
     def _update_display(self, image: Image):
         self.canvas.SetImage(image)
         self.canvas = self.matrix.SwapOnVSync(self.canvas)
+    
+    def _load_fonts(self):
+        self.fonts = {
+            "mbta": ImageFont.truetype(os.path.join(
+                CURRENT_FOLDER, "fonts/MBTASans-Regular.otf"), 8),
+            "silkscreen": ImageFont.truetype(os.path.join(
+                CURRENT_FOLDER, "fonts/Silkscreen-Normal.ttf"), 8),
+            "picopixel": ImageFont.truetype(os.path.join(
+                CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7),
+        }
+        self.default_font = self.fonts["silkscreen"]
 
     def render_text_content(self, text: str):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
         draw = ImageDraw.Draw(image)
-        draw.text((0, 0), text, font=self.font, fill=(255, 255, 255))
+        draw.text((0, 0), text, font=self.default_font, fill=(255, 255, 255))
         self._update_display(image)
 
     def render_mbta_content(self, content: Tuple[PredictionStatus, List[Prediction]]):
@@ -66,18 +76,18 @@ class Display:
             p1, p2 = predictions[0], predictions[1]
 
             # Draw first prediction line
-            draw.text((0, 0), p1.label, font=self.font, fill=self.color_amber)
-            value_width = draw.textlength(p1.value, font=self.font)
+            draw.text((0, 0), p1.label, font=self.fonts["mbta"], fill=self.color_amber)
+            value_width = draw.textlength(p1.value, font=self.fonts["mbta"])
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
-            draw.text((x_pos, 0), p1.value, font=self.font,
+            draw.text((x_pos, 0), p1.value, font=self.fonts["mbta"],
                       fill=self.color_amber)
 
             # Draw second prediction line
-            draw.text((0, 16), p2.label, font=self.font, fill=self.color_amber)
-            value_width = draw.textlength(p2.value, font=self.font)
+            draw.text((0, 16), p2.label, font=self.fonts["mbta"], fill=self.color_amber)
+            value_width = draw.textlength(p2.value, font=self.fonts["mbta"])
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
             draw.text((x_pos, 16), p2.value,
-                      font=self.font, fill=self.color_amber)
+                      font=self.fonts["mbta"], fill=self.color_amber)
 
             # Draw cached data indicator if needed
             if status == PredictionStatus.ERROR_SHOW_CACHED:
@@ -90,7 +100,7 @@ class Display:
             return
         else:
             draw.text((0, 0), "Failed to fetch MBTA data",
-                      font=self.font, fill=self.color_amber)
+                      font=self.default_font, fill=self.color_amber)
 
         self._update_display(image)
 
@@ -99,6 +109,7 @@ class Display:
         image = Image.new(
             'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), self.color_black)
         draw = ImageDraw.Draw(image)
+        mbta_font = self.fonts["mbta"]
 
         if status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
                       PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2]:
@@ -110,17 +121,17 @@ class Display:
             line2 = "is now arriving."
 
             # Center text for both lines
-            width1 = draw.textlength(line1, font=self.font)
-            width2 = draw.textlength(line2, font=self.font)
+            width1 = draw.textlength(line1, font=mbta_font)
+            width2 = draw.textlength(line2, font=mbta_font)
             x1 = (SCREEN_WIDTH - width1) // 2
             x2 = (SCREEN_WIDTH - width2) // 2
 
-            draw.text((x1, 0), line1, font=self.font, fill=self.color_amber)
-            draw.text((x2, 16), line2, font=self.font, fill=self.color_amber)
+            draw.text((x1, 0), line1, font=mbta_font, fill=self.color_amber)
+            draw.text((x2, 16), line2, font=mbta_font, fill=self.color_amber)
 
         elif status == PredictionStatus.OK_SHOW_STATION_BANNER:
             draw.text((0, 0), predictions[0].label,
-                      font=self.font, fill=self.color_amber)
+                      font=self.default_font, fill=self.color_amber)
 
         self._update_display(image)
 
@@ -155,8 +166,7 @@ class Display:
             time_to_end = self._format_time((song.duration_ms - song.progress_ms) // 1000, True)
             
             # Use smaller font for time display
-            small_font = ImageFont.truetype(os.path.join(
-                CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7)
+            small_font = self.fonts["picopixel"]
 
             # Draw song title and artist
             draw.text((32+1, 0), song.title, font=small_font, fill=(255, 255, 255))
