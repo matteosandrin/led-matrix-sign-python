@@ -34,8 +34,9 @@ class Display:
         self.canvas = self.matrix.CreateFrameCanvas()
         self._load_fonts()
 
-        self.color_amber = (255, 191, 0)
         self.color_black = (0, 0, 0)
+        self.color_mbta_amber = (255, 191, 0)
+        self.color_spotify_green = (29, 185, 84)
 
     def _update_display(self, image: Image):
         self.canvas.SetImage(image)
@@ -81,22 +82,22 @@ class Display:
             p1, p2 = predictions[0], predictions[1]
 
             # Draw first prediction line
-            draw.text((0, 0), p1.label, font=self.fonts["mbta"], fill=self.color_amber)
+            draw.text((0, 0), p1.label, font=self.fonts["mbta"], fill=self.color_mbta_amber)
             value_width = draw.textlength(p1.value, font=self.fonts["mbta"])
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
             draw.text((x_pos, 0), p1.value, font=self.fonts["mbta"],
-                      fill=self.color_amber)
+                      fill=self.color_mbta_amber)
 
             # Draw second prediction line
-            draw.text((0, 16), p2.label, font=self.fonts["mbta"], fill=self.color_amber)
+            draw.text((0, 16), p2.label, font=self.fonts["mbta"], fill=self.color_mbta_amber)
             value_width = draw.textlength(p2.value, font=self.fonts["mbta"])
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
             draw.text((x_pos, 16), p2.value,
-                      font=self.fonts["mbta"], fill=self.color_amber)
+                      font=self.fonts["mbta"], fill=self.color_mbta_amber)
 
             # Draw cached data indicator if needed
             if status == PredictionStatus.ERROR_SHOW_CACHED:
-                draw.point((SCREEN_WIDTH - 1, 0), fill=self.color_amber)
+                draw.point((SCREEN_WIDTH - 1, 0), fill=self.color_mbta_amber)
 
         elif status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
                         PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2,
@@ -105,7 +106,7 @@ class Display:
             return
         else:
             draw.text((0, 0), "Failed to fetch MBTA data",
-                      font=self.default_font, fill=self.color_amber)
+                      font=self.default_font, fill=self.color_mbta_amber)
 
         self._update_display(image)
 
@@ -131,12 +132,12 @@ class Display:
             x1 = (SCREEN_WIDTH - width1) // 2
             x2 = (SCREEN_WIDTH - width2) // 2
 
-            draw.text((x1, 0), line1, font=mbta_font, fill=self.color_amber)
-            draw.text((x2, 16), line2, font=mbta_font, fill=self.color_amber)
+            draw.text((x1, 0), line1, font=mbta_font, fill=self.color_mbta_amber)
+            draw.text((x2, 16), line2, font=mbta_font, fill=self.color_mbta_amber)
 
         elif status == PredictionStatus.OK_SHOW_STATION_BANNER:
             draw.text((0, 0), predictions[0].label,
-                      font=self.default_font, fill=self.color_amber)
+                      font=self.default_font, fill=self.color_mbta_amber)
 
         self._update_display(image)
 
@@ -163,7 +164,7 @@ class Display:
             if current_bar_width > 0:
                 draw.rectangle(
                     [(32, SCREEN_HEIGHT - 2), (32 + current_bar_width, SCREEN_HEIGHT)],
-                    fill=(29, 185, 84)  # Spotify green
+                    fill=self.color_spotify_green  # Spotify green
                 )
             
             # Draw time progress
@@ -179,12 +180,12 @@ class Display:
             # Draw progress time (left side)
             progress_time_y = SCREEN_HEIGHT - 8
             draw.text((32 + 1, progress_time_y), progress_time, 
-                    font=small_font, fill=(29, 185, 84))
+                    font=small_font, fill=self.color_spotify_green)
             
             # Draw time to end (right side)
             time_to_end_width = draw.textlength(time_to_end, font=small_font)
             draw.text((SCREEN_WIDTH - time_to_end_width - 1, progress_time_y), 
-                    time_to_end, font=small_font, fill=(29, 185, 84))
+                    time_to_end, font=small_font, fill=self.color_spotify_green)
             
             # Draw album art if available
             if song.cover.data is not None:
@@ -196,11 +197,11 @@ class Display:
             
         elif status == SpotifyResponse.EMPTY:
             draw.text((0, 0), "Nothing is playing", 
-                    font=self.default_font, fill=(29, 185, 84))
+                    font=self.default_font, fill=self.color_spotify_green)
             self._update_display(image)
         else:
             draw.text((0, 0), "Error querying the spotify API", 
-                    font=self.default_font, fill=(29, 185, 84))
+                    font=self.default_font, fill=self.color_spotify_green)
             self._update_display(image)
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:
