@@ -64,7 +64,7 @@ class MBTA:
         dst = [Prediction() for _ in range(num_predictions)]
 
         if self.station == TrainStation.TEST:
-            self._get_placeholder_predictions(dst)
+            dst = self._get_placeholder_predictions()
             dst[0].value = "5 min"
             dst[1].value = "12 min"
             return PredictionStatus.OK, dst
@@ -228,15 +228,18 @@ class MBTA:
                 label=self.latest_predictions[1].label, value=self.latest_predictions[1].value)
         ]
 
-    def _get_placeholder_predictions(self, dst: List[Prediction]) -> None:
-        dst[0].label = "Ashmont"
-        dst[0].value = ""
-        dst[1].label = "Alewife"
-        dst[1].value = ""
+    def _get_placeholder_predictions(self) -> None:
+        placeholders = [Prediction(), Prediction()]
+        placeholders[0].label = "Ashmont"
+        placeholders[0].value = ""
+        placeholders[1].label = "Alewife"
+        placeholders[1].value = ""
+        return placeholders
+
 
     def set_station(self, station: TrainStation) -> None:
         self.station_broadcaster.set_status(station)
-        self._get_placeholder_predictions(self.latest_predictions)
+        self.latest_predictions = self._get_placeholder_predictions()
 
     @staticmethod
     def train_station_to_str(station: TrainStation) -> str:
@@ -250,6 +253,7 @@ class MBTA:
             TrainStation.CHARLES_MGH: "Charles/MGH",
             TrainStation.PARK_STREET: "Park Street",
             TrainStation.DOWNTOWN_CROSSING: "Downtown Crossing",
-            TrainStation.SOUTH_STATION: "South Station"
+            TrainStation.SOUTH_STATION: "South Station",
+            TrainStation.TEST: "Test station"
         }
         return station_names.get(station, "TRAIN_STATION_UNKNOWN")
