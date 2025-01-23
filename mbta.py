@@ -23,9 +23,6 @@ class Prediction:
 
 class PredictionStatus(Enum):
     OK = auto()
-    OK_SHOW_ARR_BANNER_SLOT_1 = auto()
-    OK_SHOW_ARR_BANNER_SLOT_2 = auto()
-    OK_SHOW_STATION_BANNER = auto()
     ERROR = auto()
     ERROR_SHOW_CACHED = auto()
     ERROR_EMPTY = auto()
@@ -86,15 +83,7 @@ class MBTA:
                 prediction_data, directions[i], nth_positions[i])
             trip = self._find_trip_for_prediction(prediction_data, prediction)
             dst[i] = self._format_prediction(prediction, trip)
-
-        prediction_status = PredictionStatus.OK
-        if self._show_arriving_banner(dst[0], directions[0]):
-            prediction_status = PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1
-        elif self._show_arriving_banner(dst[1], directions[1]):
-            prediction_status = PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2
-
-        self._update_latest_predictions(dst, directions)
-        return prediction_status, dst
+        return PredictionStatus.OK, dst
 
     def get_predictions_both_directions(self) -> tuple[PredictionStatus, List[Prediction]]:
         directions = [DIRECTION_SOUTHBOUND, DIRECTION_NORTHBOUND]
@@ -209,16 +198,25 @@ class MBTA:
         dst.value = display_string
         return dst
 
-    def _update_latest_predictions(self, latest: List[Prediction], directions: List[int]) -> None:
+    def update_latest_predictions(self, latest: List[Prediction], directions: List[int]) -> None:
         if directions[0] == directions[1]:
             self.latest_predictions[directions[0]] = latest[0]
         else:
             self.latest_predictions[directions[0]] = latest[0]
             self.latest_predictions[directions[1]] = latest[1]
 
-    def _show_arriving_banner(self, prediction: Prediction, direction: int) -> bool:
-        return (prediction.value == "ARR" and
-                self.latest_predictions[direction].value != "ARR")
+    def find_prediction_with_arriving_banner(self, predictions: [Prediction]) -> Optional[Prediction]:
+        if len(predictions) < 2:
+            return None
+        if predictions[0].value == "ARR" and self.latest_predictions[0].value != "ARR":
+            return predictions[0]
+        if predictions[1].value == "ARR" and self.latest_predictions[1].value != "ARR":
+            return predictions[1]
+        return None
+
+    def get_arriving_banner(self, prediction: Prediction) -> [str]:
+        return [f"{prediction.label} train",
+                "is now arriving."]
 
     def get_cached_predictions(self) -> List[Prediction]:
         return [

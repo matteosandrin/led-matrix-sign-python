@@ -9,7 +9,7 @@ import queue
 from datetime import datetime
 from enum import Enum
 from typing import Optional, List
-from mbta import MBTA, TrainStation
+from mbta import MBTA, TrainStation, PredictionStatus
 from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
@@ -102,6 +102,8 @@ def render_task():
                 display.render_text_content(message["content"])
             if message.get("type") == RenderMessageType.MBTA:
                 display.render_mbta_content(message["content"])
+            if message.get("type") == RenderMessageType.MBTA_BANNER:
+                display.render_mbta_banner_content(message["content"])
             if message.get("type") == RenderMessageType.MUSIC:
                 display.render_music_content(message["content"])
         except queue.Empty:
@@ -124,12 +126,19 @@ def clock_provider_task():
 def mbta_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MBTA:
-            result = mbta.get_predictions_both_directions()
-            print(result)
+            status, predictions = mbta.get_predictions_both_directions()
             render_queue.put({
                 "type": RenderMessageType.MBTA,
-                "content": result
+                "content": [status, predictions]
             })
+            if status == PredictionStatus.OK:
+                arr_prediction = mbta.find_prediction_with_arriving_banner(predictions)
+                if arr_prediction is not None:
+                    render_queue.put({
+                        "type": RenderMessageType.MBTA_BANNER,
+                        "content": mbta.get_arriving_banner(arr_prediction)
+                    })
+                mbta.update_latest_predictions(predictions, [0,1])
             time.sleep(5)
         else:
             time.sleep(REFRESH_RATE)

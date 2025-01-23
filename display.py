@@ -97,47 +97,34 @@ class Display:
             # Draw cached data indicator if needed
             if status == PredictionStatus.ERROR_SHOW_CACHED:
                 draw.point((SCREEN_WIDTH - 1, 0), fill=Colors.MBTA_AMBER)
-
-        elif status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
-                        PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2,
-                        PredictionStatus.OK_SHOW_STATION_BANNER]:
-            self.render_mbta_banner_content(status, predictions)
-            return
         else:
             draw.text((0, 0), "Failed to fetch MBTA data",
                       font=self.default_font, fill=Colors.MBTA_AMBER)
 
         self._update_display(image)
 
-    def render_mbta_banner_content(self, status: PredictionStatus, predictions: List[Prediction]):
+    def render_mbta_banner_content(self, lines: [str]):
+        lines = lines[:2]
+        if len(lines) < 2:
+            return
+
+        line1 = lines[0][:16]
+        line2 = lines[1][:16]
+
         # Create new image with black background
         image = Image.new(
             'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
         mbta_font = Fonts.MBTA
 
-        if status in [PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_1,
-                      PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2]:
-            slot = 0
-            if status == PredictionStatus.OK_SHOW_ARR_BANNER_SLOT_2:
-                slot = 1
+        # Center text for both lines
+        width1 = draw.textlength(line1, font=mbta_font)
+        width2 = draw.textlength(line2, font=mbta_font)
+        x1 = (SCREEN_WIDTH - width1) // 2
+        x2 = (SCREEN_WIDTH - width2) // 2
 
-            line1 = f"{predictions[slot].label} train"
-            line2 = "is now arriving."
-
-            # Center text for both lines
-            width1 = draw.textlength(line1, font=mbta_font)
-            width2 = draw.textlength(line2, font=mbta_font)
-            x1 = (SCREEN_WIDTH - width1) // 2
-            x2 = (SCREEN_WIDTH - width2) // 2
-
-            draw.text((x1, 0), line1, font=mbta_font, fill=Colors.MBTA_AMBER)
-            draw.text((x2, 16), line2, font=mbta_font, fill=Colors.MBTA_AMBER)
-
-        elif status == PredictionStatus.OK_SHOW_STATION_BANNER:
-            draw.text((0, 0), predictions[0].label,
-                      font=self.default_font, fill=Colors.MBTA_AMBER)
-
+        draw.text((x1, 0), line1, font=mbta_font, fill=Colors.MBTA_AMBER)
+        draw.text((x2, 16), line2, font=mbta_font, fill=Colors.MBTA_AMBER)
         self._update_display(image)
 
     def render_music_content(self, content: Tuple[SpotifyResponse, Song]):

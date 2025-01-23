@@ -23,4 +23,5 @@ class UIMessageType(Enum):
 class RenderMessageType(Enum):
     TEXT = 0
     MBTA = 1
-    MUSIC = 2
+    MBTA_BANNER = 2
+    MUSIC = 3
