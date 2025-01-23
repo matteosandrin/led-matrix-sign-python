@@ -44,6 +44,7 @@ class TrainStation(Enum):
     SOUTH_STATION = "place-sstat"
     TEST = "test"
 
+
 DEFAULT_TRAIN_STATION = TrainStation.HARVARD
 
 
@@ -84,7 +85,7 @@ class MBTA:
             prediction = self._find_nth_prediction_for_direction(
                 prediction_data, directions[i], nth_positions[i])
             trip = self._find_trip_for_prediction(prediction_data, prediction)
-            self._format_prediction(prediction, trip, dst[i])
+            dst[i] = self._format_prediction(prediction, trip)
 
         prediction_status = PredictionStatus.OK
         if self._show_arriving_banner(dst[0], directions[0]):
@@ -122,15 +123,10 @@ class MBTA:
 
     def _find_nth_prediction_for_direction(self, prediction_data: dict,
                                            direction: int, n: int) -> Optional[dict]:
-        prediction_array = prediction_data["data"]
-
-        for prediction in prediction_array:
+        for prediction in prediction_data["data"]:
             attrs = prediction["attributes"]
-            d = attrs["direction_id"]
-            status = attrs["status"]
-
-            if d == direction:
-                if status is not None:
+            if attrs["direction_id"] == direction:
+                if attrs["status"] is not None:
                     if n == 0:
                         return prediction
                     n -= 1
@@ -180,11 +176,12 @@ class MBTA:
             return "BRD"
         return "ERROR"
 
-    def _format_prediction(self, prediction: Optional[dict], trip: Optional[dict], dst: Prediction) -> None:
+    def _format_prediction(self, prediction: Optional[dict], trip: Optional[dict]) -> Prediction:
+        dst = Prediction()
         if not prediction or not trip:
             dst.label = ""
             dst.value = ""
-            return
+            return dst
 
         attrs = prediction["attributes"]
         headsign = trip["attributes"]["headsign"]
@@ -192,7 +189,9 @@ class MBTA:
         dep_time = attrs.get("departure_time")
         status = attrs.get("status")
 
-        dst.label = headsign[:31]  # Limit to 31 chars like C++ version
+        # display can fit 16 chars per line
+        # 10 label + 6 value
+        dst.label = headsign[:10]
 
         print(f"status: {status}")
 
@@ -208,6 +207,7 @@ class MBTA:
 
         print(f"display string: {display_string}")
         dst.value = display_string
+        return dst
 
     def _update_latest_predictions(self, latest: List[Prediction], directions: List[int]) -> None:
         if directions[0] == directions[1]:
@@ -235,7 +235,6 @@ class MBTA:
         placeholders[1].label = "Alewife"
         placeholders[1].value = ""
         return placeholders
-
 
     def set_station(self, station: TrainStation) -> None:
         self.station_broadcaster.set_status(station)
