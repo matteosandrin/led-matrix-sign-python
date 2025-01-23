@@ -131,9 +131,12 @@ def mbta_provider_task():
                 "type": RenderMessageType.MBTA,
                 "content": [status, predictions]
             })
+            print(status)
+            print(predictions)
             if status == PredictionStatus.OK:
                 arr_prediction = mbta.find_prediction_with_arriving_banner(predictions)
                 if arr_prediction is not None:
+                    print("showing arriving banner")
                     render_queue.put({
                         "type": RenderMessageType.MBTA_BANNER,
                         "content": mbta.get_arriving_banner(arr_prediction)
@@ -150,8 +153,8 @@ def music_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MUSIC:
             status, currently_playing = spotify.get_currently_playing()
-            print(f"Music status: {status}")
-            print(f"Currently playing: {currently_playing}")
+            print(status)
+            print(currently_playing)
             if status == SpotifyResponse.OK:
                 if spotify.is_current_song_new(currently_playing):
                     status, img = spotify.get_album_cover(currently_playing)

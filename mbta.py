@@ -171,18 +171,14 @@ class MBTA:
             dst.label = ""
             dst.value = ""
             return dst
-
         attrs = prediction["attributes"]
         headsign = trip["attributes"]["headsign"]
         arr_time = attrs.get("arrival_time")
         dep_time = attrs.get("departure_time")
         status = attrs.get("status")
-
         # display can fit 16 chars per line
         # 10 label + 6 value
         dst.label = headsign[:10]
-
-        print(f"status: {status}")
 
         if status:
             display_string = self._determine_display_string(-1, -1, status)
@@ -193,8 +189,6 @@ class MBTA:
                 arr_diff, dep_diff, None)
         else:
             display_string = "ERROR"
-
-        print(f"display string: {display_string}")
         dst.value = display_string
         return dst
 
