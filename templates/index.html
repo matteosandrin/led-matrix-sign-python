@@ -13,9 +13,13 @@
 <body>
   <h1>LED Matrix Display</h1>
   {% if EMULATE_RGB_MATRIX %}
-    <div id="emulator-container">
-      <img src="#" id="emulator-image" />
-    </div>
+    <h2>Emulator</h2>
+    <details>
+      <summary>Emulator preview</summary>
+      <div id="emulator-container">
+        <img src="#" id="emulator-image" />
+      </div>
+    </details>
     <a href="3" id="emulator-link">Go to emulator</a>
     <script type="text/javascript">
       const emulator_domain = "http://" + window.location.hostname + ":8888";
