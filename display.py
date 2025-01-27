@@ -105,26 +105,18 @@ class Display:
 
     def render_mbta_banner_content(self, lines: [str]):
         lines = lines[:2]
-        if len(lines) < 2:
-            return
-
-        line1 = lines[0][:16]
-        line2 = lines[1][:16]
-
         # Create new image with black background
         image = Image.new(
             'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
         mbta_font = Fonts.MBTA
-
-        # Center text for both lines
-        width1 = draw.textlength(line1, font=mbta_font)
-        width2 = draw.textlength(line2, font=mbta_font)
-        x1 = (SCREEN_WIDTH - width1) // 2
-        x2 = (SCREEN_WIDTH - width2) // 2
-
-        draw.text((x1, 0), line1, font=mbta_font, fill=Colors.MBTA_AMBER)
-        draw.text((x2, 16), line2, font=mbta_font, fill=Colors.MBTA_AMBER)
+        for i, line in enumerate(lines):
+            line = line[:16]
+            # Center text for both lines
+            line_width = draw.textlength(line, font=mbta_font)
+            x = (SCREEN_WIDTH - line_width) // 2
+            y = i * 16
+            draw.text((x, y), line, font=mbta_font, fill=Colors.MBTA_AMBER)
         self._update_display(image)
 
     def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
