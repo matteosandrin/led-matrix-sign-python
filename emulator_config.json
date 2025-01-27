@@ -15,5 +15,5 @@
         "debug_text": true,
         "image_format": "JPEG"
     },
-    "log_level": "info"
+    "log_level": "warning"
 }
