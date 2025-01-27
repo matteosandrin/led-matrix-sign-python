@@ -42,31 +42,34 @@ class Server:
         try:
             mode = list(SignMode)[int(value)]
             self.set_mode(mode)
-            return render_template('result.html', message=f'Mode set to {mode.name}')
+            return self.result_template(f'Mode set to {mode.name}')
         except Exception as e:
-            return render_template('result.html', message=f'Invalid mode: {value}')
+            return self.result_template(f'Invalid mode: {value}')
 
     def set_station_route(self):
         value = request.args.get('id')
         if value is None:
-            return render_template('result.html', message='Station not provided')
+            return self.result_template('Station not provided')
         try:
             station = list(TrainStation)[int(value)]
             self.set_station(station)
-            return render_template('result.html', message=f'Station set to {station}')
+            return self.result_template(f'Station set to {station}')
         except Exception as e:
-            return render_template('result.html', message=f'Invalid station: {value}')
+            return self.result_template(f'Invalid station: {value}')
 
     def set_test_message_route(self):
         value = request.args.get('msg')
         if value is None:
-            return render_template('result.html', message='Message not provided')
+            return self.result_template('Message not provided')
         self.set_test_message(value)
-        return render_template('result.html', message=f'Message set to {value}')
+        return self.result_template(f'Message set to {value}')
 
     def web_server_task(self):
         self.app.run(host='0.0.0.0', port=5000,
                      debug=False, use_reloader=False)
+
+    def result_template(self, message: str):
+        return render_template('result.html', message=message)
 
     def set_mode(self, mode: SignMode):
         self.ui_queue.put({"type": UIMessageType.MODE_CHANGE, "mode": mode})
