@@ -8,9 +8,10 @@ from enum import Enum
 from PIL import ImageFont
 import os
 
-__all__ = ["config","SignMode", "UIMessageType", "Fonts", "Colors"]
+__all__ = ["config", "SignMode", "UIMessageType", "Fonts", "Colors"]
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
 
 class SignMode(Enum):
     TEST = 0
@@ -18,11 +19,13 @@ class SignMode(Enum):
     CLOCK = 2
     MUSIC = 3
 
+
 class UIMessageType(Enum):
     TEST = 0
     MODE_SHIFT = 1
     MODE_CHANGE = 2
     MBTA_CHANGE_STATION = 3
+
 
 class RenderMessageType(Enum):
     TEXT = 0
@@ -31,12 +34,14 @@ class RenderMessageType(Enum):
     MUSIC = 3
     IMAGE = 4
 
+
 class Rect:
     def __init__(self, x: int, y: int, w: int, h: int):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+
 
 class Fonts:
     MBTA = ImageFont.truetype(os.path.join(
@@ -45,6 +50,7 @@ class Fonts:
         CURRENT_FOLDER, "fonts/Silkscreen-Normal.ttf"), 8)
     PICOPIXEL = ImageFont.truetype(os.path.join(
         CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7)
+
 
 class Colors:
     BLACK = (0, 0, 0)

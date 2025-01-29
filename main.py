@@ -32,6 +32,7 @@ mode_broadcaster.set_status(DEFAULT_SIGN_MODE)
 
 mbta = MBTA(api_key=config.MBTA_API_KEY)
 
+
 def setup_gpio():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -43,11 +44,12 @@ def setup_gpio():
 def button_callback(channel):
     ui_queue.put({"type": UIMessageType.MODE_SHIFT})
 
+
 def ui_task():
     while True:
         try:
             message = ui_queue.get(timeout=REFRESH_RATE)
-            
+
             if message["type"] == UIMessageType.MODE_SHIFT:
                 # Cycle through modes
                 modes = list(SignMode)
@@ -88,10 +90,11 @@ def ui_task():
                     "type": RenderMessageType.TEXT,
                     "content": new_message
                 })
- 
+
         except queue.Empty:
             time.sleep(REFRESH_RATE)
             continue
+
 
 def render_task():
     display = Display()
@@ -136,21 +139,23 @@ def mbta_provider_task():
             print(status)
             print(predictions)
             if status == PredictionStatus.OK:
-                arr_prediction = mbta.find_prediction_with_arriving_banner(predictions)
+                arr_prediction = mbta.find_prediction_with_arriving_banner(
+                    predictions)
                 if arr_prediction is not None:
                     print("showing arriving banner")
                     render_queue.put({
                         "type": RenderMessageType.MBTA_BANNER,
                         "content": mbta.get_arriving_banner(arr_prediction)
                     })
-                mbta.update_latest_predictions(predictions, [0,1])
+                mbta.update_latest_predictions(predictions, [0, 1])
             time.sleep(5)
         else:
             time.sleep(REFRESH_RATE)
 
 
 def music_provider_task():
-    spotify = Spotify(config.SPOTIFY_CLIENT_ID, config.SPOTIFY_CLIENT_SECRET, config.SPOTIFY_REFRESH_TOKEN)
+    spotify = Spotify(config.SPOTIFY_CLIENT_ID,
+                      config.SPOTIFY_CLIENT_SECRET, config.SPOTIFY_REFRESH_TOKEN)
     spotify.setup()
     while True:
         if mode_broadcaster.get_status() == SignMode.MUSIC:
@@ -162,7 +167,8 @@ def music_provider_task():
                     status, img = spotify.get_album_cover(currently_playing)
                     if status == SpotifyResponse.OK:
                         currently_playing.cover.data = img
-                        print(f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
+                        print(
+                            f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
                     spotify.update_current_song(currently_playing)
                 else:
                     currently_playing.cover.data = spotify.get_current_song().cover.data
@@ -203,7 +209,7 @@ def main():
     mbta_thread.start()
     music_thread.start()
     web_server_thread.start()
-    
+
     try:
         while True:
             time.sleep(1)

@@ -2,11 +2,13 @@ from queue import Queue
 from flask import Flask, render_template, request
 from mbta import TrainStation, MBTA
 from broadcaster import StatusBroadcaster
-from common import config,SignMode, UIMessageType
+from common import config, SignMode, UIMessageType
 
 
 class Server:
-    def __init__(self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster, station_broadcaster: StatusBroadcaster):
+    def __init__(
+            self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster,
+            station_broadcaster: StatusBroadcaster):
         self.app = Flask(__name__)
         self.ui_queue = ui_queue
         self.mode_broadcaster = mode_broadcaster
@@ -30,7 +32,8 @@ class Server:
             current_station = self.station_broadcaster.get_status()
             current_station_index = list(TrainStation).index(current_station)
 
-            stations = [MBTA.train_station_to_str(station) for station in TrainStation]
+            stations = [MBTA.train_station_to_str(
+                station) for station in TrainStation]
             params["stations"] = stations
             params["current_station"] = current_station_index
         return render_template('index.html', **params)

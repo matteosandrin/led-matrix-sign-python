@@ -41,7 +41,9 @@ class Animation(ABC):
 
 
 class TextScrollAnimation(Animation):
-    def __init__(self, render_queue: Queue, bbox: Rect, speed: int, loop: bool, text: str, font: ImageFont, color: Tuple[int, int, int]):
+    def __init__(
+            self, render_queue: Queue, bbox: Rect, speed: int, loop: bool,
+            text: str, font: ImageFont, color: Tuple[int, int, int]):
         super().__init__(render_queue, bbox, speed, loop)
         self.text = text
         if len(self.text) > 0 and self.text[-1] != " ":

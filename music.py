@@ -146,7 +146,8 @@ class Spotify:
             print(f"Error fetching currently playing: {e}")
             return SpotifyResponse.ERROR
 
-    def get_album_cover(self, currently_playing: Song) -> tuple[str, Optional[bytes]]:
+    def get_album_cover(self, currently_playing: Song) -> tuple[str,
+                                                                Optional[bytes]]:
         return self.fetch_album_cover(currently_playing.cover.url)
 
     def fetch_album_cover(self, url: str) -> tuple[str, Optional[bytes]]:

@@ -85,7 +85,8 @@ class MBTA:
             dst[i] = self._format_prediction(prediction, trip)
         return PredictionStatus.OK, dst
 
-    def get_predictions_both_directions(self) -> tuple[PredictionStatus, List[Prediction]]:
+    def get_predictions_both_directions(self) -> tuple[PredictionStatus,
+                                                       List[Prediction]]:
         directions = [DIRECTION_SOUTHBOUND, DIRECTION_NORTHBOUND]
         nth_positions = [0, 0]
         return self.get_predictions(2, directions, nth_positions)
@@ -129,7 +130,8 @@ class MBTA:
                             n -= 1
         return None
 
-    def _find_trip_for_prediction(self, prediction_data: dict, prediction: Optional[dict]) -> Optional[dict]:
+    def _find_trip_for_prediction(self, prediction_data: dict,
+                                  prediction: Optional[dict]) -> Optional[dict]:
         if not prediction:
             return None
 
@@ -148,7 +150,8 @@ class MBTA:
         local_time = datetime.now(timezone.utc)
         return int((prediction_time - local_time).total_seconds())
 
-    def _determine_display_string(self, arr_diff: int, dep_diff: int, status: Optional[str]) -> str:
+    def _determine_display_string(
+            self, arr_diff: int, dep_diff: int, status: Optional[str]) -> str:
         if status:
             status = status.lower()
             if "stopped" in status:
@@ -165,7 +168,9 @@ class MBTA:
             return "BRD"
         return "ERROR"
 
-    def _format_prediction(self, prediction: Optional[dict], trip: Optional[dict]) -> Prediction:
+    def _format_prediction(
+            self, prediction: Optional[dict],
+            trip: Optional[dict]) -> Prediction:
         dst = Prediction()
         if not prediction or not trip:
             dst.label = ""
@@ -192,14 +197,17 @@ class MBTA:
         dst.value = display_string
         return dst
 
-    def update_latest_predictions(self, latest: List[Prediction], directions: List[int]) -> None:
+    def update_latest_predictions(
+            self, latest: List[Prediction],
+            directions: List[int]) -> None:
         if directions[0] == directions[1]:
             self.latest_predictions[directions[0]] = latest[0]
         else:
             self.latest_predictions[directions[0]] = latest[0]
             self.latest_predictions[directions[1]] = latest[1]
 
-    def find_prediction_with_arriving_banner(self, predictions: [Prediction]) -> Optional[Prediction]:
+    def find_prediction_with_arriving_banner(
+            self, predictions: [Prediction]) -> Optional[Prediction]:
         if len(predictions) < 2:
             return None
         if predictions[0].value == "ARR" and self.latest_predictions[0].value != "ARR":

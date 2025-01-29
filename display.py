@@ -16,6 +16,7 @@ PANEL_COUNT = 5
 SCREEN_WIDTH = PANEL_WIDTH * PANEL_COUNT
 SCREEN_HEIGHT = PANEL_HEIGHT
 
+
 class Display:
     def __init__(self):
         # Configure RGB matrix
@@ -39,7 +40,7 @@ class Display:
 
     def _get_draw_context_antialiased(self, image: Image):
         draw = ImageDraw.Draw(image)
-        draw.fontmode = "1" # turn off antialiasing
+        draw.fontmode = "1"  # turn off antialiasing
         return draw
 
     def render_text_content(self, text: str):
@@ -52,7 +53,8 @@ class Display:
         bbox, image = content
         self._update_display(image, bbox.x, bbox.y)
 
-    def render_mbta_content(self, content: Tuple[PredictionStatus, List[Prediction]]):
+    def render_mbta_content(
+            self, content: Tuple[PredictionStatus, List[Prediction]]):
         # Create new image with black background
         image = Image.new(
             'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
@@ -77,7 +79,8 @@ class Display:
                       fill=Colors.MBTA_AMBER)
 
             # Draw second prediction line
-            draw.text((0, 16), p2.label, font=Fonts.MBTA, fill=Colors.MBTA_AMBER)
+            draw.text((0, 16), p2.label, font=Fonts.MBTA,
+                      fill=Colors.MBTA_AMBER)
             value_width = draw.textlength(p2.value, font=Fonts.MBTA)
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
             draw.text((x_pos, 16), p2.value,
@@ -120,55 +123,60 @@ class Display:
             progress_bar_width = SCREEN_WIDTH - 32
             progress = song.progress_ms / song.duration_ms
             current_bar_width = int(progress_bar_width * progress)
-            
+
             # Draw progress bar background
             draw.rectangle(
-                [(32, SCREEN_HEIGHT - 2), (32 + progress_bar_width, SCREEN_HEIGHT)],
-                fill=(255, 255, 255)
-            )
-            
+                [(32, SCREEN_HEIGHT - 2),
+                 (32 + progress_bar_width, SCREEN_HEIGHT)],
+                fill=(255, 255, 255))
+
             # Draw progress bar fill
             if current_bar_width > 0:
                 draw.rectangle(
-                    [(32, SCREEN_HEIGHT - 2), (32 + current_bar_width, SCREEN_HEIGHT)],
-                    fill=Colors.SPOTIFY_GREEN
-                )
-            
+                    [(32, SCREEN_HEIGHT - 2),
+                     (32 + current_bar_width, SCREEN_HEIGHT)],
+                    fill=Colors.SPOTIFY_GREEN)
+
             # Draw time progress
             progress_time = self._format_time(song.progress_ms // 1000, False)
-            time_to_end = self._format_time((song.duration_ms - song.progress_ms) // 1000, True)
-            
+            time_to_end = self._format_time(
+                (song.duration_ms - song.progress_ms) // 1000, True)
+
             # Use smaller font for time display
             small_font = Fonts.PICOPIXEL
 
             # Draw song title and artist
-            draw.text((32+1, 0), song.title, font=small_font, fill=(255, 255, 255))
-            draw.text((32+1, 8), song.artist, font=small_font, fill=(255, 255, 255))
+            draw.text((32+1, 0), song.title,
+                      font=small_font, fill=(255, 255, 255))
+            draw.text((32+1, 8), song.artist,
+                      font=small_font, fill=(255, 255, 255))
             # Draw progress time (left side)
             progress_time_y = SCREEN_HEIGHT - 8
-            draw.text((32 + 1, progress_time_y), progress_time, 
-                    font=small_font, fill=Colors.SPOTIFY_GREEN)
-            
+            draw.text((32 + 1, progress_time_y), progress_time,
+                      font=small_font, fill=Colors.SPOTIFY_GREEN)
+
             # Draw time to end (right side)
             time_to_end_width = draw.textlength(time_to_end, font=small_font)
-            draw.text((SCREEN_WIDTH - time_to_end_width - 1, progress_time_y), 
-                    time_to_end, font=small_font, fill=Colors.SPOTIFY_GREEN)
-            
+            draw.text((SCREEN_WIDTH - time_to_end_width - 1, progress_time_y),
+                      time_to_end, font=small_font, fill=Colors.SPOTIFY_GREEN)
+
             # Draw album art if available
             if song.cover.data is not None:
-                album_art = Image.open(BytesIO(song.cover.data), formats=['JPEG'])
+                album_art = Image.open(
+                    BytesIO(song.cover.data),
+                    formats=['JPEG'])
                 album_art = album_art.resize((32, 32))
                 image.paste(album_art, (0, 0, 32, 32))
 
             self._update_display(image)
-            
+
         elif status == SpotifyResponse.EMPTY:
-            draw.text((0, 0), "Nothing is playing", 
-                    font=self.default_font, fill=Colors.SPOTIFY_GREEN)
+            draw.text((0, 0), "Nothing is playing",
+                      font=self.default_font, fill=Colors.SPOTIFY_GREEN)
             self._update_display(image)
         else:
-            draw.text((0, 0), "Error querying the spotify API", 
-                    font=self.default_font, fill=Colors.SPOTIFY_GREEN)
+            draw.text((0, 0), "Error querying the spotify API",
+                      font=self.default_font, fill=Colors.SPOTIFY_GREEN)
             self._update_display(image)
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:
@@ -176,8 +184,7 @@ class Display:
         hours = seconds // 3600
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
-        
+
         if hours > 0:
             return f"{'-' if is_negative else ''}{hours:02d}:{minutes:02d}:{seconds:02d}"
         return f"{'-' if is_negative else ''}{minutes:02d}:{seconds:02d}"
-
