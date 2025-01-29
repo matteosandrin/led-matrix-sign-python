@@ -106,6 +106,8 @@ def render_task():
                 display.render_mbta_banner_content(message["content"])
             if message.get("type") == RenderMessageType.MUSIC:
                 display.render_music_content(message["content"])
+            if message.get("type") == RenderMessageType.IMAGE:
+                display.render_image_content(message["content"])
         except queue.Empty:
             continue
 

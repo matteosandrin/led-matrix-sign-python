@@ -1,10 +1,10 @@
-from common import config
+from common import config, Fonts, Colors, Rect
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from io import BytesIO
-from typing import List, Tuple
+from typing import List, Tuple, Any
 from mbta import Prediction, PredictionStatus
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
@@ -15,21 +15,6 @@ PANEL_HEIGHT = 32
 PANEL_COUNT = 5
 SCREEN_WIDTH = PANEL_WIDTH * PANEL_COUNT
 SCREEN_HEIGHT = PANEL_HEIGHT
-CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
-
-class Fonts:
-    MBTA = ImageFont.truetype(os.path.join(
-        CURRENT_FOLDER, "fonts/MBTASans-Regular.otf"), 8)
-    SILKSCREEN = ImageFont.truetype(os.path.join(
-        CURRENT_FOLDER, "fonts/Silkscreen-Normal.ttf"), 8)
-    PICOPIXEL = ImageFont.truetype(os.path.join(
-        CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7)
-
-class Colors:
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-    MBTA_AMBER = (255, 191, 0)
-    SPOTIFY_GREEN = (29, 185, 84)
 
 class Display:
     def __init__(self):
@@ -48,8 +33,8 @@ class Display:
 
         self.default_font = Fonts.SILKSCREEN
 
-    def _update_display(self, image: Image):
-        self.canvas.SetImage(image)
+    def _update_display(self, image: Image, x: int = 0, y: int = 0):
+        self.canvas.SetImage(image, x, y)
         self.canvas = self.matrix.SwapOnVSync(self.canvas)
 
     def _get_draw_context_antialiased(self, image: Image):
@@ -62,6 +47,10 @@ class Display:
         draw = self._get_draw_context_antialiased(image)
         draw.text((0, 0), text, font=self.default_font, fill=Colors.WHITE)
         self._update_display(image)
+
+    def render_image_content(self, content: Tuple[Rect, Any]):
+        bbox, image = content
+        self._update_display(image, bbox.x, bbox.y)
 
     def render_mbta_content(self, content: Tuple[PredictionStatus, List[Prediction]]):
         # Create new image with black background
