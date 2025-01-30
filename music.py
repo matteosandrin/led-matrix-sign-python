@@ -25,6 +25,7 @@ class Song:
     duration_ms: int = 0
     progress_ms: int = 0
     timestamp_ms: int = 0
+    is_new: bool = False
     cover: AlbumCover = field(default_factory=AlbumCover)
 
 
@@ -107,7 +108,7 @@ class Spotify:
         result.duration_ms = data["item"]["duration_ms"]
         result.progress_ms = data["progress_ms"]
         result.cover = self.format_album_cover(data)
-
+        result.is_new = self.is_current_song_new(result)
         return SpotifyResponse.OK, result
 
     def format_artists(self, data: Dict[str, Any]) -> str:

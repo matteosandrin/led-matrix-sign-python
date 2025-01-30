@@ -163,7 +163,7 @@ def music_provider_task():
             print(status)
             print(currently_playing)
             if status == SpotifyResponse.OK:
-                if spotify.is_current_song_new(currently_playing):
+                if currently_playing.is_new:
                     status, img = spotify.get_album_cover(currently_playing)
                     if status == SpotifyResponse.OK:
                         currently_playing.cover.data = img

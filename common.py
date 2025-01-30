@@ -42,6 +42,12 @@ class Rect:
         self.w = w
         self.h = h
 
+    def to_tuple(self):
+        return (self.x, self.y, self.w, self.h)
+    
+    def to_crop_tuple(self):
+        return (self.x, self.y, self.x + self.w, self.y + self.h)
+
 
 class Fonts:
     MBTA = ImageFont.truetype(os.path.join(
