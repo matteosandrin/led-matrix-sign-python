@@ -72,7 +72,8 @@ class Display:
             p1, p2 = predictions[0], predictions[1]
 
             # Draw first prediction line
-            draw.text((0, 0), p1.label, font=Fonts.MBTA, fill=Colors.MBTA_AMBER)
+            draw.text((0, 0), p1.label, font=Fonts.MBTA,
+                      fill=Colors.MBTA_AMBER)
             value_width = draw.textlength(p1.value, font=Fonts.MBTA)
             x_pos = max(PANEL_WIDTH * 3, SCREEN_WIDTH - value_width)
             draw.text((x_pos, 0), p1.value, font=Fonts.MBTA,
@@ -114,67 +115,34 @@ class Display:
     def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
         status, song = content
 
-        # Create new image with black background
-        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
-        draw = self._get_draw_context_antialiased(image)
-
         if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED]:
-            # Draw progress bar
-            progress_bar_width = SCREEN_WIDTH - 32
-            progress = song.progress_ms / song.duration_ms
-            current_bar_width = int(progress_bar_width * progress)
 
-            # Draw progress bar background
-            draw.rectangle(
-                [(32, SCREEN_HEIGHT - 2),
-                 (32 + progress_bar_width, SCREEN_HEIGHT)],
-                fill=(255, 255, 255))
+            progress_bar_image = self._get_progress_bar_image(song)
+            title_and_artist_image = self._get_title_and_artist_image(song)
 
-            # Draw progress bar fill
-            if current_bar_width > 0:
-                draw.rectangle(
-                    [(32, SCREEN_HEIGHT - 2),
-                     (32 + current_bar_width, SCREEN_HEIGHT)],
-                    fill=Colors.SPOTIFY_GREEN)
+            self.canvas.SetImage(progress_bar_image, 32,
+                                 SCREEN_HEIGHT - progress_bar_image.height)
+            self.canvas.SetImage(title_and_artist_image, 32, 0)
 
-            # Draw time progress
-            progress_time = self._format_time(song.progress_ms // 1000, False)
-            time_to_end = self._format_time(
-                (song.duration_ms - song.progress_ms) // 1000, True)
-
-            # Use smaller font for time display
-            small_font = Fonts.PICOPIXEL
-
-            # Draw song title and artist
-            draw.text((32+1, 0), song.title,
-                      font=small_font, fill=(255, 255, 255))
-            draw.text((32+1, 8), song.artist,
-                      font=small_font, fill=(255, 255, 255))
-            # Draw progress time (left side)
-            progress_time_y = SCREEN_HEIGHT - 8
-            draw.text((32 + 1, progress_time_y), progress_time,
-                      font=small_font, fill=Colors.SPOTIFY_GREEN)
-
-            # Draw time to end (right side)
-            time_to_end_width = draw.textlength(time_to_end, font=small_font)
-            draw.text((SCREEN_WIDTH - time_to_end_width - 1, progress_time_y),
-                      time_to_end, font=small_font, fill=Colors.SPOTIFY_GREEN)
-
-            # Draw album art if available
             if song.cover.data is not None:
-                album_art = Image.open(
+                album_art_image = Image.open(
                     BytesIO(song.cover.data),
                     formats=['JPEG'])
-                album_art = album_art.resize((32, 32))
-                image.paste(album_art, (0, 0, 32, 32))
-
-            self._update_display(image)
+                album_art_image = album_art_image.resize((32, 32))
+                self.canvas.SetImage(album_art_image, 0, 0)
+            self.canvas = self.matrix.SwapOnVSync(self.canvas)
 
         elif status == SpotifyResponse.EMPTY:
+            image = Image.new(
+                'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
+            draw = self._get_draw_context_antialiased(image)
             draw.text((0, 0), "Nothing is playing",
                       font=self.default_font, fill=Colors.SPOTIFY_GREEN)
             self._update_display(image)
         else:
+            image = Image.new(
+                'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
+            draw = self._get_draw_context_antialiased(image)
             draw.text((0, 0), "Error querying the spotify API",
                       font=self.default_font, fill=Colors.SPOTIFY_GREEN)
             self._update_display(image)
@@ -188,3 +156,49 @@ class Display:
         if hours > 0:
             return f"{'-' if is_negative else ''}{hours:02d}:{minutes:02d}:{seconds:02d}"
         return f"{'-' if is_negative else ''}{minutes:02d}:{seconds:02d}"
+
+    def _get_progress_bar_image(self, song: Song):
+        image = Image.new('RGB', (SCREEN_WIDTH - 32, 8), Colors.BLACK)
+        draw = self._get_draw_context_antialiased(image)
+        # Draw progress bar
+        progress_bar_width = SCREEN_WIDTH - 32
+        progress = song.progress_ms / song.duration_ms
+        current_bar_width = int(progress_bar_width * progress)
+
+        # Draw progress bar background
+        draw.rectangle(
+            [(0, image.height - 2),
+                (image.width, image.height)],
+            fill=(255, 255, 255))
+
+        # Draw progress bar fill
+        if current_bar_width > 0:
+            draw.rectangle(
+                [(0, image.height - 2),
+                    (current_bar_width, image.height)],
+                fill=Colors.SPOTIFY_GREEN)
+
+        # Draw time progress
+        progress_time = self._format_time(song.progress_ms // 1000, False)
+        time_to_end = self._format_time(
+            (song.duration_ms - song.progress_ms) // 1000, True)
+
+        small_font = Fonts.PICOPIXEL
+        # Draw progress time (left side)
+        draw.text((1, 0), progress_time,
+                  font=small_font, fill=Colors.SPOTIFY_GREEN)
+
+        # Draw time to end (right side)
+        time_to_end_width = draw.textlength(time_to_end, font=small_font)
+        draw.text((image.width - time_to_end_width, 0),
+                  time_to_end, font=small_font, fill=Colors.SPOTIFY_GREEN)
+        return image
+
+    def _get_title_and_artist_image(self, song: Song):
+        image = Image.new('RGB', (SCREEN_WIDTH - 32, 24), Colors.BLACK)
+        draw = self._get_draw_context_antialiased(image)
+        draw.text((0, 0), song.title,
+                  font=Fonts.SILKSCREEN, fill=Colors.WHITE)
+        draw.text((0, 8), song.artist,
+                  font=Fonts.SILKSCREEN, fill=Colors.WHITE)
+        return image
