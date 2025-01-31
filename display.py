@@ -8,6 +8,7 @@ from typing import List, Tuple, Any
 from mbta import Prediction, PredictionStatus
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
+from animation import AnimationManager, TextScrollAnimation
 import os
 
 PANEL_WIDTH = 32
@@ -31,11 +32,18 @@ class Display:
 
         self.matrix = RGBMatrix(options=options)
         self.canvas = self.matrix.CreateFrameCanvas()
-
         self.default_font = Fonts.SILKSCREEN
+        self.animation_manager = None
+
+    def set_animation_manager(self, animation_manager: AnimationManager):
+        self.animation_manager = animation_manager
+        self.animation_manager.start()
 
     def _update_display(self, image: Image, x: int = 0, y: int = 0):
         self.canvas.SetImage(image, x, y)
+        self._swap_canvas()
+
+    def _swap_canvas(self):
         self.canvas = self.matrix.SwapOnVSync(self.canvas)
 
     def _get_draw_context_antialiased(self, image: Image):
@@ -115,15 +123,29 @@ class Display:
     def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
         status, song = content
 
-        if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED]:
+        if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED, SpotifyResponse.OK_NEW_SONG]:
 
             progress_bar_image = self._get_progress_bar_image(song)
-            title_and_artist_image = self._get_title_and_artist_image(song)
-
             self.canvas.SetImage(progress_bar_image, 32,
                                  SCREEN_HEIGHT - progress_bar_image.height)
-            self.canvas.SetImage(title_and_artist_image, 32, 0)
 
+            if status == SpotifyResponse.OK_NEW_SONG:
+                self.animation_manager.remove_animation("song_title")
+                self.animation_manager.remove_animation("song_artist")
+                title_and_artist_image = self._get_title_and_artist_image(song)
+                self.canvas.SetImage(title_and_artist_image, 32, 0)
+                if self._get_text_length(song.title, Fonts.SILKSCREEN) > title_and_artist_image.width:
+                    self.animation_manager.add_animation(
+                        "song_title",
+                        TextScrollAnimation(
+                            Rect(32, 0, title_and_artist_image.width, 8),
+                            True, song.title, Fonts.SILKSCREEN, Colors.WHITE))
+                if self._get_text_length(song.artist, Fonts.SILKSCREEN) > title_and_artist_image.width:
+                    self.animation_manager.add_animation(
+                        "song_artist",
+                        TextScrollAnimation(
+                            Rect(32, 8, title_and_artist_image.width, 8),
+                            True, song.artist, Fonts.SILKSCREEN, Colors.WHITE))
             if song.cover.data is not None:
                 album_art_image = Image.open(
                     BytesIO(song.cover.data),
@@ -146,16 +168,6 @@ class Display:
             draw.text((0, 0), "Error querying the spotify API",
                       font=self.default_font, fill=Colors.SPOTIFY_GREEN)
             self._update_display(image)
-
-    def _format_time(self, seconds: int, is_negative: bool) -> str:
-        """Helper function to format time strings"""
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
-        seconds = seconds % 60
-
-        if hours > 0:
-            return f"{'-' if is_negative else ''}{hours:02d}:{minutes:02d}:{seconds:02d}"
-        return f"{'-' if is_negative else ''}{minutes:02d}:{seconds:02d}"
 
     def _get_progress_bar_image(self, song: Song):
         image = Image.new('RGB', (SCREEN_WIDTH - 32, 8), Colors.BLACK)
@@ -202,3 +214,24 @@ class Display:
         draw.text((0, 8), song.artist,
                   font=Fonts.SILKSCREEN, fill=Colors.WHITE)
         return image
+
+    def _get_text_length(self, text: str, font: ImageFont):
+        draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
+        return draw.textlength(text, font=font)
+
+    def render_animation_frame_content(self, content: Tuple[Rect, Any]):
+        bbox, frame = content
+        self.canvas.SetImage(frame, bbox.x, bbox.y)
+
+    def render_animation_swap_content(self, content: None):
+        self._swap_canvas()
+
+    def _format_time(self, seconds: int, is_negative: bool) -> str:
+        """Helper function to format time strings"""
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+
+        if hours > 0:
+            return f"{'-' if is_negative else ''}{hours:02d}:{minutes:02d}:{seconds:02d}"
+        return f"{'-' if is_negative else ''}{minutes:02d}:{seconds:02d}"

@@ -14,6 +14,7 @@ from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
 from music import Spotify, SpotifyResponse
+from animation import AnimationManager
 
 
 # Constants
@@ -98,6 +99,8 @@ def ui_task():
 
 def render_task():
     display = Display()
+    animation_manager = AnimationManager(render_queue)
+    display.set_animation_manager(animation_manager)
     while True:
         try:
             message = render_queue.get(timeout=REFRESH_RATE)
@@ -111,6 +114,10 @@ def render_task():
                 display.render_music_content(message["content"])
             if message.get("type") == RenderMessageType.IMAGE:
                 display.render_image_content(message["content"])
+            if message.get("type") == RenderMessageType.ANIMATION_FRAME:
+                display.render_animation_frame_content(message["content"])
+            if message.get("type") == RenderMessageType.ANIMATION_SWAP:
+                display.render_animation_swap_content(message["content"])
         except queue.Empty:
             continue
 
@@ -162,16 +169,14 @@ def music_provider_task():
             status, currently_playing = spotify.get_currently_playing()
             print(status)
             print(currently_playing)
-            if status == SpotifyResponse.OK:
-                if currently_playing.is_new:
-                    status, img = spotify.get_album_cover(currently_playing)
-                    if status == SpotifyResponse.OK:
-                        currently_playing.cover.data = img
-                        print(
-                            f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
-                    spotify.update_current_song(currently_playing)
-                else:
-                    currently_playing.cover.data = spotify.get_current_song().cover.data
+            if status == SpotifyResponse.OK_NEW_SONG:
+                img_status, img = spotify.get_album_cover(currently_playing)
+                if img_status == SpotifyResponse.OK:
+                    currently_playing.cover.data = img
+                    print(f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
+                spotify.update_current_song(currently_playing)
+            elif status == SpotifyResponse.OK:
+                pass
             elif status == SpotifyResponse.OK_SHOW_CACHED:
                 currently_playing = spotify.get_current_song()
             else:

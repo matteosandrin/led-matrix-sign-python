@@ -33,6 +33,8 @@ class RenderMessageType(Enum):
     MBTA_BANNER = 2
     MUSIC = 3
     IMAGE = 4
+    ANIMATION_FRAME = 5
+    ANIMATION_SWAP = 6
 
 
 class Rect:
