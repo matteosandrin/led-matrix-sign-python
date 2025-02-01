@@ -1,18 +1,22 @@
+import math
 import time
-from common import RenderMessageType, Rect
+from common import RenderMessageType, Fonts, Colors, Rect
 from PIL import Image, ImageDraw, ImageFont
 from typing import Tuple
 from queue import Queue
 from abc import ABC, abstractmethod
 import threading
 
+ANIMATION_REFRESH_RATE = 1 / 60.0 # 60 fps
 
 class Animation(ABC):
-    def __init__(self, bbox: Rect, loop: bool):
+    def __init__(self, bbox: Rect, speed: float, loop: bool):
         self.bbox = bbox
+        self.speed = speed # frames per second
         self.loop = loop
         self.frames = []
         self.current_frame = 0
+        self.last_update = 0
 
     @abstractmethod
     def render_frames(self):
@@ -50,11 +54,12 @@ class Animation(ABC):
         return frame, is_complete
 
 
+
 class TextScrollAnimation(Animation):
     def __init__(
-            self, bbox: Rect, loop: bool,
+            self, bbox: Rect, speed: float, loop: bool,
             text: str, font: ImageFont, color: Tuple[int, int, int]):
-        super().__init__(bbox, loop)
+        super().__init__(bbox, speed, loop)
         self.text = text
         if len(self.text) > 0 and self.text[-1] != " ":
             self.text += " " * 4
@@ -70,17 +75,52 @@ class TextScrollAnimation(Animation):
 
     def render_frames(self):
         frames = []
-        distance = int(max(self.bbox.x, self.text_width()))
-        for i in range(0, distance):
+        delta = int(max(self.bbox.x, self.text_width()))
+        for i in range(0, delta):
             image = Image.new('RGB', (self.bbox.w, self.bbox.h))
             draw = ImageDraw.Draw(image)
             draw.fontmode = "1"  # antialiasing off
             x_pos1, x_pos2 = -i, -i + self.text_width()
             draw.text((x_pos1, 0), self.text, font=self.font, fill=self.color)
             draw.text((x_pos2, 0), self.text, font=self.font, fill=self.color)
-            frames.append(image)
+            frames.append((self.bbox, image))
         return frames
 
+class MBTABannerAnimation(Animation):
+    def __init__(
+            self, start_bbox: Rect, end_bbox: Rect,
+            line1: str, line2: str):
+        super().__init__(start_bbox, 60, False)
+        self.start_bbox = start_bbox
+        self.end_bbox = end_bbox
+        self.line1 = line1
+        self.line2 = line2
+        self.font = Fonts.MBTA
+        self.color = Colors.MBTA_AMBER
+        self.frames = self.render_frames()
+
+    def render_frames(self):
+        frames = []
+        image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+        draw = ImageDraw.Draw(image)
+        draw.fontmode = "1"  # antialiasing off
+        line1 = self.line1[:16]
+        line2 = self.line2[:16]
+        # Center text for both lines
+        line1_width = draw.textlength(line1, font=self.font)
+        line2_width = draw.textlength(line2, font=self.font)
+        x1 = (self.bbox.w - line1_width) // 2
+        x2 = (self.bbox.w - line2_width) // 2
+        draw.text((x1, 0), self.line1, font=self.font, fill=self.color)
+        draw.text((x2, 16), self.line2, font=self.font, fill=self.color)
+        x_delta, y_delta = self.end_bbox.x - self.start_bbox.x, self.end_bbox.y - self.start_bbox.y
+        delta = math.sqrt(x_delta ** 2 + y_delta ** 2)
+        frame_count = int(delta)
+        for i in range(0, frame_count + 1):
+            x_pos = self.start_bbox.x + (x_delta * i / frame_count)
+            y_pos = self.start_bbox.y + (y_delta * i / frame_count)
+            frames.append((Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), image))
+        return frames
 
 class AnimationManager:
     def __init__(self, render_queue: Queue):
@@ -88,13 +128,25 @@ class AnimationManager:
         self.animations = {}
         self.is_running = False
         self.thread = None
+        self.sync_groups = {}
+        self.last_update = {}
 
     def add_animation(self, key: str, animation: Animation):
         self.animations[key] = animation
+        if animation.speed not in self.sync_groups:
+            self.sync_groups[animation.speed] = []
+        self.sync_groups[animation.speed].append(key)
+        self.last_update[animation.speed] = 0
 
     def remove_animation(self, key: str):
         if key in self.animations:
+            if self.last_update[self.animations[key].speed] == 0:
+                del self.last_update[self.animations[key].speed]
             del self.animations[key]
+            for speed, keys in self.sync_groups.items():
+                if key in keys:
+                    keys.remove(key)
+            
 
     def get_animation(self, key: str):
         return self.animations.get(key)
@@ -114,21 +166,27 @@ class AnimationManager:
         self.animations = {}
 
     def _run_animations(self):
+        frame_count = 0
         while self.is_running:
             completed_keys = []
             start_time = time.time()
             
-            for key, animation in self.animations.items():
-                frame, is_complete = animation.next_frame()
-                if frame is not None:
-                    self.render_queue.put({
-                        "type": RenderMessageType.ANIMATION_FRAME,
-                        "content": (animation.bbox, frame)
-                    })
-                if is_complete:
-                    completed_keys.append(key)
-                    
-            if self.animations:
+            update_count = 0
+            for speed, keys in self.sync_groups.items():
+                if frame_count - self.last_update[speed] >= math.floor(60 / speed):
+                    for key in keys:
+                        animation = self.animations[key]
+                        frame, is_complete = animation.next_frame()
+                        if frame is not None:
+                            self.render_queue.put({
+                                "type": RenderMessageType.ANIMATION_FRAME,
+                                "content": frame
+                            })
+                            update_count += 1
+                    if is_complete:
+                        completed_keys.append(key)
+                    self.last_update[speed] = frame_count
+            if update_count > 0:
                 self.render_queue.put({
                     "type": RenderMessageType.ANIMATION_SWAP,
                     "content": None
@@ -137,6 +195,7 @@ class AnimationManager:
             for key in completed_keys:
                 self.remove_animation(key)
                 
+            frame_count += 1
             elapsed_time = time.time() - start_time
-            sleep_time = min(0.1, 0.1 - elapsed_time)
+            sleep_time = min(ANIMATION_REFRESH_RATE, ANIMATION_REFRESH_RATE - elapsed_time)
             time.sleep(sleep_time)

@@ -86,9 +86,16 @@ def ui_task():
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
                 render_queue.put({
-                    "type": RenderMessageType.TEXT,
-                    "content": new_message
+                    "type": RenderMessageType.CLEAR
                 })
+                render_queue.put({
+                    "type": RenderMessageType.MBTA_BANNER,
+                    "content": ["Alewife train" , "is now arriving."]
+                });
+                # render_queue.put({
+                #     "type": RenderMessageType.TEXT,
+                #     "content": new_message
+                # })
 
         except queue.Empty:
             time.sleep(REFRESH_RATE)

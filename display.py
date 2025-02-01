@@ -8,7 +8,7 @@ from typing import List, Tuple, Any
 from mbta import Prediction, PredictionStatus
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
-from animation import AnimationManager, TextScrollAnimation
+from animation import AnimationManager, MBTABannerAnimation, TextScrollAnimation
 import os
 
 PANEL_WIDTH = 32
@@ -112,18 +112,12 @@ class Display:
     def render_mbta_banner_content(self, lines: [str]):
         lines = lines[:2]
         # Create new image with black background
-        image = Image.new(
-            'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
-        draw = self._get_draw_context_antialiased(image)
-        mbta_font = Fonts.MBTA
-        for i, line in enumerate(lines):
-            line = line[:16]
-            # Center text for both lines
-            line_width = draw.textlength(line, font=mbta_font)
-            x = (SCREEN_WIDTH - line_width) // 2
-            y = i * 16
-            draw.text((x, y), line, font=mbta_font, fill=Colors.MBTA_AMBER)
-        self._update_display(image)
+        self.animation_manager.add_animation(
+            "mbta_banner",
+            MBTABannerAnimation(
+                Rect(0, 32, SCREEN_WIDTH, SCREEN_HEIGHT),
+                Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+                lines[0], lines[1]))
 
     def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
         status, song = content
@@ -143,13 +137,13 @@ class Display:
                     self.animation_manager.add_animation(
                         "song_title",
                         TextScrollAnimation(
-                            Rect(32, 0, title_and_artist_image.width, 8),
+                            Rect(32, 0, title_and_artist_image.width, 8), 10,
                             True, song.title, Fonts.SILKSCREEN, Colors.WHITE))
                 if self._get_text_length(song.artist, Fonts.SILKSCREEN) > title_and_artist_image.width:
                     self.animation_manager.add_animation(
                         "song_artist",
                         TextScrollAnimation(
-                            Rect(32, 8, title_and_artist_image.width, 8),
+                            Rect(32, 8, title_and_artist_image.width, 8), 10,
                             True, song.artist, Fonts.SILKSCREEN, Colors.WHITE))
             if song.cover.data is not None:
                 album_art_image = Image.open(
