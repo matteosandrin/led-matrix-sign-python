@@ -122,31 +122,47 @@ class MBTABannerAnimation(Animation):
             frames.append((Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), image))
         return frames
 
+class AnimationGroup:
+    def __init__(self, speed: float):
+        self.speed = speed
+        self.animation_keys = []
+        self.last_update = 0
+
+    def add_animation(self, key: str):
+        self.animation_keys.append(key)
+
+    def remove_animation(self, key: str):
+        if key in self.animation_keys:
+            self.animation_keys.remove(key)
+
+    def is_empty(self):
+        return len(self.animation_keys) == 0
+
+    def should_update(self, frame_count: int) -> bool:
+        return frame_count - self.last_update >= math.floor(60 / self.speed)
+
 class AnimationManager:
     def __init__(self, render_queue: Queue):
         self.render_queue = render_queue
         self.animations = {}
         self.is_running = False
         self.thread = None
-        self.sync_groups = {}
-        self.last_update = {}
+        self.animation_groups = {}  # speed -> AnimationGroup
 
     def add_animation(self, key: str, animation: Animation):
         self.animations[key] = animation
-        if animation.speed not in self.sync_groups:
-            self.sync_groups[animation.speed] = []
-        self.sync_groups[animation.speed].append(key)
-        self.last_update[animation.speed] = 0
+        if animation.speed not in self.animation_groups:
+            self.animation_groups[animation.speed] = AnimationGroup(animation.speed)
+        self.animation_groups[animation.speed].add_animation(key)
 
     def remove_animation(self, key: str):
         if key in self.animations:
-            if self.last_update[self.animations[key].speed] == 0:
-                del self.last_update[self.animations[key].speed]
+            speed = self.animations[key].speed
+            group = self.animation_groups[speed]
+            group.remove_animation(key)
+            if group.is_empty():
+                del self.animation_groups[speed]
             del self.animations[key]
-            for speed, keys in self.sync_groups.items():
-                if key in keys:
-                    keys.remove(key)
-            
 
     def get_animation(self, key: str):
         return self.animations.get(key)
@@ -172,9 +188,9 @@ class AnimationManager:
             start_time = time.time()
             
             update_count = 0
-            for speed, keys in self.sync_groups.items():
-                if frame_count - self.last_update[speed] >= math.floor(60 / speed):
-                    for key in keys:
+            for speed, group in self.animation_groups.items():
+                if group.should_update(frame_count):
+                    for key in group.animation_keys:
                         animation = self.animations[key]
                         frame, is_complete = animation.next_frame()
                         if frame is not None:
@@ -183,9 +199,10 @@ class AnimationManager:
                                 "content": frame
                             })
                             update_count += 1
-                    if is_complete:
-                        completed_keys.append(key)
-                    self.last_update[speed] = frame_count
+                        if is_complete:
+                            completed_keys.append(key)
+                    group.last_update = frame_count
+
             if update_count > 0:
                 self.render_queue.put({
                     "type": RenderMessageType.ANIMATION_SWAP,
