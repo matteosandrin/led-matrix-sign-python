@@ -44,7 +44,7 @@ class Display:
         self._swap_canvas()
 
     def _swap_canvas(self):
-        self.canvas = self.matrix.SwapOnVSync(self.canvas)
+        self.matrix.SwapOnVSync(self.canvas)
 
     def _get_draw_context_antialiased(self, image: Image):
         draw = ImageDraw.Draw(image)
@@ -152,7 +152,7 @@ class Display:
                     formats=['JPEG'])
                 album_art_image = album_art_image.resize((32, 32))
                 self.canvas.SetImage(album_art_image, 0, 0)
-            self.canvas = self.matrix.SwapOnVSync(self.canvas)
+            self.matrix.SwapOnVSync(self.canvas)
 
         elif status == SpotifyResponse.EMPTY:
             image = Image.new(
