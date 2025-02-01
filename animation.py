@@ -110,6 +110,9 @@ class AnimationManager:
         if self.thread:
             self.thread.join()
 
+    def clear(self):
+        self.animations = {}
+
     def _run_animations(self):
         while self.is_running:
             completed_keys = []

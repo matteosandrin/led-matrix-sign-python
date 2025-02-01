@@ -61,8 +61,7 @@ def ui_task():
                 print(f"Mode changed to: {modes[next_index]}")
                 # clear the display
                 render_queue.put({
-                    "type": RenderMessageType.TEXT,
-                    "content": ""
+                    "type": RenderMessageType.CLEAR,
                 })
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
@@ -72,8 +71,7 @@ def ui_task():
                     print(f"Mode changed to: {new_mode}")
                     # clear the display
                     render_queue.put({
-                        "type": RenderMessageType.TEXT,
-                        "content": ""
+                        "type": RenderMessageType.CLEAR
                     })
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
@@ -104,6 +102,8 @@ def render_task():
     while True:
         try:
             message = render_queue.get(timeout=REFRESH_RATE)
+            if message.get("type") == RenderMessageType.CLEAR:
+                display.clear()
             if message.get("type") == RenderMessageType.TEXT:
                 display.render_text_content(message["content"])
             if message.get("type") == RenderMessageType.MBTA:

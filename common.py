@@ -28,13 +28,14 @@ class UIMessageType(Enum):
 
 
 class RenderMessageType(Enum):
-    TEXT = 0
-    MBTA = 1
-    MBTA_BANNER = 2
-    MUSIC = 3
-    IMAGE = 4
-    ANIMATION_FRAME = 5
-    ANIMATION_SWAP = 6
+    CLEAR = 0
+    TEXT = 1
+    MBTA = 2
+    MBTA_BANNER = 3
+    MUSIC = 4
+    IMAGE = 5
+    ANIMATION_FRAME = 6
+    ANIMATION_SWAP = 7
 
 
 class Rect:

@@ -39,6 +39,11 @@ class Display:
         self.animation_manager = animation_manager
         self.animation_manager.start()
 
+    def clear(self):
+        self.animation_manager.clear()
+        self.canvas.Clear()
+        self._swap_canvas()
+
     def _update_display(self, image: Image, x: int = 0, y: int = 0):
         self.canvas.SetImage(image, x, y)
         self._swap_canvas()
