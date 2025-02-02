@@ -162,6 +162,8 @@ def mbta_provider_task():
                         "type": RenderMessageType.MBTA_BANNER,
                         "content": mbta.get_arriving_banner(arr_prediction)
                     })
+                    # in total this banner is displayed for 3+5 seconds
+                    time.sleep(3) 
                 mbta.update_latest_predictions(predictions, [0, 1])
             time.sleep(5)
         else:
