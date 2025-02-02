@@ -46,7 +46,7 @@ class Display:
         self._swap_canvas()
 
     def _update_display(self, image: Image, x: int = 0, y: int = 0):
-        self.canvas.SetImage(image, x, y)
+        self.canvas.SetImage(image, int(x), int(y))
         self._swap_canvas()
 
     def _swap_canvas(self):
@@ -226,7 +226,7 @@ class Display:
 
     def render_animation_frame_content(self, content: Tuple[Rect, Any]):
         bbox, frame = content
-        self.canvas.SetImage(frame, bbox.x, bbox.y)
+        self.canvas.SetImage(frame, int(bbox.x), int(bbox.y))
 
     def render_animation_swap_content(self, content: None):
         self._swap_canvas()
