@@ -2,7 +2,7 @@ import math
 import time
 from common import RenderMessageType, Fonts, Colors, Rect
 from PIL import Image, ImageDraw, ImageFont
-from typing import Tuple
+from typing import Dict, Tuple
 from queue import Queue
 from abc import ABC, abstractmethod
 import threading
@@ -75,7 +75,7 @@ class TextScrollAnimation(Animation):
 
     def render_frames(self):
         frames = []
-        delta = int(max(self.bbox.x, self.text_width()))
+        delta = int(max(self.bbox.w, self.text_width()))
         for i in range(0, delta):
             image = Image.new('RGB', (self.bbox.w, self.bbox.h))
             draw = ImageDraw.Draw(image)
@@ -148,24 +148,36 @@ class AnimationManager:
         self.is_running = False
         self.thread = None
         self.animation_groups = {}  # speed -> AnimationGroup
+        self.lock = threading.Lock()  # Add lock
 
     def add_animation(self, key: str, animation: Animation):
-        self.animations[key] = animation
-        if animation.speed not in self.animation_groups:
-            self.animation_groups[animation.speed] = AnimationGroup(animation.speed)
-        self.animation_groups[animation.speed].add_animation(key)
+        with self.lock:
+            self.animations[key] = animation
+            if animation.speed not in self.animation_groups:
+                self.animation_groups[animation.speed] = AnimationGroup(animation.speed)
+            self.animation_groups[animation.speed].add_animation(key)
+    
+    def add_animations(self, animations: Dict[str, Animation]):
+        with self.lock:
+            for key, animation in animations.items():
+                self.animations[key] = animation
+                if animation.speed not in self.animation_groups:
+                    self.animation_groups[animation.speed] = AnimationGroup(animation.speed)
+                self.animation_groups[animation.speed].add_animation(key)
 
     def remove_animation(self, key: str):
-        if key in self.animations:
-            speed = self.animations[key].speed
-            group = self.animation_groups[speed]
-            group.remove_animation(key)
-            if group.is_empty():
-                del self.animation_groups[speed]
-            del self.animations[key]
+        with self.lock:
+            if key in self.animations:
+                speed = self.animations[key].speed
+                group = self.animation_groups[speed]
+                group.remove_animation(key)
+                if group.is_empty():
+                    del self.animation_groups[speed]
+                del self.animations[key]
 
     def get_animation(self, key: str):
-        return self.animations.get(key)
+        with self.lock:
+            return self.animations.get(key)
 
     def start(self):
         if not self.is_running:
@@ -188,10 +200,10 @@ class AnimationManager:
             start_time = time.time()
             
             update_count = 0
-            for speed, group in self.animation_groups.items():
+            for speed, group in list(self.animation_groups.items()):
                 if group.should_update(frame_count):
                     for key in group.animation_keys:
-                        animation = self.animations[key]
+                        animation = self.get_animation(key)
                         frame, is_complete = animation.next_frame()
                         if frame is not None:
                             self.render_queue.put({
@@ -202,7 +214,6 @@ class AnimationManager:
                         if is_complete:
                             completed_keys.append(key)
                     group.last_update = frame_count
-
             if update_count > 0:
                 self.render_queue.put({
                     "type": RenderMessageType.ANIMATION_SWAP,
@@ -215,4 +226,5 @@ class AnimationManager:
             frame_count += 1
             elapsed_time = time.time() - start_time
             sleep_time = min(ANIMATION_REFRESH_RATE, ANIMATION_REFRESH_RATE - elapsed_time)
-            time.sleep(sleep_time)
+            if sleep_time > 0:
+                time.sleep(sleep_time)

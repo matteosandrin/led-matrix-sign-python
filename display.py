@@ -133,18 +133,16 @@ class Display:
                 self.animation_manager.remove_animation("song_artist")
                 title_and_artist_image = self._get_title_and_artist_image(song)
                 self.canvas.SetImage(title_and_artist_image, 32, 0)
+                animations = {}
                 if self._get_text_length(song.title, Fonts.SILKSCREEN) > title_and_artist_image.width:
-                    self.animation_manager.add_animation(
-                        "song_title",
-                        TextScrollAnimation(
-                            Rect(32, 0, title_and_artist_image.width, 8), 10,
-                            True, song.title, Fonts.SILKSCREEN, Colors.WHITE))
+                    animations["song_title"] = TextScrollAnimation(
+                        Rect(32, 0, title_and_artist_image.width, 8), 10,
+                        True, song.title, Fonts.SILKSCREEN, Colors.WHITE)
                 if self._get_text_length(song.artist, Fonts.SILKSCREEN) > title_and_artist_image.width:
-                    self.animation_manager.add_animation(
-                        "song_artist",
-                        TextScrollAnimation(
-                            Rect(32, 8, title_and_artist_image.width, 8), 10,
-                            True, song.artist, Fonts.SILKSCREEN, Colors.WHITE))
+                    animations["song_artist"] = TextScrollAnimation(
+                        Rect(32, 8, title_and_artist_image.width, 8), 10,
+                        True, song.artist, Fonts.SILKSCREEN, Colors.WHITE)
+                self.animation_manager.add_animations(animations)
             if song.cover.data is not None:
                 album_art_image = Image.open(
                     BytesIO(song.cover.data),
