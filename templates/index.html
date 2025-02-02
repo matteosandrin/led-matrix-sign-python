@@ -46,6 +46,10 @@
       </select>
       <input type="submit" value="Set station">
     </form>
+    <form method="GET" action="/trigger/banner">
+      <h2>Trigger banner</h2>
+      <input type="submit" value="Trigger banner">
+    </form>
   {% endif %}
   {% if current_mode == 0 %} <!-- SignMode.TEST -->
     <form method="GET" action="/set/test">

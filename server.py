@@ -18,6 +18,7 @@ class Server:
         self.app.route('/set/mode')(self.set_mode_route)
         self.app.route('/set/station')(self.set_station_route)
         self.app.route('/set/test')(self.set_test_message_route)
+        self.app.route('/trigger/banner')(self.trigger_banner_route)
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
@@ -59,6 +60,13 @@ class Server:
             return self.result_template(f'Station set to {station}')
         except Exception as e:
             return self.result_template(f'Invalid station: {value}')
+
+    def trigger_banner_route(self):
+        self.ui_queue.put({
+            "type": UIMessageType.MBTA_TEST_BANNER,
+            "content": ["Alewife train", "is now arriving."]
+        })
+        return self.result_template('Banner triggered')
 
     def set_test_message_route(self):
         value = request.args.get('msg')

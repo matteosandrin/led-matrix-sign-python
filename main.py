@@ -83,8 +83,7 @@ def ui_task():
                         "type": RenderMessageType.TEXT,
                         "content": MBTA.train_station_to_str(new_station)
                     })
-            elif message["type"] == UIMessageType.TEST:
-                new_message = message.get("content")
+            elif message["type"] == UIMessageType.MBTA_TEST_BANNER:
                 render_queue.put({
                     "type": RenderMessageType.CLEAR
                 })
@@ -92,10 +91,12 @@ def ui_task():
                     "type": RenderMessageType.MBTA_BANNER,
                     "content": ["Alewife train" , "is now arriving."]
                 });
-                # render_queue.put({
-                #     "type": RenderMessageType.TEXT,
-                #     "content": new_message
-                # })
+            elif message["type"] == UIMessageType.TEST:
+                new_message = message.get("content")
+                render_queue.put({
+                    "type": RenderMessageType.TEXT,
+                    "content": new_message
+                })
 
         except queue.Empty:
             time.sleep(REFRESH_RATE)

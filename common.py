@@ -25,6 +25,7 @@ class UIMessageType(Enum):
     MODE_SHIFT = 1
     MODE_CHANGE = 2
     MBTA_CHANGE_STATION = 3
+    MBTA_TEST_BANNER = 4
 
 
 class RenderMessageType(Enum):
