@@ -53,8 +53,6 @@ class Animation(ABC):
         
         return frame, is_complete
 
-
-
 class TextScrollAnimation(Animation):
     def __init__(
             self, bbox: Rect, speed: float, loop: bool,
@@ -86,41 +84,54 @@ class TextScrollAnimation(Animation):
             frames.append((self.bbox, image))
         return frames
 
-class MBTABannerAnimation(Animation):
+class MoveAnimation(Animation):
     def __init__(
-            self, start_bbox: Rect, end_bbox: Rect,
-            line1: str, line2: str):
-        super().__init__(start_bbox, 60, False)
+            self, start_bbox: Rect, end_bbox: Rect, 
+            image: Image.Image, speed: float = 60, loop: bool = False):
+        super().__init__(start_bbox, speed, loop)
         self.start_bbox = start_bbox
         self.end_bbox = end_bbox
-        self.line1 = line1
-        self.line2 = line2
-        self.font = Fonts.MBTA
-        self.color = Colors.MBTA_AMBER
+        self.image = image
         self.frames = self.render_frames()
 
     def render_frames(self):
         frames = []
-        image = Image.new('RGB', (self.bbox.w, self.bbox.h))
-        draw = ImageDraw.Draw(image)
-        draw.fontmode = "1"  # antialiasing off
-        line1 = self.line1[:16]
-        line2 = self.line2[:16]
-        # Center text for both lines
-        line1_width = draw.textlength(line1, font=self.font)
-        line2_width = draw.textlength(line2, font=self.font)
-        x1 = (self.bbox.w - line1_width) // 2
-        x2 = (self.bbox.w - line2_width) // 2
-        draw.text((x1, 0), self.line1, font=self.font, fill=self.color)
-        draw.text((x2, 16), self.line2, font=self.font, fill=self.color)
-        x_delta, y_delta = self.end_bbox.x - self.start_bbox.x, self.end_bbox.y - self.start_bbox.y
+        x_delta = self.end_bbox.x - self.start_bbox.x
+        y_delta = self.end_bbox.y - self.start_bbox.y
         delta = math.sqrt(x_delta ** 2 + y_delta ** 2)
         frame_count = int(delta)
+        
         for i in range(0, frame_count + 1):
             x_pos = self.start_bbox.x + (x_delta * i / frame_count)
             y_pos = self.start_bbox.y + (y_delta * i / frame_count)
-            frames.append((Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), image))
+            frames.append((Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), self.image))
         return frames
+
+class MBTABannerAnimation(MoveAnimation):
+    def __init__(
+            self, start_bbox: Rect, end_bbox: Rect,
+            line1: str, line2: str):
+        # Create the banner image first
+        image = Image.new('RGB', (start_bbox.w, start_bbox.h))
+        draw = ImageDraw.Draw(image)
+        draw.fontmode = "1"  # antialiasing off
+        
+        # Truncate and center text
+        line1 = line1[:16]
+        line2 = line2[:16]
+        font = Fonts.MBTA
+        color = Colors.MBTA_AMBER
+        
+        line1_width = draw.textlength(line1, font=font)
+        line2_width = draw.textlength(line2, font=font)
+        x1 = (start_bbox.w - line1_width) // 2
+        x2 = (start_bbox.w - line2_width) // 2
+        
+        draw.text((x1, 0), line1, font=font, fill=color)
+        draw.text((x2, 16), line2, font=font, fill=color)
+        
+        # Initialize the move animation with our banner image
+        super().__init__(start_bbox, end_bbox, image, speed=60, loop=False)
 
 class AnimationGroup:
     def __init__(self, speed: float):

@@ -8,7 +8,7 @@ from typing import List, Tuple, Any
 from mbta import Prediction, PredictionStatus
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
-from animation import AnimationManager, MBTABannerAnimation, TextScrollAnimation
+from animation import AnimationManager, MBTABannerAnimation, MoveAnimation, TextScrollAnimation
 import os
 
 PANEL_WIDTH = 32
@@ -34,6 +34,7 @@ class Display:
         self.canvas = self.matrix.CreateFrameCanvas()
         self.default_font = Fonts.SILKSCREEN
         self.animation_manager = None
+        self.last_mbta_image = None
 
     def set_animation_manager(self, animation_manager: AnimationManager):
         self.animation_manager = animation_manager
@@ -107,17 +108,24 @@ class Display:
             draw.text((0, 0), "Failed to fetch MBTA data",
                       font=self.default_font, fill=Colors.MBTA_AMBER)
 
+        self.last_mbta_image = image
         self._update_display(image)
 
     def render_mbta_banner_content(self, lines: [str]):
         lines = lines[:2]
         # Create new image with black background
-        self.animation_manager.add_animation(
-            "mbta_banner",
-            MBTABannerAnimation(
+        animations = {
+            "mbta_banner": MBTABannerAnimation(
                 Rect(0, 32, SCREEN_WIDTH, SCREEN_HEIGHT),
                 Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
-                lines[0], lines[1]))
+                lines[0], lines[1])
+        }
+        if self.last_mbta_image is not None:
+            animations["mbta_content_scroll_away"] = MoveAnimation(
+                Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+                Rect(0, -SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT),
+                self.last_mbta_image, speed=60, loop=False)
+        self.animation_manager.add_animations(animations)
 
     def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
         status, song = content
