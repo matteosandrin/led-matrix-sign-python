@@ -43,14 +43,14 @@ class Display:
     def clear(self):
         self.animation_manager.clear()
         self.canvas.Clear()
-        self._swap_canvas()
+        self.swap_canvas()
+
+    def swap_canvas(self):
+        self.matrix.SwapOnVSync(self.canvas)
 
     def _update_display(self, image: Image, x: int = 0, y: int = 0):
         self.canvas.SetImage(image, int(x), int(y))
-        self._swap_canvas()
-
-    def _swap_canvas(self):
-        self.matrix.SwapOnVSync(self.canvas)
+        self.swap_canvas()
 
     def _get_draw_context_antialiased(self, image: Image):
         draw = ImageDraw.Draw(image)
@@ -62,10 +62,6 @@ class Display:
         draw = self._get_draw_context_antialiased(image)
         draw.text((0, 0), text, font=self.default_font, fill=Colors.WHITE)
         self._update_display(image)
-
-    def render_image_content(self, content: Tuple[Rect, Any]):
-        bbox, image = content
-        self._update_display(image, bbox.x, bbox.y)
 
     def render_mbta_content(
             self, content: Tuple[PredictionStatus, List[Prediction]]):
@@ -224,12 +220,12 @@ class Display:
         draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
         return draw.textlength(text, font=font)
 
-    def render_animation_frame_content(self, content: Tuple[Rect, Any]):
+    def render_frame_content(self, content: Tuple[Rect, Any]):
         bbox, frame = content
         self.canvas.SetImage(frame, int(bbox.x), int(bbox.y))
 
-    def render_animation_swap_content(self, content: None):
-        self._swap_canvas()
+    def render_swap_content(self, content: None):
+        self.swap_canvas()
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:
         """Helper function to format time strings"""

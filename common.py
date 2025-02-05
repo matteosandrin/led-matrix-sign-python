@@ -18,6 +18,7 @@ class SignMode(Enum):
     MBTA = 1
     CLOCK = 2
     MUSIC = 3
+    WIDGET = 4
 
 
 class UIMessageType(Enum):
@@ -34,9 +35,8 @@ class RenderMessageType(Enum):
     MBTA = 2
     MBTA_BANNER = 3
     MUSIC = 4
-    IMAGE = 5
-    ANIMATION_FRAME = 6
-    ANIMATION_SWAP = 7
+    FRAME = 5
+    SWAP = 6
 
 
 class Rect:

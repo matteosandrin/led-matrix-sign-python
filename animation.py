@@ -218,7 +218,7 @@ class AnimationManager:
                         frame, is_complete = animation.next_frame()
                         if frame is not None:
                             self.render_queue.put({
-                                "type": RenderMessageType.ANIMATION_FRAME,
+                                "type": RenderMessageType.FRAME,
                                 "content": frame
                             })
                             update_count += 1
@@ -227,8 +227,7 @@ class AnimationManager:
                     group.last_update = frame_count
             if update_count > 0:
                 self.render_queue.put({
-                    "type": RenderMessageType.ANIMATION_SWAP,
-                    "content": None
+                    "type": RenderMessageType.SWAP
                 })
                 
             for key in completed_keys:

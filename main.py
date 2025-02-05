@@ -15,6 +15,8 @@ from server import Server
 from broadcaster import StatusBroadcaster
 from music import Spotify, SpotifyResponse
 from animation import AnimationManager
+from widget import WidgetManager, ClockWidget
+from common import Rect
 
 
 # Constants
@@ -112,6 +114,8 @@ def render_task():
             message = render_queue.get(timeout=REFRESH_RATE)
             if message.get("type") == RenderMessageType.CLEAR:
                 display.clear()
+            if message.get("type") == RenderMessageType.SWAP:
+                display.swap_canvas()
             if message.get("type") == RenderMessageType.TEXT:
                 display.render_text_content(message["content"])
             if message.get("type") == RenderMessageType.MBTA:
@@ -120,12 +124,8 @@ def render_task():
                 display.render_mbta_banner_content(message["content"])
             if message.get("type") == RenderMessageType.MUSIC:
                 display.render_music_content(message["content"])
-            if message.get("type") == RenderMessageType.IMAGE:
-                display.render_image_content(message["content"])
-            if message.get("type") == RenderMessageType.ANIMATION_FRAME:
-                display.render_animation_frame_content(message["content"])
-            if message.get("type") == RenderMessageType.ANIMATION_SWAP:
-                display.render_animation_swap_content(message["content"])
+            if message.get("type") == RenderMessageType.FRAME:
+                display.render_frame_content(message["content"])
         except queue.Empty:
             continue
 
@@ -205,6 +205,22 @@ def web_server_task():
     server.web_server_task()
 
 
+def widget_provider_task():
+    widget_manager = WidgetManager(render_queue)
+    widget_manager.add_widget(ClockWidget(
+        Rect(0, 0, 32, 8)
+    ))
+    
+    while True:
+        if mode_broadcaster.get_status() == SignMode.WIDGET:
+            if not widget_manager.active:
+                widget_manager.start()
+        else:
+            if widget_manager.active:
+                widget_manager.stop()
+        time.sleep(REFRESH_RATE)
+
+
 def main():
     # Setup
     if not config.EMULATE_RGB_MATRIX:
@@ -217,6 +233,7 @@ def main():
     mbta_thread = threading.Thread(target=mbta_provider_task, daemon=True)
     music_thread = threading.Thread(target=music_provider_task, daemon=True)
     web_server_thread = threading.Thread(target=web_server_task, daemon=True)
+    widget_thread = threading.Thread(target=widget_provider_task, daemon=True)
 
     ui_thread.start()
     render_thread.start()
@@ -224,6 +241,7 @@ def main():
     mbta_thread.start()
     music_thread.start()
     web_server_thread.start()
+    widget_thread.start()
 
     try:
         while True:
