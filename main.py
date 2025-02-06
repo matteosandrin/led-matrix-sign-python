@@ -15,7 +15,7 @@ from server import Server
 from broadcaster import StatusBroadcaster
 from music import Spotify, SpotifyResponse
 from animation import AnimationManager
-from widget import WidgetManager, ClockWidget
+from widget import WidgetManager, ClockWidget, WeatherWidget
 from common import Rect
 
 
@@ -208,9 +208,13 @@ def web_server_task():
 def widget_provider_task():
     widget_manager = WidgetManager(render_queue)
     widget_manager.add_widget(ClockWidget(
-        Rect(0, 0, 32, 8)
+        Rect(40, 8, 80, 16)
     ))
-    
+    widget_manager.add_widget(WeatherWidget(
+        Rect(0, 0, 32, 32),
+        config.IPDATA_API_KEY
+    ))
+
     while True:
         if mode_broadcaster.get_status() == SignMode.WIDGET:
             if not widget_manager.active:

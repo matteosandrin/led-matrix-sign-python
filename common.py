@@ -60,6 +60,8 @@ class Fonts:
         CURRENT_FOLDER, "fonts/Silkscreen-Normal.ttf"), 8)
     PICOPIXEL = ImageFont.truetype(os.path.join(
         CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7)
+    LCD = ImageFont.truetype(os.path.join(
+        CURRENT_FOLDER, "fonts/LCD.ttf"), 8)
 
 
 class Colors:
