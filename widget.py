@@ -16,6 +16,7 @@ class Widget(ABC):
         self.active = False
         self._thread: Optional[threading.Thread] = None
         self._image = Image.new('RGB', (bbox.w, bbox.h))
+        self._image_lock = threading.Lock()  # Add lock for image access
         self._draw = ImageDraw.Draw(self._image)
         self._draw.fontmode = "1"  # turn off antialiasing
 
@@ -47,23 +48,25 @@ class Widget(ABC):
 
     def get_render_data(self) -> dict:
         """Get the widget's current render data."""
-        return {
-            "type": RenderMessageType.FRAME,
-            "content": (self.bbox, self._image)
-        }
+        with self._image_lock:
+            return {
+                "type": RenderMessageType.FRAME,
+                "content": (self.bbox, self._image.copy())
+            }
 
 class ClockWidget(Widget):
     def __init__(self, bbox: Rect):
         super().__init__(bbox, refresh_rate=0.1)
         
     def update(self):
-        self._image.paste((0, 0, 0), (0, 0, self.bbox.w, self.bbox.h))
-        now = datetime.now()
-        if now.microsecond < 500000:
-            time_str = now.strftime("%H:%M:%S")
-        else:
-            time_str = now.strftime("%H %M %S")
-        self._draw.text((0, 0), time_str, font=Fonts.MBTA, fill=Colors.WHITE)
+        with self._image_lock:
+            self._image.paste((0, 0, 0), (0, 0, self.bbox.w, self.bbox.h))
+            now = datetime.now()
+            if now.microsecond < 500000:
+                time_str = now.strftime("%H:%M:%S")
+            else:
+                time_str = now.strftime("%H %M %S")
+            self._draw.text((0, 0), time_str, font=Fonts.MBTA, fill=Colors.WHITE)
 
 class WeatherWidget(Widget):
     def __init__(self, bbox: Rect, ipdata_api_key: str):
