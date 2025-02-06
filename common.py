@@ -5,7 +5,7 @@ except ImportError:
     print("       Start by copying config/config.example.py to config/config.py")
     exit(1)
 from enum import Enum
-from PIL import ImageFont
+from PIL import Image, ImageFont
 import os
 
 __all__ = ["config", "SignMode", "UIMessageType", "Fonts", "Colors"]
@@ -69,3 +69,11 @@ class Colors:
     WHITE = (255, 255, 255)
     MBTA_AMBER = (255, 191, 0)
     SPOTIFY_GREEN = (29, 185, 84)
+
+class Images:
+    ARROW_UP = Image.open(os.path.join(
+        CURRENT_FOLDER, "img/arrow-up.png"))
+    ARROW_DOWN = Image.open(os.path.join(
+        CURRENT_FOLDER, "img/arrow-down.png"))
+    DEG_SYMBOL = Image.open(os.path.join(
+        CURRENT_FOLDER, "img/deg-symbol.png"))

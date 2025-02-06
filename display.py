@@ -25,7 +25,10 @@ class Display:
         options.rows = PANEL_HEIGHT
         options.cols = PANEL_WIDTH
         options.chain_length = PANEL_COUNT
-        options.brightness = 50
+        if config.EMULATE_RGB_MATRIX:
+            options.brightness = 100
+        else:
+            options.brightness = 50
         options.hardware_mapping = "adafruit-hat-pwm"
 
         options.gpio_slowdown = 3

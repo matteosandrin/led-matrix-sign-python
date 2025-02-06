@@ -4,10 +4,11 @@ import time
 import queue
 from typing import Any, Optional
 from datetime import datetime
-from common import RenderMessageType, Rect, Fonts, Colors
+from common import RenderMessageType, Rect, Fonts, Colors, Images
 from PIL import Image, ImageDraw
 import requests
 from pprint import pprint
+import numpy as np
 
 class Widget(ABC):
     def __init__(self, bbox: Rect, refresh_rate: float = 1.0):
@@ -73,6 +74,21 @@ class WeatherWidget(Widget):
         super().__init__(bbox, refresh_rate=30)
         self.ipdata_api_key = ipdata_api_key
         self.location = self.get_location()
+        self.temp_color_map = {
+            -20: (0, 60, 98),      # dark blue
+            -10: (120, 162, 204),  # darker blue
+            0: (164, 195, 210),    # light blue
+            10: (121, 210, 179),   # turquoise  
+            20: (252, 245, 112),   # yellow
+            30: (255, 150, 79),    # orange
+            40: (255, 192, 159),   # red
+        }
+
+    def get_image_with_color(self, image: Image.Image, color: tuple[int, int, int]) -> Image.Image:
+        image = np.array(image.convert("RGB"))
+        image = (image / 255) * np.array(color)
+        image = image.astype(np.uint8)
+        return Image.fromarray(image, mode="RGB")
 
     def get_location(self):
         response = requests.get("https://api.ipdata.co", params={
@@ -110,6 +126,25 @@ class WeatherWidget(Widget):
         else:
             return None
 
+    def get_temp_color(self, temp: float) -> tuple[int, int, int]:
+        """Get interpolated color for a given temperature."""
+        temps = sorted(self.temp_color_map.keys())
+        if temp <= temps[0]:
+            return self.temp_color_map[temps[0]]
+        if temp >= temps[-1]:
+            return self.temp_color_map[temps[-1]]
+        for i in range(len(temps) - 1):
+            t1, t2 = temps[i], temps[i + 1]            
+            if t1 <= temp <= t2:
+                c1 = self.temp_color_map[t1]
+                c2 = self.temp_color_map[t2]
+                fraction = (temp - t1) / (t2 - t1)
+                r = int(c1[0] + fraction * (c2[0] - c1[0]))
+                g = int(c1[1] + fraction * (c2[1] - c1[1]))
+                b = int(c1[2] + fraction * (c2[2] - c1[2]))
+                return (r, g, b)
+        return Colors.WHITE
+
     def update(self):
         weather = self.get_weather()
         if weather is None:
@@ -117,13 +152,22 @@ class WeatherWidget(Widget):
         current_temp = int(round(weather['current']['temperature_2m']))
         min_temp = int(round(weather['daily']['temperature_2m_min'][0]))
         max_temp = int(round(weather['daily']['temperature_2m_max'][0]))
-        right_anchor = self._draw.textlength("H-00", font=Fonts.LCD)
+        right_anchor = int(self._draw.textlength("H-00", font=Fonts.LCD))
         self._image.paste((0, 0, 0), (0, 0, self.bbox.w, self.bbox.h))
-        self._draw.text((0, 0), f"{current_temp}", font=Fonts.MBTA, fill=Colors.WHITE, anchor="lt") # left-top
-        self._draw.text((0, 16), f"H", font=Fonts.LCD, fill=Colors.WHITE, anchor="lt") # left-top
-        self._draw.text((right_anchor, 16), f"{max_temp}", font=Fonts.LCD, fill=Colors.WHITE, anchor="rt") # right-top
-        self._draw.text((0, 16+8), f"L", font=Fonts.LCD, fill=Colors.WHITE, anchor="lt") # left-top
-        self._draw.text((right_anchor, 16+8), f"{min_temp}", font=Fonts.LCD, fill=Colors.WHITE, anchor="rt") # right-top
+        current_color = self.get_temp_color(current_temp)
+        max_color = self.get_temp_color(max_temp)
+        min_color = self.get_temp_color(min_temp)
+        arrow_up = self.get_image_with_color(Images.ARROW_UP, max_color)
+        arrow_down = self.get_image_with_color(Images.ARROW_DOWN, min_color)
+        deg_symbol_max = self.get_image_with_color(Images.DEG_SYMBOL, max_color)
+        deg_symbol_min = self.get_image_with_color(Images.DEG_SYMBOL, min_color)
+        self._draw.text((right_anchor, 0), f"{current_temp}", font=Fonts.MBTA, fill=current_color, anchor="rt")
+        self._image.paste(arrow_up, (0, 16))
+        self._draw.text((right_anchor, 16), f"{max_temp}", font=Fonts.LCD, fill=max_color, anchor="rt")
+        self._image.paste(deg_symbol_max, (right_anchor, 16))
+        self._image.paste(arrow_down, (0, 16+8))
+        self._draw.text((right_anchor, 16+8), f"{min_temp}", font=Fonts.LCD, fill=min_color, anchor="rt")
+        self._image.paste(deg_symbol_min, (right_anchor, 16+8))
 
 class WidgetManager:
     def __init__(self, render_queue: queue.Queue):
