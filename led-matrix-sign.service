@@ -1,0 +1,16 @@
+[Unit]
+Description=LED Matrix Sign Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /home/matteo/led-matrix-sign-python/main.py 
+Restart=on-failure
+RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=led-matrix-sign
+
+[Install]
+WantedBy=multi-user.target

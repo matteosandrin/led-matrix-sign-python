@@ -30,3 +30,18 @@ worse without it.
 ```bash
 sudo python3 main.py
 ```
+
+## Run at system startup
+
+First, edit the `led-matrix-sign.service` file to set the correct path to the
+Python script. Then, run the following commands:
+
+```bash
+sudo cp led-matrix-sign.service /etc/systemd/system/
+sudo chmod 644 /etc/systemd/system/led-matrix-sign.service
+sudo systemctl daemon-reload
+sudo systemctl enable led-matrix-sign.service
+sudo systemctl start led-matrix-sign.service
+# to check logs
+sudo journalctl -u led-matrix-sign.service
+```
