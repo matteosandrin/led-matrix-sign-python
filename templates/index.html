@@ -27,7 +27,38 @@
       document.getElementById("emulator-image").src = emulator_domain + "/image";
     </script>
   {% endif %}
-  <form method="GET" action="/set/mode">
+  <script>
+    async function handleFormSubmit(event, form) {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const queryString = new URLSearchParams(formData).toString();
+      const url = form.action + '?' + queryString;
+      
+      try {
+        const existingError = form.querySelector('.error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 250);
+      } catch (error) {
+        const submitButton = form.querySelector('input[type="submit"]');
+        const errorSpan = document.createElement('span');
+        errorSpan.textContent = ' ' + error.message;
+        errorSpan.className = 'error-message';
+        errorSpan.style.color = 'red';
+        submitButton.insertAdjacentElement('afterend', errorSpan);
+      }
+    }
+  </script>
+
+  <form method="GET" action="/set/mode" onsubmit="handleFormSubmit(event, this)">
     <h2>Set sign mode</h2>
     <select name="id">
       {% for mode in sign_modes %}
@@ -37,7 +68,7 @@
     <input type="submit" value="Set sign mode">
   </form>
   {% if current_mode == 1 %} <!-- SignMode.MBTA -->
-    <form method="GET" action="/set/station">
+    <form method="GET" action="/set/station" onsubmit="handleFormSubmit(event, this)">
       <h2>Set MBTA station</h2>
       <select name="id">
       {% for station in stations %}
@@ -46,13 +77,13 @@
       </select>
       <input type="submit" value="Set station">
     </form>
-    <form method="GET" action="/trigger/banner">
+    <form method="GET" action="/trigger/banner" onsubmit="handleFormSubmit(event, this)">
       <h2>Trigger banner</h2>
       <input type="submit" value="Trigger banner">
     </form>
   {% endif %}
   {% if current_mode == 0 %} <!-- SignMode.TEST -->
-    <form method="GET" action="/set/test">
+    <form method="GET" action="/set/test" onsubmit="handleFormSubmit(event, this)">
       <h2>Set test message</h2>
       <input type="text" name="msg" value="">
       <input type="submit" value="Set message">

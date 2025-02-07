@@ -46,41 +46,38 @@ class Server:
         try:
             mode = list(SignMode)[int(value)]
             self.set_mode(mode)
-            return self.result_template(f'Mode set to {mode.name}')
+            return f'Mode set to {mode.name}', 200
         except Exception as e:
-            return self.result_template(f'Invalid mode: {value}')
+            return f'Invalid mode: {value}', 400
 
     def set_station_route(self):
         value = request.args.get('id')
         if value is None:
-            return self.result_template('Station not provided')
+            return f'Station not provided', 400
         try:
             station = list(TrainStation)[int(value)]
             self.set_station(station)
-            return self.result_template(f'Station set to {station}')
+            return f'Station set to {station}', 200
         except Exception as e:
-            return self.result_template(f'Invalid station: {value}')
+            return f'Invalid station: {value}', 400
 
     def trigger_banner_route(self):
         self.ui_queue.put({
             "type": UIMessageType.MBTA_TEST_BANNER,
             "content": ["Alewife train", "is now arriving."]
         })
-        return self.result_template('Banner triggered')
+        return 'Banner triggered', 200
 
     def set_test_message_route(self):
         value = request.args.get('msg')
         if value is None:
-            return self.result_template('Message not provided')
+            return 'Message not provided', 400
         self.set_test_message(value)
-        return self.result_template(f'Message set to {value}')
+        return f'Message set to {value}', 200
 
     def web_server_task(self):
         self.app.run(host='0.0.0.0', port=5000,
                      debug=False, use_reloader=False)
-
-    def result_template(self, message: str):
-        return render_template('result.html', message=message)
 
     def set_mode(self, mode: SignMode):
         self.ui_queue.put({"type": UIMessageType.MODE_CHANGE, "mode": mode})
