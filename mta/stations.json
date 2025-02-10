@@ -1,0 +1,5759 @@
+[
+    {
+        "stop_id": "R01",
+        "stop_name": "Astoria-Ditmars Blvd",
+        "latitude": 40.775036,
+        "longitude": -73.912034,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R03",
+        "stop_name": "Astoria Blvd",
+        "latitude": 40.770258,
+        "longitude": -73.917843,
+        "north_direction_label": "Ditmars Blvd",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R04",
+        "stop_name": "30 Av",
+        "latitude": 40.766779,
+        "longitude": -73.921479,
+        "north_direction_label": "Astoria - Ditmars Blvd",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R05",
+        "stop_name": "Broadway",
+        "latitude": 40.76182,
+        "longitude": -73.925508,
+        "north_direction_label": "Astoria - Ditmars Blvd",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R06",
+        "stop_name": "36 Av",
+        "latitude": 40.756804,
+        "longitude": -73.929575,
+        "north_direction_label": "Astoria - Ditmars Blvd",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R08",
+        "stop_name": "39 Av-Dutch Kills",
+        "latitude": 40.752882,
+        "longitude": -73.932755,
+        "north_direction_label": "Astoria - Ditmars Blvd",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R11",
+        "stop_name": "Lexington Av/59 St",
+        "latitude": 40.762256,
+        "longitude": -73.967504,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R13",
+        "stop_name": "5 Av/59 St",
+        "latitude": 40.764736,
+        "longitude": -73.973438,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "R14",
+        "stop_name": "57 St-7 Av",
+        "latitude": 40.76468,
+        "longitude": -73.98,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R15",
+        "stop_name": "49 St",
+        "latitude": 40.75983,
+        "longitude": -73.98355,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R17",
+        "stop_name": "34 St-Herald Sq",
+        "latitude": 40.749567,
+        "longitude": -73.98765,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "B",
+            "D",
+            "F",
+            "M",
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R18",
+        "stop_name": "28 St",
+        "latitude": 40.745505,
+        "longitude": -73.988415,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R19",
+        "stop_name": "23 St",
+        "latitude": 40.741303,
+        "longitude": -73.989344,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R20",
+        "stop_name": "14 St-Union Sq",
+        "latitude": 40.73480006,
+        "longitude": -73.990768,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "L",
+            "R",
+            "W",
+            "N",
+            "Q",
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "R21",
+        "stop_name": "8 St-NYU",
+        "latitude": 40.7307,
+        "longitude": -73.992629,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R22",
+        "stop_name": "Prince St",
+        "latitude": 40.724329,
+        "longitude": -73.997702,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R23",
+        "stop_name": "Canal St",
+        "latitude": 40.719527,
+        "longitude": -74.001775,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "Q01",
+        "stop_name": "Canal St",
+        "latitude": 40.718383,
+        "longitude": -74,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "4",
+            "5",
+            "6",
+            "J",
+            "Z"
+        ]
+    },
+    {
+        "stop_id": "R24",
+        "stop_name": "City Hall",
+        "latitude": 40.713282,
+        "longitude": -74.006978,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R25",
+        "stop_name": "Cortlandt St",
+        "latitude": 40.71062,
+        "longitude": -74.010863,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R26",
+        "stop_name": "Rector St",
+        "latitude": 40.70722,
+        "longitude": -74.013342,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R27",
+        "stop_name": "Whitehall St-South Ferry",
+        "latitude": 40.70291,
+        "longitude": -74.013052,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "N",
+            "Q",
+            "W",
+            "R"
+        ]
+    },
+    {
+        "stop_id": "R28",
+        "stop_name": "Court St",
+        "latitude": 40.6941,
+        "longitude": -73.9923,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Bay Ridge - 95 St",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R30",
+        "stop_name": "DeKalb Av",
+        "latitude": 40.6909,
+        "longitude": -73.982,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island - Bay Ridge",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "R31",
+        "stop_name": "Atlantic Av-Barclays Ctr",
+        "latitude": 40.68455,
+        "longitude": -73.9786,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island - Bay Ridge",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "R32",
+        "stop_name": "Union St",
+        "latitude": 40.677316,
+        "longitude": -73.98311,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Bay Ridge - 95 St",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "R33",
+        "stop_name": "4 Av-9 St",
+        "latitude": 40.670847,
+        "longitude": -73.988302,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Bay Ridge - 95 St",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "R34",
+        "stop_name": "Prospect Av",
+        "latitude": 40.665414,
+        "longitude": -73.992872,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Bay Ridge - 95 St",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "R35",
+        "stop_name": "25 St",
+        "latitude": 40.660397,
+        "longitude": -73.998091,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Bay Ridge - 95 St",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "R36",
+        "stop_name": "36 St",
+        "latitude": 40.655144,
+        "longitude": -74.003549,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island - Bay Ridge",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "R39",
+        "stop_name": "45 St",
+        "latitude": 40.648939,
+        "longitude": -74.010006,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Bay Ridge - 95 St",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R40",
+        "stop_name": "53 St",
+        "latitude": 40.645069,
+        "longitude": -74.014034,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Bay Ridge - 95 St",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R41",
+        "stop_name": "59 St",
+        "latitude": 40.641362,
+        "longitude": -74.017881,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island - Bay Ridge",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "R42",
+        "stop_name": "Bay Ridge Av",
+        "latitude": 40.634967,
+        "longitude": -74.023377,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "95 St",
+        "routes": [
+            "R"
+        ]
+    },
+    {
+        "stop_id": "R43",
+        "stop_name": "77 St",
+        "latitude": 40.629742,
+        "longitude": -74.02551,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "95 St",
+        "routes": [
+            "R"
+        ]
+    },
+    {
+        "stop_id": "R44",
+        "stop_name": "86 St",
+        "latitude": 40.622687,
+        "longitude": -74.028398,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "95 St",
+        "routes": [
+            "R"
+        ]
+    },
+    {
+        "stop_id": "R45",
+        "stop_name": "Bay Ridge-95 St",
+        "latitude": 40.616622,
+        "longitude": -74.030876,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "R"
+        ]
+    },
+    {
+        "stop_id": "D25",
+        "stop_name": "7 Av",
+        "latitude": 40.67705,
+        "longitude": -73.9725,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5",
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D26",
+        "stop_name": "Prospect Park",
+        "latitude": 40.661614,
+        "longitude": -73.962246,
+        "north_direction_label": "Manhattan & Franklin Av",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B",
+            "FS"
+        ]
+    },
+    {
+        "stop_id": "D27",
+        "stop_name": "Parkside Av",
+        "latitude": 40.655292,
+        "longitude": -73.961495,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D28",
+        "stop_name": "Church Av",
+        "latitude": 40.650527,
+        "longitude": -73.962982,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D29",
+        "stop_name": "Beverley Rd",
+        "latitude": 40.644031,
+        "longitude": -73.964492,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D30",
+        "stop_name": "Cortelyou Rd",
+        "latitude": 40.640927,
+        "longitude": -73.963891,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D31",
+        "stop_name": "Newkirk Plaza",
+        "latitude": 40.635082,
+        "longitude": -73.962793,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D32",
+        "stop_name": "Avenue H",
+        "latitude": 40.62927,
+        "longitude": -73.961639,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D33",
+        "stop_name": "Avenue J",
+        "latitude": 40.625039,
+        "longitude": -73.960803,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D34",
+        "stop_name": "Avenue M",
+        "latitude": 40.617618,
+        "longitude": -73.959399,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D35",
+        "stop_name": "Kings Hwy",
+        "latitude": 40.60867,
+        "longitude": -73.957734,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D37",
+        "stop_name": "Avenue U",
+        "latitude": 40.5993,
+        "longitude": -73.955929,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D38",
+        "stop_name": "Neck Rd",
+        "latitude": 40.595246,
+        "longitude": -73.955161,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D39",
+        "stop_name": "Sheepshead Bay",
+        "latitude": 40.586896,
+        "longitude": -73.954155,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Brighton Beach & Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D40",
+        "stop_name": "Brighton Beach",
+        "latitude": 40.577621,
+        "longitude": -73.961376,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "D41",
+        "stop_name": "Ocean Pkwy",
+        "latitude": 40.576312,
+        "longitude": -73.968501,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Stillwell Av",
+        "routes": [
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "D42",
+        "stop_name": "W 8 St-NY Aquarium",
+        "latitude": 40.576127,
+        "longitude": -73.975939,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Stillwell Av",
+        "routes": [
+            "F",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "D43",
+        "stop_name": "Coney Island-Stillwell Av",
+        "latitude": 40.577422,
+        "longitude": -73.981233,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "Q",
+            "F",
+            "D",
+            "N"
+        ]
+    },
+    {
+        "stop_id": "B12",
+        "stop_name": "9 Av",
+        "latitude": 40.646292,
+        "longitude": -73.994324,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B13",
+        "stop_name": "Fort Hamilton Pkwy",
+        "latitude": 40.640914,
+        "longitude": -73.994304,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B14",
+        "stop_name": "50 St",
+        "latitude": 40.63626,
+        "longitude": -73.994791,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B15",
+        "stop_name": "55 St",
+        "latitude": 40.631435,
+        "longitude": -73.995476,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B16",
+        "stop_name": "62 St",
+        "latitude": 40.626472,
+        "longitude": -73.996895,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B17",
+        "stop_name": "71 St",
+        "latitude": 40.619589,
+        "longitude": -73.998864,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B18",
+        "stop_name": "79 St",
+        "latitude": 40.613501,
+        "longitude": -74.00061,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B19",
+        "stop_name": "18 Av",
+        "latitude": 40.607954,
+        "longitude": -74.001736,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B20",
+        "stop_name": "20 Av",
+        "latitude": 40.604556,
+        "longitude": -73.998168,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B21",
+        "stop_name": "Bay Pkwy",
+        "latitude": 40.601875,
+        "longitude": -73.993728,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B22",
+        "stop_name": "25 Av",
+        "latitude": 40.597704,
+        "longitude": -73.986829,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B23",
+        "stop_name": "Bay 50 St",
+        "latitude": 40.588841,
+        "longitude": -73.983765,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "N02",
+        "stop_name": "8 Av",
+        "latitude": 40.635064,
+        "longitude": -74.011719,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N03",
+        "stop_name": "Fort Hamilton Pkwy",
+        "latitude": 40.631386,
+        "longitude": -74.005351,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N04",
+        "stop_name": "New Utrecht Av",
+        "latitude": 40.624842,
+        "longitude": -73.996353,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N05",
+        "stop_name": "18 Av",
+        "latitude": 40.620671,
+        "longitude": -73.990414,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N06",
+        "stop_name": "20 Av",
+        "latitude": 40.61741,
+        "longitude": -73.985026,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N07",
+        "stop_name": "Bay Pkwy",
+        "latitude": 40.611815,
+        "longitude": -73.981848,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N08",
+        "stop_name": "Kings Hwy",
+        "latitude": 40.603923,
+        "longitude": -73.980353,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N09",
+        "stop_name": "Avenue U",
+        "latitude": 40.597473,
+        "longitude": -73.979137,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "N10",
+        "stop_name": "86 St",
+        "latitude": 40.592721,
+        "longitude": -73.97823,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "W",
+            "N",
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "J12",
+        "stop_name": "121 St",
+        "latitude": 40.700492,
+        "longitude": -73.828294,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J13",
+        "stop_name": "111 St",
+        "latitude": 40.697418,
+        "longitude": -73.836345,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J14",
+        "stop_name": "104 St",
+        "latitude": 40.695178,
+        "longitude": -73.84433,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J15",
+        "stop_name": "Woodhaven Blvd",
+        "latitude": 40.693879,
+        "longitude": -73.851576,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J16",
+        "stop_name": "85 St-Forest Pkwy",
+        "latitude": 40.692435,
+        "longitude": -73.86001,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J17",
+        "stop_name": "75 St-Elderts Ln",
+        "latitude": 40.691324,
+        "longitude": -73.867139,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J19",
+        "stop_name": "Cypress Hills",
+        "latitude": 40.689941,
+        "longitude": -73.87255,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "J",
+            "Z"
+        ]
+    },
+    {
+        "stop_id": "J20",
+        "stop_name": "Crescent St",
+        "latitude": 40.683194,
+        "longitude": -73.873785,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "J",
+            "Z"
+        ]
+    },
+    {
+        "stop_id": "J21",
+        "stop_name": "Norwood Av",
+        "latitude": 40.68141,
+        "longitude": -73.880039,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J22",
+        "stop_name": "Cleveland St",
+        "latitude": 40.679947,
+        "longitude": -73.884639,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J23",
+        "stop_name": "Van Siclen Av",
+        "latitude": 40.678024,
+        "longitude": -73.891688,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J24",
+        "stop_name": "Alabama Av",
+        "latitude": 40.67725,
+        "longitude": -73.8987,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J27",
+        "stop_name": "Broadway Junction",
+        "latitude": 40.679498,
+        "longitude": -73.904512,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "L",
+            "A",
+            "C",
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J28",
+        "stop_name": "Chauncey St",
+        "latitude": 40.682893,
+        "longitude": -73.910456,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J29",
+        "stop_name": "Halsey St",
+        "latitude": 40.68637,
+        "longitude": -73.916559,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J30",
+        "stop_name": "Gates Av",
+        "latitude": 40.68963,
+        "longitude": -73.92227,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "J31",
+        "stop_name": "Kosciuszko St",
+        "latitude": 40.693342,
+        "longitude": -73.928814,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J"
+        ]
+    },
+    {
+        "stop_id": "M11",
+        "stop_name": "Myrtle Av",
+        "latitude": 40.697207,
+        "longitude": -73.935657,
+        "north_direction_label": "Jamaica - Middle Village",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M12",
+        "stop_name": "Flushing Av",
+        "latitude": 40.70026,
+        "longitude": -73.941126,
+        "north_direction_label": "Jamaica - Middle Village",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M13",
+        "stop_name": "Lorimer St",
+        "latitude": 40.703869,
+        "longitude": -73.947408,
+        "north_direction_label": "Jamaica - Middle Village",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M14",
+        "stop_name": "Hewes St",
+        "latitude": 40.70687,
+        "longitude": -73.953431,
+        "north_direction_label": "Jamaica - Middle Village",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M16",
+        "stop_name": "Marcy Av",
+        "latitude": 40.708359,
+        "longitude": -73.957,
+        "north_direction_label": "Jamaica - Middle Village",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M18",
+        "stop_name": "Delancey St-Essex St",
+        "latitude": 40.7182,
+        "longitude": -73.9874,
+        "north_direction_label": "Brooklyn",
+        "south_direction_label": "Broad St (JZ) - Uptown (M)",
+        "routes": [
+            "F",
+            "A",
+            "C",
+            "Z",
+            "J",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M19",
+        "stop_name": "Bowery",
+        "latitude": 40.720331,
+        "longitude": -73.993298,
+        "north_direction_label": "Brooklyn",
+        "south_direction_label": "Broad St",
+        "routes": [
+            "J",
+            "Z"
+        ]
+    },
+    {
+        "stop_id": "M21",
+        "stop_name": "Chambers St",
+        "latitude": 40.713243,
+        "longitude": -74.00352,
+        "north_direction_label": "Brooklyn",
+        "south_direction_label": "Broad St",
+        "routes": [
+            "J",
+            "Z"
+        ]
+    },
+    {
+        "stop_id": "M23",
+        "stop_name": "Broad St",
+        "latitude": 40.706476,
+        "longitude": -74.011056,
+        "north_direction_label": "Brooklyn",
+        "south_direction_label": "",
+        "routes": [
+            "J",
+            "Z"
+        ]
+    },
+    {
+        "stop_id": "M01",
+        "stop_name": "Middle Village-Metropolitan Av",
+        "latitude": 40.711396,
+        "longitude": -73.889601,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M04",
+        "stop_name": "Fresh Pond Rd",
+        "latitude": 40.706186,
+        "longitude": -73.895877,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Metropolitan Av",
+        "routes": [
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M05",
+        "stop_name": "Forest Av",
+        "latitude": 40.704423,
+        "longitude": -73.903077,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Metropolitan Av",
+        "routes": [
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M06",
+        "stop_name": "Seneca Av",
+        "latitude": 40.702762,
+        "longitude": -73.90774,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Metropolitan Av",
+        "routes": [
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M09",
+        "stop_name": "Knickerbocker Av",
+        "latitude": 40.698664,
+        "longitude": -73.919711,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Metropolitan Av",
+        "routes": [
+            "M"
+        ]
+    },
+    {
+        "stop_id": "M10",
+        "stop_name": "Central Av",
+        "latitude": 40.697857,
+        "longitude": -73.927397,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Metropolitan Av",
+        "routes": [
+            "M"
+        ]
+    },
+    {
+        "stop_id": "L01",
+        "stop_name": "8 Av",
+        "latitude": 40.739644,
+        "longitude": -74.002203,
+        "north_direction_label": "",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L02",
+        "stop_name": "6 Av",
+        "latitude": 40.737641,
+        "longitude": -73.99748,
+        "north_direction_label": "8 Av",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L05",
+        "stop_name": "3 Av",
+        "latitude": 40.732849,
+        "longitude": -73.986122,
+        "north_direction_label": "8 Av",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L06",
+        "stop_name": "1 Av",
+        "latitude": 40.730953,
+        "longitude": -73.981628,
+        "north_direction_label": "8 Av",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L08",
+        "stop_name": "Bedford Av",
+        "latitude": 40.717304,
+        "longitude": -73.956872,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L10",
+        "stop_name": "Lorimer St",
+        "latitude": 40.714063,
+        "longitude": -73.950275,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L11",
+        "stop_name": "Graham Av",
+        "latitude": 40.714565,
+        "longitude": -73.944053,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L12",
+        "stop_name": "Grand St",
+        "latitude": 40.711926,
+        "longitude": -73.94067,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L13",
+        "stop_name": "Montrose Av",
+        "latitude": 40.707739,
+        "longitude": -73.93985,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L14",
+        "stop_name": "Morgan Av",
+        "latitude": 40.706152,
+        "longitude": -73.933147,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L15",
+        "stop_name": "Jefferson St",
+        "latitude": 40.706607,
+        "longitude": -73.922913,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L16",
+        "stop_name": "DeKalb Av",
+        "latitude": 40.703811,
+        "longitude": -73.918425,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L17",
+        "stop_name": "Myrtle-Wyckoff Avs",
+        "latitude": 40.699814,
+        "longitude": -73.911586,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "L19",
+        "stop_name": "Halsey St",
+        "latitude": 40.695602,
+        "longitude": -73.904084,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L20",
+        "stop_name": "Wilson Av",
+        "latitude": 40.688764,
+        "longitude": -73.904046,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L21",
+        "stop_name": "Bushwick Av-Aberdeen St",
+        "latitude": 40.682829,
+        "longitude": -73.905249,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L24",
+        "stop_name": "Atlantic Av",
+        "latitude": 40.675345,
+        "longitude": -73.903097,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L25",
+        "stop_name": "Sutter Av",
+        "latitude": 40.669367,
+        "longitude": -73.901975,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L26",
+        "stop_name": "Livonia Av",
+        "latitude": 40.664038,
+        "longitude": -73.900571,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L27",
+        "stop_name": "New Lots Av",
+        "latitude": 40.658733,
+        "longitude": -73.899232,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L28",
+        "stop_name": "East 105 St",
+        "latitude": 40.650573,
+        "longitude": -73.899485,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Canarsie - Rockaway Parkway",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "L29",
+        "stop_name": "Canarsie-Rockaway Pkwy",
+        "latitude": 40.646654,
+        "longitude": -73.90185,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "L"
+        ]
+    },
+    {
+        "stop_id": "S01",
+        "stop_name": "Franklin Av",
+        "latitude": 40.680596,
+        "longitude": -73.955827,
+        "north_direction_label": "",
+        "south_direction_label": "Prospect Park",
+        "routes": [
+            "FS"
+        ]
+    },
+    {
+        "stop_id": "S03",
+        "stop_name": "Park Pl",
+        "latitude": 40.674772,
+        "longitude": -73.957624,
+        "north_direction_label": "Franklin Av",
+        "south_direction_label": "Prospect Park",
+        "routes": [
+            "FS"
+        ]
+    },
+    {
+        "stop_id": "S04",
+        "stop_name": "Botanic Garden",
+        "latitude": 40.669986,
+        "longitude": -73.959695,
+        "north_direction_label": "Franklin Av",
+        "south_direction_label": "Prospect Park",
+        "routes": [
+            "FS"
+        ]
+    },
+    {
+        "stop_id": "A02",
+        "stop_name": "Inwood-207 St",
+        "latitude": 40.868072,
+        "longitude": -73.919899,
+        "north_direction_label": "",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A03",
+        "stop_name": "Dyckman St",
+        "latitude": 40.865491,
+        "longitude": -73.927271,
+        "north_direction_label": "207 St",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A05",
+        "stop_name": "190 St",
+        "latitude": 40.859022,
+        "longitude": -73.93418,
+        "north_direction_label": "207 St",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A06",
+        "stop_name": "181 St",
+        "latitude": 40.851695,
+        "longitude": -73.937969,
+        "north_direction_label": "207 St",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A07",
+        "stop_name": "175 St",
+        "latitude": 40.847391,
+        "longitude": -73.939704,
+        "north_direction_label": "207 St",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A09",
+        "stop_name": "168 St",
+        "latitude": 40.840719,
+        "longitude": -73.939561,
+        "north_direction_label": "207 St",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A10",
+        "stop_name": "163 St-Amsterdam Av",
+        "latitude": 40.836013,
+        "longitude": -73.939892,
+        "north_direction_label": "Uptown",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A11",
+        "stop_name": "155 St",
+        "latitude": 40.830518,
+        "longitude": -73.941514,
+        "north_direction_label": "Uptown",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A12",
+        "stop_name": "145 St",
+        "latitude": 40.824783,
+        "longitude": -73.944216,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A14",
+        "stop_name": "135 St",
+        "latitude": 40.817894,
+        "longitude": -73.947649,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A15",
+        "stop_name": "125 St",
+        "latitude": 40.810526,
+        "longitude": -73.952642,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A16",
+        "stop_name": "116 St",
+        "latitude": 40.805085,
+        "longitude": -73.954882,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A17",
+        "stop_name": "Cathedral Pkwy (110 St)",
+        "latitude": 40.800603,
+        "longitude": -73.958161,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A18",
+        "stop_name": "103 St",
+        "latitude": 40.796092,
+        "longitude": -73.961454,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A19",
+        "stop_name": "96 St",
+        "latitude": 40.791642,
+        "longitude": -73.964696,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A20",
+        "stop_name": "86 St",
+        "latitude": 40.785868,
+        "longitude": -73.968916,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A21",
+        "stop_name": "81 St-Museum of Natural History",
+        "latitude": 40.781433,
+        "longitude": -73.972143,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A22",
+        "stop_name": "72 St",
+        "latitude": 40.775594,
+        "longitude": -73.97641,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A24",
+        "stop_name": "59 St-Columbus Circle",
+        "latitude": 40.768396,
+        "longitude": -73.981736,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "1",
+            "2",
+            "3",
+            "A",
+            "C",
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "A25",
+        "stop_name": "50 St",
+        "latitude": 40.762456,
+        "longitude": -73.985984,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "A27",
+        "stop_name": "42 St-Port Authority Bus Terminal",
+        "latitude": 40.757108,
+        "longitude": -73.98986,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "A28",
+        "stop_name": "34 St-Penn Station",
+        "latitude": 40.752287,
+        "longitude": -73.993391,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "A30",
+        "stop_name": "23 St",
+        "latitude": 40.745906,
+        "longitude": -73.998041,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "A31",
+        "stop_name": "14 St",
+        "latitude": 40.740893,
+        "longitude": -74.00169,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "A32",
+        "stop_name": "W 4 St-Wash Sq",
+        "latitude": 40.7323,
+        "longitude": -74.0008,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "A33",
+        "stop_name": "Spring St",
+        "latitude": 40.7256,
+        "longitude": -74.004,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A34",
+        "stop_name": "Canal St",
+        "latitude": 40.720824,
+        "longitude": -74.0047,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A36",
+        "stop_name": "Chambers St",
+        "latitude": 40.714111,
+        "longitude": -74.008585,
+        "north_direction_label": "Uptown",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "E01",
+        "stop_name": "World Trade Center",
+        "latitude": 40.71272,
+        "longitude": -74.009842,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "",
+        "routes": [
+            "E",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "A38",
+        "stop_name": "Fulton St",
+        "latitude": 40.709974,
+        "longitude": -74.00794,
+        "north_direction_label": "Uptown",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "A",
+            "C",
+            "J",
+            "Z"
+        ]
+    },
+    {
+        "stop_id": "A40",
+        "stop_name": "High St",
+        "latitude": 40.699337,
+        "longitude": -73.990531,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid - Lefferts - Rockaways",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A41",
+        "stop_name": "Jay St-MetroTech",
+        "latitude": 40.691961,
+        "longitude": -73.986316,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid - Lefferts - Rockaways - Coney Island",
+        "routes": [
+            "F",
+            "A",
+            "C",
+            "Q",
+            "N",
+            "W",
+            "R"
+        ]
+    },
+    {
+        "stop_id": "A42",
+        "stop_name": "Hoyt-Schermerhorn Sts",
+        "latitude": 40.688484,
+        "longitude": -73.985001,
+        "north_direction_label": "Manhattan - Church Av",
+        "south_direction_label": "Euclid Av & Queens - Court Sq",
+        "routes": [
+            "G",
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A43",
+        "stop_name": "Lafayette Av",
+        "latitude": 40.686113,
+        "longitude": -73.973946,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A44",
+        "stop_name": "Clinton-Washington Avs",
+        "latitude": 40.683263,
+        "longitude": -73.965838,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A45",
+        "stop_name": "Franklin Av",
+        "latitude": 40.68138,
+        "longitude": -73.956848,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A46",
+        "stop_name": "Nostrand Av",
+        "latitude": 40.680438,
+        "longitude": -73.950426,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid - Lefferts - Rockaways",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A47",
+        "stop_name": "Kingston-Throop Avs",
+        "latitude": 40.679921,
+        "longitude": -73.940858,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A48",
+        "stop_name": "Utica Av",
+        "latitude": 40.679364,
+        "longitude": -73.930729,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid - Lefferts - Rockaways",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A49",
+        "stop_name": "Ralph Av",
+        "latitude": 40.678822,
+        "longitude": -73.920786,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A50",
+        "stop_name": "Rockaway Av",
+        "latitude": 40.67834,
+        "longitude": -73.911946,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A52",
+        "stop_name": "Liberty Av",
+        "latitude": 40.674542,
+        "longitude": -73.896548,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A53",
+        "stop_name": "Van Siclen Av",
+        "latitude": 40.67271,
+        "longitude": -73.890358,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A54",
+        "stop_name": "Shepherd Av",
+        "latitude": 40.67413,
+        "longitude": -73.88075,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Euclid Av",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A55",
+        "stop_name": "Euclid Av",
+        "latitude": 40.675377,
+        "longitude": -73.872106,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Lefferts - Rockaways",
+        "routes": [
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "A57",
+        "stop_name": "Grant Av",
+        "latitude": 40.677044,
+        "longitude": -73.86505,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Lefferts - Rockaways",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A59",
+        "stop_name": "80 St",
+        "latitude": 40.679371,
+        "longitude": -73.858992,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Lefferts - Rockaways",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A60",
+        "stop_name": "88 St",
+        "latitude": 40.679843,
+        "longitude": -73.85147,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Lefferts - Rockaways",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A61",
+        "stop_name": "Rockaway Blvd",
+        "latitude": 40.680429,
+        "longitude": -73.843853,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Lefferts - Rockaways",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A63",
+        "stop_name": "104 St",
+        "latitude": 40.681711,
+        "longitude": -73.837683,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Lefferts Blvd",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A64",
+        "stop_name": "111 St",
+        "latitude": 40.684331,
+        "longitude": -73.832163,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Lefferts Blvd",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "A65",
+        "stop_name": "Ozone Park-Lefferts Blvd",
+        "latitude": 40.685951,
+        "longitude": -73.825798,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H01",
+        "stop_name": "Aqueduct Racetrack",
+        "latitude": 40.672097,
+        "longitude": -73.835919,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Rockaways",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H02",
+        "stop_name": "Aqueduct-N Conduit Av",
+        "latitude": 40.668234,
+        "longitude": -73.834058,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Rockaways",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H03",
+        "stop_name": "Howard Beach-JFK Airport",
+        "latitude": 40.660476,
+        "longitude": -73.830301,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Rockaways",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H04",
+        "stop_name": "Broad Channel",
+        "latitude": 40.608382,
+        "longitude": -73.815925,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Rockaways",
+        "routes": [
+            "H",
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H12",
+        "stop_name": "Beach 90 St",
+        "latitude": 40.588034,
+        "longitude": -73.813641,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Rockaway Park",
+        "routes": [
+            "A",
+            "H"
+        ]
+    },
+    {
+        "stop_id": "H13",
+        "stop_name": "Beach 98 St",
+        "latitude": 40.585307,
+        "longitude": -73.820558,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Rockaway Park",
+        "routes": [
+            "A",
+            "H"
+        ]
+    },
+    {
+        "stop_id": "H14",
+        "stop_name": "Beach 105 St",
+        "latitude": 40.583209,
+        "longitude": -73.827559,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Rockaway Park",
+        "routes": [
+            "A",
+            "H"
+        ]
+    },
+    {
+        "stop_id": "H15",
+        "stop_name": "Rockaway Park-Beach 116 St",
+        "latitude": 40.580903,
+        "longitude": -73.835592,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "A",
+            "H"
+        ]
+    },
+    {
+        "stop_id": "H06",
+        "stop_name": "Beach 67 St",
+        "latitude": 40.590927,
+        "longitude": -73.796924,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Far Rockaway",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H07",
+        "stop_name": "Beach 60 St",
+        "latitude": 40.592374,
+        "longitude": -73.788522,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Far Rockaway",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H08",
+        "stop_name": "Beach 44 St",
+        "latitude": 40.592943,
+        "longitude": -73.776013,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Far Rockaway",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H09",
+        "stop_name": "Beach 36 St",
+        "latitude": 40.595398,
+        "longitude": -73.768175,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Far Rockaway",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H10",
+        "stop_name": "Beach 25 St",
+        "latitude": 40.600066,
+        "longitude": -73.761353,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Far Rockaway",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "H11",
+        "stop_name": "Far Rockaway-Mott Av",
+        "latitude": 40.603995,
+        "longitude": -73.755405,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "A"
+        ]
+    },
+    {
+        "stop_id": "D01",
+        "stop_name": "Norwood-205 St",
+        "latitude": 40.874811,
+        "longitude": -73.878855,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D03",
+        "stop_name": "Bedford Park Blvd",
+        "latitude": 40.873244,
+        "longitude": -73.887138,
+        "north_direction_label": "Norwood - 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D04",
+        "stop_name": "Kingsbridge Rd",
+        "latitude": 40.866978,
+        "longitude": -73.893509,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D05",
+        "stop_name": "Fordham Rd",
+        "latitude": 40.861296,
+        "longitude": -73.897749,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D06",
+        "stop_name": "182-183 Sts",
+        "latitude": 40.856093,
+        "longitude": -73.900741,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D07",
+        "stop_name": "Tremont Av",
+        "latitude": 40.85041,
+        "longitude": -73.905227,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D08",
+        "stop_name": "174-175 Sts",
+        "latitude": 40.8459,
+        "longitude": -73.910136,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D09",
+        "stop_name": "170 St",
+        "latitude": 40.839306,
+        "longitude": -73.9134,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D10",
+        "stop_name": "167 St",
+        "latitude": 40.833771,
+        "longitude": -73.91844,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "D11",
+        "stop_name": "161 St-Yankee Stadium",
+        "latitude": 40.827905,
+        "longitude": -73.925651,
+        "north_direction_label": "Bedford Pk Blvd & 205 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "B",
+            "D",
+            "4"
+        ]
+    },
+    {
+        "stop_id": "D12",
+        "stop_name": "155 St",
+        "latitude": 40.830135,
+        "longitude": -73.938209,
+        "north_direction_label": "The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "B04",
+        "stop_name": "21 St-Queensbridge",
+        "latitude": 40.754446,
+        "longitude": -73.942039,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "B06",
+        "stop_name": "Roosevelt Island",
+        "latitude": 40.759145,
+        "longitude": -73.95326,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "B08",
+        "stop_name": "Lexington Av/63 St",
+        "latitude": 40.764649,
+        "longitude": -73.966114,
+        "north_direction_label": "Uptown - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "Q",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "B10",
+        "stop_name": "57 St",
+        "latitude": 40.76385,
+        "longitude": -73.97745,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "E",
+            "F"
+        ]
+    },
+    {
+        "stop_id": "D15",
+        "stop_name": "47-50 Sts-Rockefeller Ctr",
+        "latitude": 40.758663,
+        "longitude": -73.981329,
+        "north_direction_label": "Uptown & The Bronx - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "D16",
+        "stop_name": "42 St-Bryant Pk",
+        "latitude": 40.754222,
+        "longitude": -73.984569,
+        "north_direction_label": "Uptown & The Bronx - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "D18",
+        "stop_name": "23 St",
+        "latitude": 40.742878,
+        "longitude": -73.992821,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "D19",
+        "stop_name": "14 St",
+        "latitude": 40.738228,
+        "longitude": -73.996209,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "B",
+            "D",
+            "F",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "D21",
+        "stop_name": "Broadway-Lafayette St",
+        "latitude": 40.725383,
+        "longitude": -73.995844,
+        "north_direction_label": "Uptown & The Bronx - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "B",
+            "D",
+            "F",
+            "M",
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "D22",
+        "stop_name": "Grand St",
+        "latitude": 40.718267,
+        "longitude": -73.993753,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "F14",
+        "stop_name": "2 Av",
+        "latitude": 40.72315,
+        "longitude": -73.9902,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "F",
+            "M",
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "F16",
+        "stop_name": "East Broadway",
+        "latitude": 40.714196,
+        "longitude": -73.990559,
+        "north_direction_label": "Uptown & Queens",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "F",
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "F18",
+        "stop_name": "York St",
+        "latitude": 40.701397,
+        "longitude": -73.986751,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F",
+            "A",
+            "C"
+        ]
+    },
+    {
+        "stop_id": "F20",
+        "stop_name": "Bergen St",
+        "latitude": 40.686145,
+        "longitude": -73.9907,
+        "north_direction_label": "Manhattan - Queens",
+        "south_direction_label": "Church Av - Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F21",
+        "stop_name": "Carroll St",
+        "latitude": 40.680303,
+        "longitude": -73.995048,
+        "north_direction_label": "Manhattan - Queens",
+        "south_direction_label": "Church Av - Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F22",
+        "stop_name": "Smith-9 Sts",
+        "latitude": 40.673292,
+        "longitude": -73.996082,
+        "north_direction_label": "Manhattan - Queens",
+        "south_direction_label": "Church Av - Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F23",
+        "stop_name": "4 Av-9 St",
+        "latitude": 40.670524,
+        "longitude": -73.989442,
+        "north_direction_label": "Manhattan - Queens",
+        "south_direction_label": "Church Av - Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F24",
+        "stop_name": "7 Av",
+        "latitude": 40.666588,
+        "longitude": -73.980094,
+        "north_direction_label": "Manhattan - Queens",
+        "south_direction_label": "Church Av - Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F25",
+        "stop_name": "15 St-Prospect Park",
+        "latitude": 40.660365,
+        "longitude": -73.979493,
+        "north_direction_label": "Manhattan - Queens",
+        "south_direction_label": "Church Av - Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F26",
+        "stop_name": "Fort Hamilton Pkwy",
+        "latitude": 40.650782,
+        "longitude": -73.975776,
+        "north_direction_label": "Manhattan - Queens",
+        "south_direction_label": "Church Av - Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F27",
+        "stop_name": "Church Av",
+        "latitude": 40.644041,
+        "longitude": -73.979678,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F",
+            "G"
+        ]
+    },
+    {
+        "stop_id": "F29",
+        "stop_name": "Ditmas Av",
+        "latitude": 40.636119,
+        "longitude": -73.978172,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F30",
+        "stop_name": "18 Av",
+        "latitude": 40.629755,
+        "longitude": -73.976971,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F31",
+        "stop_name": "Avenue I",
+        "latitude": 40.625322,
+        "longitude": -73.976127,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F32",
+        "stop_name": "Bay Pkwy",
+        "latitude": 40.620769,
+        "longitude": -73.975264,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F33",
+        "stop_name": "Avenue N",
+        "latitude": 40.61514,
+        "longitude": -73.974197,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F34",
+        "stop_name": "Avenue P",
+        "latitude": 40.608944,
+        "longitude": -73.973022,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F35",
+        "stop_name": "Kings Hwy",
+        "latitude": 40.603217,
+        "longitude": -73.972361,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F36",
+        "stop_name": "Avenue U",
+        "latitude": 40.596063,
+        "longitude": -73.973357,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F38",
+        "stop_name": "Avenue X",
+        "latitude": 40.58962,
+        "longitude": -73.97425,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Coney Island",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F39",
+        "stop_name": "Neptune Av",
+        "latitude": 40.581011,
+        "longitude": -73.974574,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Stillwell Av",
+        "routes": [
+            "F"
+        ]
+    },
+    {
+        "stop_id": "F01",
+        "stop_name": "Jamaica-179 St",
+        "latitude": 40.712646,
+        "longitude": -73.783817,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "F02",
+        "stop_name": "169 St",
+        "latitude": 40.71047,
+        "longitude": -73.793604,
+        "north_direction_label": "179 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "F03",
+        "stop_name": "Parsons Blvd",
+        "latitude": 40.707564,
+        "longitude": -73.803326,
+        "north_direction_label": "179 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "F04",
+        "stop_name": "Sutphin Blvd",
+        "latitude": 40.70546,
+        "longitude": -73.810708,
+        "north_direction_label": "179 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "F05",
+        "stop_name": "Briarwood",
+        "latitude": 40.709179,
+        "longitude": -73.820574,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "F06",
+        "stop_name": "Kew Gardens-Union Tpke",
+        "latitude": 40.714441,
+        "longitude": -73.831008,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "F07",
+        "stop_name": "75 Av",
+        "latitude": 40.718331,
+        "longitude": -73.837324,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G08",
+        "stop_name": "Forest Hills-71 Av",
+        "latitude": 40.721691,
+        "longitude": -73.844521,
+        "north_direction_label": "Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G09",
+        "stop_name": "67 Av",
+        "latitude": 40.726523,
+        "longitude": -73.852719,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G10",
+        "stop_name": "63 Dr-Rego Park",
+        "latitude": 40.729846,
+        "longitude": -73.861604,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G11",
+        "stop_name": "Woodhaven Blvd",
+        "latitude": 40.733106,
+        "longitude": -73.869229,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G12",
+        "stop_name": "Grand Av-Newtown",
+        "latitude": 40.737015,
+        "longitude": -73.877223,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G13",
+        "stop_name": "Elmhurst Av",
+        "latitude": 40.742454,
+        "longitude": -73.882017,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G14",
+        "stop_name": "Jackson Hts-Roosevelt Av",
+        "latitude": 40.746644,
+        "longitude": -73.891338,
+        "north_direction_label": "Forest Hills - Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G15",
+        "stop_name": "65 St",
+        "latitude": 40.749669,
+        "longitude": -73.898453,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G16",
+        "stop_name": "Northern Blvd",
+        "latitude": 40.752885,
+        "longitude": -73.906006,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G18",
+        "stop_name": "46 St",
+        "latitude": 40.756312,
+        "longitude": -73.913333,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G19",
+        "stop_name": "Steinway St",
+        "latitude": 40.756879,
+        "longitude": -73.92074,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G20",
+        "stop_name": "36 St",
+        "latitude": 40.752039,
+        "longitude": -73.928781,
+        "north_direction_label": "Forest Hills",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "F",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G21",
+        "stop_name": "Queens Plaza",
+        "latitude": 40.74953,
+        "longitude": -73.936864,
+        "north_direction_label": "Forest Hills - Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "M",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "F09",
+        "stop_name": "Court Sq-23 St",
+        "latitude": 40.747846,
+        "longitude": -73.946,
+        "north_direction_label": "Forest Hills - Jamaica",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "E",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "F11",
+        "stop_name": "Lexington Av/53 St",
+        "latitude": 40.757552,
+        "longitude": -73.969055,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "E",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "F12",
+        "stop_name": "5 Av/53 St",
+        "latitude": 40.760167,
+        "longitude": -73.975224,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "E",
+            "M"
+        ]
+    },
+    {
+        "stop_id": "D14",
+        "stop_name": "7 Av",
+        "latitude": 40.763229,
+        "longitude": -73.982434,
+        "north_direction_label": "Uptown & The Bronx - Queens",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "E",
+            "B",
+            "D"
+        ]
+    },
+    {
+        "stop_id": "G05",
+        "stop_name": "Jamaica Center-Parsons/Archer",
+        "latitude": 40.702147,
+        "longitude": -73.801109,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G06",
+        "stop_name": "Sutphin Blvd-Archer Av-JFK Airport",
+        "latitude": 40.700486,
+        "longitude": -73.807969,
+        "north_direction_label": "Jamaica Center",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "Z",
+            "J",
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G07",
+        "stop_name": "Jamaica-Van Wyck",
+        "latitude": 40.702566,
+        "longitude": -73.816859,
+        "north_direction_label": "Jamaica Center",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "E"
+        ]
+    },
+    {
+        "stop_id": "G24",
+        "stop_name": "21 St",
+        "latitude": 40.744065,
+        "longitude": -73.949724,
+        "north_direction_label": "Court Sq",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G26",
+        "stop_name": "Greenpoint Av",
+        "latitude": 40.731352,
+        "longitude": -73.954449,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G28",
+        "stop_name": "Nassau Av",
+        "latitude": 40.724635,
+        "longitude": -73.951277,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G29",
+        "stop_name": "Metropolitan Av",
+        "latitude": 40.712792,
+        "longitude": -73.951418,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G30",
+        "stop_name": "Broadway",
+        "latitude": 40.706092,
+        "longitude": -73.950308,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G31",
+        "stop_name": "Flushing Av",
+        "latitude": 40.700377,
+        "longitude": -73.950234,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G32",
+        "stop_name": "Myrtle-Willoughby Avs",
+        "latitude": 40.694568,
+        "longitude": -73.949046,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G33",
+        "stop_name": "Bedford-Nostrand Avs",
+        "latitude": 40.689627,
+        "longitude": -73.953522,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G34",
+        "stop_name": "Classon Av",
+        "latitude": 40.688873,
+        "longitude": -73.96007,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G35",
+        "stop_name": "Clinton-Washington Avs",
+        "latitude": 40.688089,
+        "longitude": -73.966839,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "G36",
+        "stop_name": "Fulton St",
+        "latitude": 40.687119,
+        "longitude": -73.975375,
+        "north_direction_label": "Queens",
+        "south_direction_label": "Church Av",
+        "routes": [
+            "G"
+        ]
+    },
+    {
+        "stop_id": "101",
+        "stop_name": "Van Cortlandt Park-242 St",
+        "latitude": 40.889248,
+        "longitude": -73.898583,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "103",
+        "stop_name": "238 St",
+        "latitude": 40.884667,
+        "longitude": -73.90087,
+        "north_direction_label": "242 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "104",
+        "stop_name": "231 St",
+        "latitude": 40.878856,
+        "longitude": -73.904834,
+        "north_direction_label": "242 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "106",
+        "stop_name": "Marble Hill-225 St",
+        "latitude": 40.874561,
+        "longitude": -73.909831,
+        "north_direction_label": "242 St",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "107",
+        "stop_name": "215 St",
+        "latitude": 40.869444,
+        "longitude": -73.915279,
+        "north_direction_label": "The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "108",
+        "stop_name": "207 St",
+        "latitude": 40.864621,
+        "longitude": -73.918822,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "109",
+        "stop_name": "Dyckman St",
+        "latitude": 40.860531,
+        "longitude": -73.925536,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "110",
+        "stop_name": "191 St",
+        "latitude": 40.855225,
+        "longitude": -73.929412,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "111",
+        "stop_name": "181 St",
+        "latitude": 40.849505,
+        "longitude": -73.933596,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "112",
+        "stop_name": "168 St-Washington Hts",
+        "latitude": 40.840556,
+        "longitude": -73.940133,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "113",
+        "stop_name": "157 St",
+        "latitude": 40.834041,
+        "longitude": -73.94489,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "114",
+        "stop_name": "145 St",
+        "latitude": 40.826551,
+        "longitude": -73.95036,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "115",
+        "stop_name": "137 St-City College",
+        "latitude": 40.822008,
+        "longitude": -73.953676,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "116",
+        "stop_name": "125 St",
+        "latitude": 40.815581,
+        "longitude": -73.958372,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "117",
+        "stop_name": "116 St-Columbia University",
+        "latitude": 40.807722,
+        "longitude": -73.96411,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "118",
+        "stop_name": "Cathedral Pkwy (110 St)",
+        "latitude": 40.803967,
+        "longitude": -73.966847,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "119",
+        "stop_name": "103 St",
+        "latitude": 40.799446,
+        "longitude": -73.968379,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "120",
+        "stop_name": "96 St",
+        "latitude": 40.793919,
+        "longitude": -73.972323,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "121",
+        "stop_name": "86 St",
+        "latitude": 40.788644,
+        "longitude": -73.976218,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "122",
+        "stop_name": "79 St",
+        "latitude": 40.783934,
+        "longitude": -73.979917,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "123",
+        "stop_name": "72 St",
+        "latitude": 40.778453,
+        "longitude": -73.98197,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "124",
+        "stop_name": "66 St-Lincoln Center",
+        "latitude": 40.77344,
+        "longitude": -73.982209,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "126",
+        "stop_name": "50 St",
+        "latitude": 40.761728,
+        "longitude": -73.983849,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "127",
+        "stop_name": "Times Sq-42 St",
+        "latitude": 40.75575,
+        "longitude": -73.9866,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "1",
+            "2",
+            "3",
+            "R",
+            "W",
+            "N",
+            "Q",
+            "GS",
+            "7"
+        ]
+    },
+    {
+        "stop_id": "128",
+        "stop_name": "34 St-Penn Station",
+        "latitude": 40.750373,
+        "longitude": -73.991057,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "129",
+        "stop_name": "28 St",
+        "latitude": 40.747215,
+        "longitude": -73.993365,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "130",
+        "stop_name": "23 St",
+        "latitude": 40.744081,
+        "longitude": -73.995657,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "131",
+        "stop_name": "18 St",
+        "latitude": 40.74104,
+        "longitude": -73.997871,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "132",
+        "stop_name": "14 St",
+        "latitude": 40.737826,
+        "longitude": -74.000201,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "133",
+        "stop_name": "Christopher St-Sheridan Sq",
+        "latitude": 40.7337,
+        "longitude": -74.0032,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "134",
+        "stop_name": "Houston St",
+        "latitude": 40.728251,
+        "longitude": -74.005367,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "135",
+        "stop_name": "Canal St",
+        "latitude": 40.722854,
+        "longitude": -74.006277,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "136",
+        "stop_name": "Franklin St",
+        "latitude": 40.719318,
+        "longitude": -74.006886,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "137",
+        "stop_name": "Chambers St",
+        "latitude": 40.715478,
+        "longitude": -74.009266,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "138",
+        "stop_name": "WTC Cortlandt",
+        "latitude": 40.711835,
+        "longitude": -74.012188,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "139",
+        "stop_name": "Rector St",
+        "latitude": 40.707513,
+        "longitude": -74.013783,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "142",
+        "stop_name": "South Ferry",
+        "latitude": 40.702068,
+        "longitude": -74.013664,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "",
+        "routes": [
+            "1"
+        ]
+    },
+    {
+        "stop_id": "228",
+        "stop_name": "Park Place",
+        "latitude": 40.713051,
+        "longitude": -74.008811,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "229",
+        "stop_name": "Fulton St",
+        "latitude": 40.709445,
+        "longitude": -74.006681,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "230",
+        "stop_name": "Wall St",
+        "latitude": 40.706536,
+        "longitude": -74.008825,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "231",
+        "stop_name": "Clark St",
+        "latitude": 40.697466,
+        "longitude": -73.993086,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - New Lots",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "232",
+        "stop_name": "Borough Hall",
+        "latitude": 40.6926,
+        "longitude": -73.989998,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "233",
+        "stop_name": "Hoyt St",
+        "latitude": 40.69052,
+        "longitude": -73.985065,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "234",
+        "stop_name": "Nevins St",
+        "latitude": 40.6887,
+        "longitude": -73.980492,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - Utica - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5",
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "235",
+        "stop_name": "Atlantic Av-Barclays Ctr",
+        "latitude": 40.685,
+        "longitude": -73.9773,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5",
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "236",
+        "stop_name": "Bergen St",
+        "latitude": 40.680829,
+        "longitude": -73.9748,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5",
+            "Q",
+            "B"
+        ]
+    },
+    {
+        "stop_id": "237",
+        "stop_name": "Grand Army Plaza",
+        "latitude": 40.6745,
+        "longitude": -73.97,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "238",
+        "stop_name": "Eastern Pkwy-Brooklyn Museum",
+        "latitude": 40.671987,
+        "longitude": -73.964375,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "239",
+        "stop_name": "Franklin Av-Medgar Evers College",
+        "latitude": 40.670682,
+        "longitude": -73.958131,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush - Utica - New Lots",
+        "routes": [
+            "2",
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "248",
+        "stop_name": "Nostrand Av",
+        "latitude": 40.669847,
+        "longitude": -73.950466,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "249",
+        "stop_name": "Kingston Av",
+        "latitude": 40.669399,
+        "longitude": -73.942161,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "250",
+        "stop_name": "Crown Hts-Utica Av",
+        "latitude": 40.668897,
+        "longitude": -73.932942,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "251",
+        "stop_name": "Sutter Av-Rutland Rd",
+        "latitude": 40.664717,
+        "longitude": -73.92261,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "252",
+        "stop_name": "Saratoga Av",
+        "latitude": 40.661453,
+        "longitude": -73.916327,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "253",
+        "stop_name": "Rockaway Av",
+        "latitude": 40.662549,
+        "longitude": -73.908946,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "254",
+        "stop_name": "Junius St",
+        "latitude": 40.663515,
+        "longitude": -73.902447,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "255",
+        "stop_name": "Pennsylvania Av",
+        "latitude": 40.664635,
+        "longitude": -73.894895,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "256",
+        "stop_name": "Van Siclen Av",
+        "latitude": 40.665449,
+        "longitude": -73.889395,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "New Lots",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "257",
+        "stop_name": "New Lots Av",
+        "latitude": 40.666235,
+        "longitude": -73.884079,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "3",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "241",
+        "stop_name": "President St-Medgar Evers College",
+        "latitude": 40.667883,
+        "longitude": -73.950683,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "242",
+        "stop_name": "Sterling St",
+        "latitude": 40.662742,
+        "longitude": -73.95085,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "243",
+        "stop_name": "Winthrop St",
+        "latitude": 40.656652,
+        "longitude": -73.9502,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "244",
+        "stop_name": "Church Av",
+        "latitude": 40.650843,
+        "longitude": -73.949575,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "245",
+        "stop_name": "Beverly Rd",
+        "latitude": 40.645098,
+        "longitude": -73.948959,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "246",
+        "stop_name": "Newkirk Av - Little Haiti",
+        "latitude": 40.639967,
+        "longitude": -73.948411,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "Flatbush",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "247",
+        "stop_name": "Flatbush Av-Brooklyn College",
+        "latitude": 40.632836,
+        "longitude": -73.947642,
+        "north_direction_label": "Manhattan",
+        "south_direction_label": "",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "601",
+        "stop_name": "Pelham Bay Park",
+        "latitude": 40.852462,
+        "longitude": -73.828121,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "602",
+        "stop_name": "Buhre Av",
+        "latitude": 40.84681,
+        "longitude": -73.832569,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "603",
+        "stop_name": "Middletown Rd",
+        "latitude": 40.843863,
+        "longitude": -73.836322,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "604",
+        "stop_name": "Westchester Sq-E Tremont Av",
+        "latitude": 40.839892,
+        "longitude": -73.842952,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "606",
+        "stop_name": "Zerega Av",
+        "latitude": 40.836488,
+        "longitude": -73.847036,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "607",
+        "stop_name": "Castle Hill Av",
+        "latitude": 40.834255,
+        "longitude": -73.851222,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "608",
+        "stop_name": "Parkchester",
+        "latitude": 40.833226,
+        "longitude": -73.860816,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "609",
+        "stop_name": "St Lawrence Av",
+        "latitude": 40.831509,
+        "longitude": -73.867618,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "610",
+        "stop_name": "Morrison Av-Soundview",
+        "latitude": 40.829521,
+        "longitude": -73.874516,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "611",
+        "stop_name": "Elder Av",
+        "latitude": 40.828584,
+        "longitude": -73.879159,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "612",
+        "stop_name": "Whitlock Av",
+        "latitude": 40.826525,
+        "longitude": -73.886283,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "613",
+        "stop_name": "Hunts Point Av",
+        "latitude": 40.820948,
+        "longitude": -73.890549,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "614",
+        "stop_name": "Longwood Av",
+        "latitude": 40.816104,
+        "longitude": -73.896435,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "615",
+        "stop_name": "E 149 St",
+        "latitude": 40.812118,
+        "longitude": -73.904098,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "616",
+        "stop_name": "E 143 St-St Mary's St",
+        "latitude": 40.808719,
+        "longitude": -73.907657,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "617",
+        "stop_name": "Cypress Av",
+        "latitude": 40.805368,
+        "longitude": -73.914042,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "618",
+        "stop_name": "Brook Av",
+        "latitude": 40.807566,
+        "longitude": -73.91924,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "619",
+        "stop_name": "3 Av-138 St",
+        "latitude": 40.810476,
+        "longitude": -73.926138,
+        "north_direction_label": "Pelham Bay Park",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "6"
+        ]
+    },
+    {
+        "stop_id": "401",
+        "stop_name": "Woodlawn",
+        "latitude": 40.886037,
+        "longitude": -73.878751,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "402",
+        "stop_name": "Mosholu Pkwy",
+        "latitude": 40.87975,
+        "longitude": -73.884655,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "405",
+        "stop_name": "Bedford Park Blvd-Lehman College",
+        "latitude": 40.873412,
+        "longitude": -73.890064,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "406",
+        "stop_name": "Kingsbridge Rd",
+        "latitude": 40.86776,
+        "longitude": -73.897174,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "407",
+        "stop_name": "Fordham Rd",
+        "latitude": 40.862803,
+        "longitude": -73.901034,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "408",
+        "stop_name": "183 St",
+        "latitude": 40.858407,
+        "longitude": -73.903879,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "409",
+        "stop_name": "Burnside Av",
+        "latitude": 40.853453,
+        "longitude": -73.907684,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "410",
+        "stop_name": "176 St",
+        "latitude": 40.84848,
+        "longitude": -73.911794,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "411",
+        "stop_name": "Mt Eden Av",
+        "latitude": 40.844434,
+        "longitude": -73.914685,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "412",
+        "stop_name": "170 St",
+        "latitude": 40.840075,
+        "longitude": -73.917791,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "413",
+        "stop_name": "167 St",
+        "latitude": 40.835537,
+        "longitude": -73.9214,
+        "north_direction_label": "Woodlawn",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4"
+        ]
+    },
+    {
+        "stop_id": "416",
+        "stop_name": "138 St-Grand Concourse",
+        "latitude": 40.813374,
+        "longitude": -73.930309,
+        "north_direction_label": "Woodlawn - Eastchester Dyre Av",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "621",
+        "stop_name": "125 St",
+        "latitude": 40.804375,
+        "longitude": -73.937439,
+        "north_direction_label": "The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "622",
+        "stop_name": "116 St",
+        "latitude": 40.798629,
+        "longitude": -73.941617,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "623",
+        "stop_name": "110 St",
+        "latitude": 40.79502,
+        "longitude": -73.94425,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "624",
+        "stop_name": "103 St",
+        "latitude": 40.7906,
+        "longitude": -73.947478,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "625",
+        "stop_name": "96 St",
+        "latitude": 40.785672,
+        "longitude": -73.95107,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "626",
+        "stop_name": "86 St",
+        "latitude": 40.779492,
+        "longitude": -73.955589,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "627",
+        "stop_name": "77 St",
+        "latitude": 40.77362,
+        "longitude": -73.959874,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "628",
+        "stop_name": "68 St-Hunter College",
+        "latitude": 40.768141,
+        "longitude": -73.96387,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "629",
+        "stop_name": "59 St",
+        "latitude": 40.76227,
+        "longitude": -73.96825,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "630",
+        "stop_name": "51 St",
+        "latitude": 40.757107,
+        "longitude": -73.97192,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "631",
+        "stop_name": "Grand Central-42 St",
+        "latitude": 40.752051,
+        "longitude": -73.9779,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "7",
+            "GS",
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "632",
+        "stop_name": "33 St",
+        "latitude": 40.746081,
+        "longitude": -73.982076,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "633",
+        "stop_name": "28 St",
+        "latitude": 40.74307,
+        "longitude": -73.984264,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "634",
+        "stop_name": "23 St",
+        "latitude": 40.739864,
+        "longitude": -73.986599,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "636",
+        "stop_name": "Astor Pl",
+        "latitude": 40.7301,
+        "longitude": -73.99125,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "637",
+        "stop_name": "Bleecker St",
+        "latitude": 40.7259,
+        "longitude": -73.99454,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "638",
+        "stop_name": "Spring St",
+        "latitude": 40.72235,
+        "longitude": -73.997355,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "640",
+        "stop_name": "Brooklyn Bridge-City Hall",
+        "latitude": 40.713065,
+        "longitude": -74.00409,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "4",
+            "5",
+            "6"
+        ]
+    },
+    {
+        "stop_id": "418",
+        "stop_name": "Fulton St",
+        "latitude": 40.71063,
+        "longitude": -74.009376,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "419",
+        "stop_name": "Wall St",
+        "latitude": 40.707556,
+        "longitude": -74.011893,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "420",
+        "stop_name": "Bowling Green",
+        "latitude": 40.70485,
+        "longitude": -74.0139,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Brooklyn",
+        "routes": [
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "201",
+        "stop_name": "Wakefield-241 St",
+        "latitude": 40.903125,
+        "longitude": -73.85062,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2"
+        ]
+    },
+    {
+        "stop_id": "204",
+        "stop_name": "Nereid Av",
+        "latitude": 40.898379,
+        "longitude": -73.854376,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "205",
+        "stop_name": "233 St",
+        "latitude": 40.893193,
+        "longitude": -73.857473,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "206",
+        "stop_name": "225 St",
+        "latitude": 40.888022,
+        "longitude": -73.860341,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "207",
+        "stop_name": "219 St",
+        "latitude": 40.883895,
+        "longitude": -73.862633,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "208",
+        "stop_name": "Gun Hill Rd",
+        "latitude": 40.87785,
+        "longitude": -73.866256,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "209",
+        "stop_name": "Burke Av",
+        "latitude": 40.871356,
+        "longitude": -73.867164,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "210",
+        "stop_name": "Allerton Av",
+        "latitude": 40.865462,
+        "longitude": -73.867352,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "211",
+        "stop_name": "Pelham Pkwy",
+        "latitude": 40.857192,
+        "longitude": -73.867615,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "212",
+        "stop_name": "Bronx Park East",
+        "latitude": 40.848828,
+        "longitude": -73.868457,
+        "north_direction_label": "Wakefield - 241 St",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "213",
+        "stop_name": "E 180 St",
+        "latitude": 40.841894,
+        "longitude": -73.873488,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "214",
+        "stop_name": "West Farms Sq-E Tremont Av",
+        "latitude": 40.840295,
+        "longitude": -73.880049,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "215",
+        "stop_name": "174 St",
+        "latitude": 40.837288,
+        "longitude": -73.887734,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "216",
+        "stop_name": "Freeman St",
+        "latitude": 40.829993,
+        "longitude": -73.891865,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "217",
+        "stop_name": "Simpson St",
+        "latitude": 40.824073,
+        "longitude": -73.893064,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "218",
+        "stop_name": "Intervale Av",
+        "latitude": 40.822181,
+        "longitude": -73.896736,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "219",
+        "stop_name": "Prospect Av",
+        "latitude": 40.819585,
+        "longitude": -73.90177,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "220",
+        "stop_name": "Jackson Av",
+        "latitude": 40.81649,
+        "longitude": -73.907807,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "221",
+        "stop_name": "3 Av-149 St",
+        "latitude": 40.816109,
+        "longitude": -73.917757,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "5",
+            "2"
+        ]
+    },
+    {
+        "stop_id": "222",
+        "stop_name": "149 St-Grand Concourse",
+        "latitude": 40.81841,
+        "longitude": -73.926718,
+        "north_direction_label": "Wakefield - Eastchester",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "2",
+            "4",
+            "5"
+        ]
+    },
+    {
+        "stop_id": "301",
+        "stop_name": "Harlem-148 St",
+        "latitude": 40.82388,
+        "longitude": -73.93647,
+        "north_direction_label": "",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "3"
+        ]
+    },
+    {
+        "stop_id": "302",
+        "stop_name": "145 St",
+        "latitude": 40.820421,
+        "longitude": -73.936245,
+        "north_direction_label": "148 St",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "224",
+        "stop_name": "135 St",
+        "latitude": 40.814229,
+        "longitude": -73.94077,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "225",
+        "stop_name": "125 St",
+        "latitude": 40.807754,
+        "longitude": -73.945495,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "226",
+        "stop_name": "116 St",
+        "latitude": 40.802098,
+        "longitude": -73.949625,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "227",
+        "stop_name": "Central Park North (110 St)",
+        "latitude": 40.799075,
+        "longitude": -73.951822,
+        "north_direction_label": "Uptown & The Bronx",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "2",
+            "3"
+        ]
+    },
+    {
+        "stop_id": "501",
+        "stop_name": "Eastchester-Dyre Av",
+        "latitude": 40.8883,
+        "longitude": -73.830834,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "5"
+        ]
+    },
+    {
+        "stop_id": "502",
+        "stop_name": "Baychester Av",
+        "latitude": 40.878663,
+        "longitude": -73.838591,
+        "north_direction_label": "Eastchester - Dyre Av",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "5"
+        ]
+    },
+    {
+        "stop_id": "503",
+        "stop_name": "Gun Hill Rd",
+        "latitude": 40.869526,
+        "longitude": -73.846384,
+        "north_direction_label": "Eastchester - Dyre Av",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "5"
+        ]
+    },
+    {
+        "stop_id": "504",
+        "stop_name": "Pelham Pkwy",
+        "latitude": 40.858985,
+        "longitude": -73.855359,
+        "north_direction_label": "Eastchester - Dyre Av",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "5"
+        ]
+    },
+    {
+        "stop_id": "505",
+        "stop_name": "Morris Park",
+        "latitude": 40.854364,
+        "longitude": -73.860495,
+        "north_direction_label": "Eastchester - Dyre Av",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "5"
+        ]
+    },
+    {
+        "stop_id": "701",
+        "stop_name": "Flushing-Main St",
+        "latitude": 40.7596,
+        "longitude": -73.83003,
+        "north_direction_label": "",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "702",
+        "stop_name": "Mets-Willets Point",
+        "latitude": 40.754622,
+        "longitude": -73.845625,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "705",
+        "stop_name": "111 St",
+        "latitude": 40.75173,
+        "longitude": -73.855334,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "706",
+        "stop_name": "103 St-Corona Plaza",
+        "latitude": 40.749865,
+        "longitude": -73.8627,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "707",
+        "stop_name": "Junction Blvd",
+        "latitude": 40.749145,
+        "longitude": -73.869527,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "708",
+        "stop_name": "90 St-Elmhurst Av",
+        "latitude": 40.748408,
+        "longitude": -73.876613,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "709",
+        "stop_name": "82 St-Jackson Hts",
+        "latitude": 40.747659,
+        "longitude": -73.883697,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "710",
+        "stop_name": "74 St-Broadway",
+        "latitude": 40.747024,
+        "longitude": -73.891318,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "711",
+        "stop_name": "69 St",
+        "latitude": 40.746325,
+        "longitude": -73.896403,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "712",
+        "stop_name": "Woodside-61 St",
+        "latitude": 40.74563,
+        "longitude": -73.902984,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "713",
+        "stop_name": "52 St",
+        "latitude": 40.744149,
+        "longitude": -73.912549,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "714",
+        "stop_name": "46 St-Bliss St",
+        "latitude": 40.743132,
+        "longitude": -73.918435,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "715",
+        "stop_name": "40 St-Lowery St",
+        "latitude": 40.743781,
+        "longitude": -73.924016,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "716",
+        "stop_name": "33 St-Rawson St",
+        "latitude": 40.744587,
+        "longitude": -73.930997,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "R09",
+        "stop_name": "Queensboro Plaza",
+        "latitude": 40.750648,
+        "longitude": -73.940143,
+        "north_direction_label": "Astoria - Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "R",
+            "W",
+            "N",
+            "7"
+        ]
+    },
+    {
+        "stop_id": "719",
+        "stop_name": "Court Sq",
+        "latitude": 40.747023,
+        "longitude": -73.945264,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "G",
+            "7"
+        ]
+    },
+    {
+        "stop_id": "720",
+        "stop_name": "Hunters Point Av",
+        "latitude": 40.742309,
+        "longitude": -73.948614,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "721",
+        "stop_name": "Vernon Blvd-Jackson Av",
+        "latitude": 40.74215,
+        "longitude": -73.953875,
+        "north_direction_label": "Flushing",
+        "south_direction_label": "Manhattan",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "724",
+        "stop_name": "5 Av",
+        "latitude": 40.75402,
+        "longitude": -73.98222,
+        "north_direction_label": "Queens",
+        "south_direction_label": "34 St - Hudson Yards",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "726",
+        "stop_name": "34 St-Hudson Yards",
+        "latitude": 40.755882,
+        "longitude": -74.00191,
+        "north_direction_label": "Queens",
+        "south_direction_label": "",
+        "routes": [
+            "7"
+        ]
+    },
+    {
+        "stop_id": "Q05",
+        "stop_name": "96 St",
+        "latitude": 40.784318,
+        "longitude": -73.947152,
+        "north_direction_label": "",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "Q04",
+        "stop_name": "86 St",
+        "latitude": 40.777891,
+        "longitude": -73.951787,
+        "north_direction_label": "Uptown",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "Q03",
+        "stop_name": "72 St",
+        "latitude": 40.768799,
+        "longitude": -73.958424,
+        "north_direction_label": "Uptown",
+        "south_direction_label": "Downtown & Brooklyn",
+        "routes": [
+            "Q"
+        ]
+    },
+    {
+        "stop_id": "S31",
+        "stop_name": "St George",
+        "latitude": 40.643748,
+        "longitude": -74.073643,
+        "north_direction_label": "",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S30",
+        "stop_name": "Tompkinsville",
+        "latitude": 40.636949,
+        "longitude": -74.074835,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S29",
+        "stop_name": "Stapleton",
+        "latitude": 40.627915,
+        "longitude": -74.075162,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S28",
+        "stop_name": "Clifton",
+        "latitude": 40.621319,
+        "longitude": -74.071402,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S27",
+        "stop_name": "Grasmere",
+        "latitude": 40.603117,
+        "longitude": -74.084087,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S26",
+        "stop_name": "Old Town",
+        "latitude": 40.596612,
+        "longitude": -74.087368,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S25",
+        "stop_name": "Dongan Hills",
+        "latitude": 40.588849,
+        "longitude": -74.09609,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S24",
+        "stop_name": "Jefferson Av",
+        "latitude": 40.583591,
+        "longitude": -74.103338,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S23",
+        "stop_name": "Grant City",
+        "latitude": 40.578965,
+        "longitude": -74.109704,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S22",
+        "stop_name": "New Dorp",
+        "latitude": 40.57348,
+        "longitude": -74.11721,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S21",
+        "stop_name": "Oakwood Heights",
+        "latitude": 40.56511,
+        "longitude": -74.12632,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S20",
+        "stop_name": "Bay Terrace",
+        "latitude": 40.5564,
+        "longitude": -74.136907,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S19",
+        "stop_name": "Great Kills",
+        "latitude": 40.551231,
+        "longitude": -74.151399,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S18",
+        "stop_name": "Eltingville",
+        "latitude": 40.544601,
+        "longitude": -74.16457,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S17",
+        "stop_name": "Annadale",
+        "latitude": 40.54046,
+        "longitude": -74.178217,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S16",
+        "stop_name": "Huguenot",
+        "latitude": 40.533674,
+        "longitude": -74.191794,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S15",
+        "stop_name": "Prince's Bay",
+        "latitude": 40.525507,
+        "longitude": -74.200064,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S14",
+        "stop_name": "Pleasant Plains",
+        "latitude": 40.52241,
+        "longitude": -74.217847,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S13",
+        "stop_name": "Richmond Valley",
+        "latitude": 40.519631,
+        "longitude": -74.229141,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S09",
+        "stop_name": "Tottenville",
+        "latitude": 40.512764,
+        "longitude": -74.251961,
+        "north_direction_label": "St George",
+        "south_direction_label": "",
+        "routes": [
+            "SI"
+        ]
+    },
+    {
+        "stop_id": "S11",
+        "stop_name": "Arthur Kill",
+        "latitude": 40.516578,
+        "longitude": -74.242096,
+        "north_direction_label": "St George",
+        "south_direction_label": "Tottenville",
+        "routes": [
+            "SI"
+        ]
+    }
+]

@@ -2,6 +2,30 @@ from datetime import datetime
 import requests
 from typing import Dict, List, Optional, TypedDict
 from pprint import pprint
+import json
+import os
+
+CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
+class TrainTime(TypedDict):
+    route_id: str
+    direction_id: str
+    long_name: str
+    stop_headsign: str
+    time: int
+    trip_id: Optional[str]
+    is_express: bool
+
+class Stations(TypedDict):
+    stop_id: str
+    stop_name: str
+    latitude: float
+    longitude: float
+    north_direction_label: str
+    south_direction_label: str
+    routes: List[str]
+
+stations: List[Stations] = json.load(open(os.path.join(CURRENT_FOLDER, "stations.json")))
 
 # Complex stations mapping
 complex_stations: Dict[str, List[str]] = {
@@ -26,16 +50,6 @@ complex_stations: Dict[str, List[str]] = {
     "R17": ["R17", "D17"],  # 34 St Herald Sq
     "R20": ["R20", "L03", "635"],  # Union Sq - 14 St
 }
-
-
-class TrainTime(TypedDict):
-    routeId: str
-    directionId: str
-    longName: str
-    stopHeadsign: str
-    time: int
-    tripId: Optional[str]
-    isExpress: bool
 
 
 def calculate_arrival_time_in_seconds(
@@ -88,13 +102,13 @@ class MTA():
                         time = calculate_arrival_time_in_seconds(arrival_time)
                         if time >= 0:
                             train_times.append({
-                                'routeId': route_id,
-                                'directionId': train['directionId'],
-                                'longName': train['tripHeadsign'],
-                                'stopHeadsign': route_entry['headsign'],
+                                'route_id': route_id,
+                                'direction_id': train['directionId'],
+                                'long_name': train['tripHeadsign'],
+                                'stop_headsign': route_entry['headsign'],
                                 'time': time,
-                                'tripId': train.get('tripId', '').replace('MTASBWY:', ''),
-                                'isExpress': 'express' in route_entry['route']['longName'].lower()
+                                'trip_id': train.get('tripId', '').replace('MTASBWY:', ''),
+                                'is_express': 'express' in route_entry['route']['longName'].lower()
                             })
             return sorted(train_times, key=lambda x: x['time'])
         except Exception as err:
