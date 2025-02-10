@@ -19,7 +19,7 @@ class SignMode(Enum):
     CLOCK = 2
     MUSIC = 3
     WIDGET = 4
-
+    MTA = 5
 
 class UIMessageType(Enum):
     TEST = 0

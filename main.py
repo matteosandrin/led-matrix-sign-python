@@ -10,6 +10,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, List
 from mbta import MBTA, TrainStation, PredictionStatus
+from mta import MTA
 from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
@@ -224,6 +225,16 @@ def widget_provider_task():
                 widget_manager.stop()
         time.sleep(REFRESH_RATE)
 
+def mta_provider_task():
+    mta = MTA(config.MTA_API_KEY)
+    while True:
+        if mode_broadcaster.get_status() == SignMode.MTA:
+            predictions = mta.get_predictions("121")
+            print(predictions)
+            time.sleep(5)
+        else:
+            time.sleep(REFRESH_RATE)
+
 
 def main():
     # Setup
@@ -238,6 +249,7 @@ def main():
     music_thread = threading.Thread(target=music_provider_task, daemon=True)
     web_server_thread = threading.Thread(target=web_server_task, daemon=True)
     widget_thread = threading.Thread(target=widget_provider_task, daemon=True)
+    mta_thread = threading.Thread(target=mta_provider_task, daemon=True)
 
     ui_thread.start()
     render_thread.start()
@@ -246,6 +258,7 @@ def main():
     music_thread.start()
     web_server_thread.start()
     widget_thread.start()
+    mta_thread.start()
 
     try:
         while True:
