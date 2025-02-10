@@ -37,6 +37,7 @@ class RenderMessageType(Enum):
     MUSIC = 4
     FRAME = 5
     SWAP = 6
+    MTA = 7
 
 
 class Rect:

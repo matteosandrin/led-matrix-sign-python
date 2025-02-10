@@ -127,6 +127,8 @@ def render_task():
                 display.render_music_content(message["content"])
             if message.get("type") == RenderMessageType.FRAME:
                 display.render_frame_content(message["content"])
+            if message.get("type") == RenderMessageType.MTA:
+                display.render_mta_content(message["content"])
         except queue.Empty:
             continue
 
@@ -231,6 +233,10 @@ def mta_provider_task():
         if mode_broadcaster.get_status() == SignMode.MTA:
             predictions = mta.get_predictions("121")
             print(predictions)
+            render_queue.put({
+                "type": RenderMessageType.MTA,
+                "content": predictions
+            })
             time.sleep(5)
         else:
             time.sleep(REFRESH_RATE)

@@ -6,6 +6,7 @@ else:
 from io import BytesIO
 from typing import List, Tuple, Any
 from mbta import Prediction, PredictionStatus
+from mta import TrainTime
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
 from animation import AnimationManager, MBTABannerAnimation, MoveAnimation, TextScrollAnimation
@@ -229,6 +230,15 @@ class Display:
 
     def render_swap_content(self, content: None):
         self.swap_canvas()
+
+    def render_mta_content(self, content: List[TrainTime]):
+        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
+        draw = self._get_draw_context_antialiased(image)
+        for i, train in enumerate(content):
+            minutes = train['time'] // 60
+            train_str = f"{train['routeId']} {train['longName']} {minutes}min"
+            draw.text((0, 8 * i), train_str, font=Fonts.SILKSCREEN, fill=Colors.WHITE)
+        self._update_display(image)
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:
         """Helper function to format time strings"""

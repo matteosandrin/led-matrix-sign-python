@@ -64,7 +64,7 @@ class MTA():
         self.domain = 'https://otp-mta-prod.camsys-apps.com/otp/routers/default'
         self.api_key = api_key
 
-    def get_predictions(self, stop_id: str) -> Optional[Dict[str, List[TrainTime]]]:
+    def get_predictions(self, stop_id: str) -> Optional[List[TrainTime]]:
         try:
             response = requests.get(f"{self.domain}/nearby", params={
                 'stops': check_for_complex_stop_ids(stop_id),
