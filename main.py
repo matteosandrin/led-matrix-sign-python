@@ -232,7 +232,6 @@ def mta_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             predictions = mta.get_predictions("121")
-            print(predictions)
             render_queue.put({
                 "type": RenderMessageType.MTA,
                 "content": predictions
