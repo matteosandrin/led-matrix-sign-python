@@ -4,6 +4,7 @@ from typing import Dict, List, Optional, TypedDict
 from pprint import pprint
 import json
 import os
+from broadcaster import StatusBroadcaster
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -51,7 +52,7 @@ complex_stations: Dict[str, List[str]] = {
     "R20": ["R20", "L03", "635"],  # Union Sq - 14 St
 }
 
-def stations_by_route() -> Dict[str, List[Station]]:
+def mta_stations_by_route() -> Dict[str, List[Station]]:
     stations_by_route = {}
     for station in stations:
         for route in station['routes']:
@@ -59,6 +60,18 @@ def stations_by_route() -> Dict[str, List[Station]]:
                 stations_by_route[route] = []
             stations_by_route[route].append(station)
     return stations_by_route
+
+def mta_station_by_id(stop_id: str) -> Optional[Station]:
+    for station in stations:
+        if station['stop_id'] == stop_id:
+            return station
+    return None
+
+def mta_train_station_to_str(station: str) -> str:
+    for s in stations:
+        if s['stop_id'] == station:
+            return s['stop_name']
+    return ""
 
 def combine_complex_ids(complex_ids: List[str]) -> str:
     return ','.join(f"MTASBWY:{stop_id}" for stop_id in complex_ids)
@@ -72,6 +85,8 @@ class MTA():
     def __init__(self, api_key: str):
         self.domain = 'https://otp-mta-prod.camsys-apps.com/otp/routers/default'
         self.api_key = api_key
+        self.station_broadcaster = StatusBroadcaster()
+        self.station_broadcaster.set_status("121") # 116th st station
 
     def get_predictions(self, stop_id: str) -> Optional[List[TrainTime]]:
         try:
@@ -106,3 +121,10 @@ class MTA():
         except Exception as err:
             print('unable to fetch nearby api', err)
             return None
+
+    def get_current_station(self) -> Optional[str]:
+        return self.station_broadcaster.get_status()
+
+    def set_current_station(self, station: str):
+        self.station_broadcaster.set_status(station)
+

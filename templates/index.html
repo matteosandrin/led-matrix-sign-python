@@ -90,7 +90,7 @@
           <option value="{{ route }}">{{ route }}</option>
         {% endfor %}
       </select>
-      <select name="station" id="mta-station">
+      <select name="id" id="mta-station">
         <option value="">Select a station</option>
       </select>
       <input type="submit" value="Set station">
@@ -98,7 +98,7 @@
     <script>
       const routeSelect = document.querySelector('select[name="mta-route"]');
       const stationSelect = document.getElementById('mta-station');
-      const stationsByRoute = {{ mta_stations_by_route | tojson }};
+      const stationsByRoute = JSON.parse('{{ mta_stations_by_route | tojson }}');
 
       routeSelect.addEventListener('change', (event) => {
         const selectedRoute = event.target.value;

@@ -1,9 +1,10 @@
 from queue import Queue
 from flask import Flask, render_template, request
 from mbta import TrainStation, MBTA
+from mta import mta_stations_by_route, mta_station_by_id
 from broadcaster import StatusBroadcaster
 from common import config, SignMode, UIMessageType
-from mta import stations_by_route as mta_stations_by_route
+
 
 class Server:
     def __init__(
@@ -19,6 +20,7 @@ class Server:
         self.app.route('/set/station')(self.set_station_route)
         self.app.route('/set/test')(self.set_test_message_route)
         self.app.route('/trigger/banner')(self.trigger_banner_route)
+        self.app.route('/set/mta-station')(self.set_mta_station_route)
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
@@ -28,7 +30,6 @@ class Server:
             "sign_modes": sign_modes,
             "current_mode": current_mode_index,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
-            "mta_stations_by_route": mta_stations_by_route()
         }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
@@ -38,6 +39,9 @@ class Server:
                 station) for station in TrainStation]
             params["stations"] = stations
             params["current_station"] = current_station_index
+        if current_mode == SignMode.MTA:
+            stations_by_route = mta_stations_by_route()
+            params["mta_stations_by_route"] = stations_by_route
         return render_template('index.html', **params)
 
     def set_mode_route(self):
@@ -59,6 +63,16 @@ class Server:
             station = list(TrainStation)[int(value)]
             self.set_station(station)
             return f'Station set to {station}', 200
+        except Exception as e:
+            return f'Invalid station: {value}', 400
+
+    def set_mta_station_route(self):
+        value = request.args.get('id')
+        if value is None:
+            return f'Station not provided', 400
+        try:
+            self.set_mta_station(value)
+            return f'Station set to {value}', 200
         except Exception as e:
             return f'Invalid station: {value}', 400
 
@@ -86,6 +100,10 @@ class Server:
     def set_station(self, station: TrainStation):
         self.ui_queue.put(
             {"type": UIMessageType.MBTA_CHANGE_STATION, "station": station})
+
+    def set_mta_station(self, station: str):
+        self.ui_queue.put(
+            {"type": UIMessageType.MTA_CHANGE_STATION, "station": station})
 
     def set_test_message(self, message: str):
         self.ui_queue.put({"type": UIMessageType.TEST, "content": message})
