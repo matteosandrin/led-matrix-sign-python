@@ -3,9 +3,6 @@ import requests
 from typing import Dict, List, Optional, TypedDict
 from pprint import pprint
 
-DOMAIN = 'https://otp-mta-prod.camsys-apps.com/otp/routers/default'
-API_KEY = '2ctbNX4XX7oS5ywqVQT86DntRQQw59eB'
-
 # Complex stations mapping
 complex_stations: Dict[str, List[str]] = {
     "127": ["127", "R16", "902", "725"],  # Times Sq-42 St ! check for all lines
