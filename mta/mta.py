@@ -60,16 +60,6 @@ def stations_by_route() -> Dict[str, List[Station]]:
             stations_by_route[route].append(station)
     return stations_by_route
 
-def calculate_arrival_time_in_seconds(
-        arrival_fmt: str, current_time_ms: Optional[int] = None) -> int:
-    if current_time_ms is None:
-        current_time_ms = int(datetime.now().timestamp() * 1000)
-    arrival_time_ms = int(datetime.fromisoformat(
-        arrival_fmt.replace('Z', '+00:00')).timestamp() * 1000)
-    time_to_arrival_ms = arrival_time_ms - current_time_ms
-    return round(time_to_arrival_ms / 1000)
-
-
 def combine_complex_ids(complex_ids: List[str]) -> str:
     return ','.join(f"MTASBWY:{stop_id}" for stop_id in complex_ids)
 
@@ -101,20 +91,14 @@ class MTA():
                     route_id = route_entry['route']['id'].replace(
                         'MTASBWY:', '')
                     for train in route_entry['times']:
-                        # Handle terminal station edge cases
-                        arrival_time = (
-                            train.get('arrivalFmt') or train.get('departureFmt')
-                            if not train.get('scheduledArrival') and
-                            not train.get('realtimeArrival') else train.get(
-                                'departureFmt'))
-                        time = calculate_arrival_time_in_seconds(arrival_time)
-                        if time >= 0:
+                        wait_time = train['realtimeArrival'] - (train['timestamp'] - train['serviceDay'])
+                        if wait_time >= 0:
                             train_times.append({
                                 'route_id': route_id,
                                 'direction_id': train['directionId'],
                                 'long_name': train['tripHeadsign'],
                                 'stop_headsign': route_entry['headsign'],
-                                'time': time,
+                                'time': wait_time,
                                 'trip_id': train.get('tripId', '').replace('MTASBWY:', ''),
                                 'is_express': 'express' in route_entry['route']['longName'].lower()
                             })
