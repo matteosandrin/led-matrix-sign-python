@@ -82,6 +82,43 @@
       <input type="submit" value="Trigger banner">
     </form>
   {% endif %}
+  {% if current_mode == 5 %} <!-- SignMode.MTA -->
+    <form method="GET" action="/set/mta-station" onsubmit="handleFormSubmit(event, this)">
+      <h2>Set MTA station</h2>
+      <select name="mta-route">
+        {% for route in mta_stations_by_route.keys() | sort %}
+          <option value="{{ route }}">{{ route }}</option>
+        {% endfor %}
+      </select>
+      <select name="station" id="mta-station">
+        <option value="">Select a station</option>
+      </select>
+      <input type="submit" value="Set station">
+    </form>
+    <script>
+      const routeSelect = document.querySelector('select[name="mta-route"]');
+      const stationSelect = document.getElementById('mta-station');
+      const stationsByRoute = {{ mta_stations_by_route | tojson }};
+
+      routeSelect.addEventListener('change', (event) => {
+        const selectedRoute = event.target.value;
+        setStationSelector(selectedRoute);
+      });
+
+      setStationSelector(routeSelect.value);
+
+      function setStationSelector(route) {
+        const stations = stationsByRoute[route];
+        stationSelect.innerHTML = '';
+        stations.forEach(station => {
+          const option = document.createElement('option');
+          option.value = station.stop_id;
+          option.textContent = station.stop_name;
+          stationSelect.appendChild(option);
+        });
+      }
+    </script>
+  {% endif %}
   {% if current_mode == 0 %} <!-- SignMode.TEST -->
     <form method="GET" action="/set/test" onsubmit="handleFormSubmit(event, this)">
       <h2>Set test message</h2>

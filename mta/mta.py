@@ -16,7 +16,7 @@ class TrainTime(TypedDict):
     trip_id: Optional[str]
     is_express: bool
 
-class Stations(TypedDict):
+class Station(TypedDict):
     stop_id: str
     stop_name: str
     latitude: float
@@ -25,7 +25,7 @@ class Stations(TypedDict):
     south_direction_label: str
     routes: List[str]
 
-stations: List[Stations] = json.load(open(os.path.join(CURRENT_FOLDER, "stations.json")))
+stations: List[Station] = json.load(open(os.path.join(CURRENT_FOLDER, "stations.json")))
 
 # Complex stations mapping
 complex_stations: Dict[str, List[str]] = {
@@ -51,6 +51,14 @@ complex_stations: Dict[str, List[str]] = {
     "R20": ["R20", "L03", "635"],  # Union Sq - 14 St
 }
 
+def stations_by_route() -> Dict[str, List[Station]]:
+    stations_by_route = {}
+    for station in stations:
+        for route in station['routes']:
+            if route not in stations_by_route:
+                stations_by_route[route] = []
+            stations_by_route[route].append(station)
+    return stations_by_route
 
 def calculate_arrival_time_in_seconds(
         arrival_fmt: str, current_time_ms: Optional[int] = None) -> int:

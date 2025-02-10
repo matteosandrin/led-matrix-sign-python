@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 from mbta import TrainStation, MBTA
 from broadcaster import StatusBroadcaster
 from common import config, SignMode, UIMessageType
-
+from mta import stations_by_route as mta_stations_by_route
 
 class Server:
     def __init__(
@@ -27,7 +27,8 @@ class Server:
         params = {
             "sign_modes": sign_modes,
             "current_mode": current_mode_index,
-            "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX
+            "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
+            "mta_stations_by_route": mta_stations_by_route()
         }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
