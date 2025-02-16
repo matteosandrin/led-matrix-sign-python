@@ -86,17 +86,21 @@ class WeatherWidget(Widget):
         }
 
     def get_location(self):
-        response = requests.get("https://api.ipdata.co", params={
-            "api-key": self.ipdata_api_key
-        })
-        if response.status_code == 200:
+        try:
+            response = requests.get("https://api.ipdata.co", params={
+                "api-key": self.ipdata_api_key
+            })
+            response.raise_for_status()
             lat, lon = response.json()["latitude"], response.json()["longitude"]
             tz = response.json()["time_zone"]["name"]
             description = response.json()["city"] + ", " + response.json()["region"] + ", " + response.json()["country_name"]
             print(f"Weather location: ({lat}, {lon}) {description}")
             print(f"Weather timezone: {tz}")
             return (lat, lon, tz)
-        return None
+        except Exception as err:
+            print(f'Error fetching location data: {err}')
+            return None
+        
 
     def get_weather(self):
         if self.location is not None:
@@ -105,7 +109,7 @@ class WeatherWidget(Widget):
             # New York City
             lat, lon, tz = 40.71427, -74.00597, "America/New_York"
             print("WARNING: No location found, using default location (New York City)")
-        response = requests.get("https://api.open-meteo.com/v1/forecast", params={
+        params = {
             "latitude": lat,
             "longitude": lon,
             "daily": "temperature_2m_max,temperature_2m_min",
@@ -114,11 +118,14 @@ class WeatherWidget(Widget):
             "current": "temperature_2m,weather_code",
             "timezone": tz, 
             "forecast_days": "1"
-        })
-        if response.status_code == 200:
+        }
+        try:
+            response = requests.get("https://api.open-meteo.com/v1/forecast", params=params)
+            response.raise_for_status()
             pprint(response.json())
             return response.json()
-        else:
+        except Exception as err:
+            print(f'Error fetching weather data: {err}')
             return None
 
     def get_temp_color(self, temp: float) -> tuple[int, int, int]:
