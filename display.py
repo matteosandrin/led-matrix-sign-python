@@ -236,8 +236,8 @@ class Display:
         draw = self._get_draw_context_antialiased(image)
         for i, train in enumerate(content):
             minutes = int(round(train['time'] / 60.0))
-            train_str = f"{train['route_id']} {minutes}min {train['long_name']} "
-            draw.text((0, 8 * i), train_str, font=Fonts.SILKSCREEN, fill=Colors.WHITE)
+            train_str = f"{train['route_id']} {train['long_name']} {minutes}min"
+            draw.text((0, 16 * i), train_str, font=Fonts.MTA, fill=Colors.WHITE)
         self._update_display(image)
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:

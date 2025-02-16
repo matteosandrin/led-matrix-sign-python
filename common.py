@@ -64,6 +64,8 @@ class Fonts:
         CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7)
     LCD = ImageFont.truetype(os.path.join(
         CURRENT_FOLDER, "fonts/LCD.ttf"), 8)
+    MTA = ImageFont.truetype(os.path.join(
+        CURRENT_FOLDER, "fonts/MTASans-Medium.otf"), 10)
 
 
 class Colors:
