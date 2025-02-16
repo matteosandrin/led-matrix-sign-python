@@ -122,6 +122,28 @@ class MTA():
             print('unable to fetch nearby api', err)
             return None
 
+    def get_fake_predictions(self) -> List[TrainTime]:
+        return [
+            {
+                'route_id': "1",
+                'direction_id': "1",
+                'long_name': "South Ferry",
+                'stop_headsign': "Downtown",
+                'time': 780,
+                'trip_id': 893,
+                'is_express': False
+            },
+            {
+                'route_id': "3",
+                'direction_id': "0",
+                'long_name': "Van Cortlandt Park",
+                'stop_headsign': "Uptown & The Bronx",
+                'time': 240,
+                'trip_id': 893,
+                'is_express': False
+            }
+        ]
+
     def get_current_station(self) -> Optional[str]:
         return self.station_broadcaster.get_status()
 

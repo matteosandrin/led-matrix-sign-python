@@ -244,7 +244,11 @@ def mta_provider_task():
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta.get_current_station()
             if station is not None:
-                predictions = mta.get_predictions(station)
+                predictions = []
+                if not config.MTA_FAKE_DATA:
+                    predictions = mta.get_predictions(station)
+                else:
+                    predictions = mta.get_fake_predictions()
                 render_queue.put({
                     "type": RenderMessageType.MTA,
                     "content": predictions
