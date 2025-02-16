@@ -5,6 +5,8 @@ from pprint import pprint
 import json
 import os
 from broadcaster import StatusBroadcaster
+from PIL import Image
+from pathlib import Path
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -52,6 +54,19 @@ complex_stations: Dict[str, List[str]] = {
     "R20": ["R20", "L03", "635"],  # Union Sq - 14 St
 }
 
+base_dir = Path(__file__).parent
+image_dir = base_dir.parent / 'img'
+route_images: Dict[str, Dict] = {
+    "1" : {
+        "img" : Image.open(image_dir / 'mta_1.png'),
+        "color" : (255, 0, 0)
+    },
+    "2" : {
+        "img" : Image.open(image_dir / 'mta_2.png'),
+        "color" : (255, 0, 0)
+    }
+}
+
 def mta_stations_by_route() -> Dict[str, List[Station]]:
     stations_by_route = {}
     for station in stations:
@@ -72,6 +87,11 @@ def mta_train_station_to_str(station: str) -> str:
         if s['stop_id'] == station:
             return s['stop_name']
     return ""
+
+def mta_get_route_image(route_id):
+    if route_id in route_images:
+        return route_images[route_id]
+    return None
 
 def combine_complex_ids(complex_ids: List[str]) -> str:
     return ','.join(f"MTASBWY:{stop_id}" for stop_id in complex_ids)
@@ -134,7 +154,7 @@ class MTA():
                 'is_express': False
             },
             {
-                'route_id': "3",
+                'route_id': "2",
                 'direction_id': "0",
                 'long_name': "Van Cortlandt Park",
                 'stop_headsign': "Uptown & The Bronx",

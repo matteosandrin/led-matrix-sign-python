@@ -8,6 +8,7 @@ from common import RenderMessageType, Rect, Fonts, Colors, Images
 from PIL import Image, ImageDraw
 import requests
 from pprint import pprint
+from display import get_image_with_color
 import numpy as np
 
 class Widget(ABC):
@@ -84,12 +85,6 @@ class WeatherWidget(Widget):
             40: (255, 192, 159),   # red
         }
 
-    def get_image_with_color(self, image: Image.Image, color: tuple[int, int, int]) -> Image.Image:
-        image = np.array(image.convert("RGB"))
-        image = (image / 255) * np.array(color)
-        image = image.astype(np.uint8)
-        return Image.fromarray(image, mode="RGB")
-
     def get_location(self):
         response = requests.get("https://api.ipdata.co", params={
             "api-key": self.ipdata_api_key
@@ -157,10 +152,10 @@ class WeatherWidget(Widget):
         current_color = self.get_temp_color(current_temp)
         max_color = self.get_temp_color(max_temp)
         min_color = self.get_temp_color(min_temp)
-        arrow_up = self.get_image_with_color(Images.ARROW_UP, max_color)
-        arrow_down = self.get_image_with_color(Images.ARROW_DOWN, min_color)
-        deg_symbol_max = self.get_image_with_color(Images.DEG_SYMBOL, max_color)
-        deg_symbol_min = self.get_image_with_color(Images.DEG_SYMBOL, min_color)
+        arrow_up = get_image_with_color(Images.ARROW_UP, max_color)
+        arrow_down = get_image_with_color(Images.ARROW_DOWN, min_color)
+        deg_symbol_max = get_image_with_color(Images.DEG_SYMBOL, max_color)
+        deg_symbol_min = get_image_with_color(Images.DEG_SYMBOL, min_color)
         self._draw.text((right_anchor, 0), f"{current_temp}", font=Fonts.MBTA, fill=current_color, anchor="rt")
         self._image.paste(arrow_up, (0, 16))
         self._draw.text((right_anchor, 16), f"{max_temp}", font=Fonts.LCD, fill=max_color, anchor="rt")
