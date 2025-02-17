@@ -1,0 +1,136 @@
+from PIL import Image
+from pathlib import Path
+from typing import Dict
+
+base_dir = Path(__file__).parent
+image_dir = base_dir.parent / 'img'
+route_images: Dict[str, Dict] = {
+    "1" : {
+        "img" : Image.open(image_dir / 'mta_1.png'),
+        "color" : "#EE0900"
+    },
+    "2" : {
+        "img" : Image.open(image_dir / 'mta_2.png'),
+        "color" : "#EE0900"
+    },
+    # "3" : {
+    #     "img" : Image.open(image_dir / 'mta_3.png'),
+    #     "color" : "#EE0900"
+    # },
+    # "4" : {
+    #     "img" : Image.open(image_dir / 'mta_4.png'),
+    #     "color" : "#057500"
+    # },
+    # "5" : {
+    #     "img" : Image.open(image_dir / 'mta_5.png'),
+    #     "color" : "#057500"
+    # },
+    "6" : {
+        "img" : Image.open(image_dir / 'mta_6.png'),
+        "color" : "#057500"
+    },
+    # "7" : {
+    #     "img" : Image.open(image_dir / 'mta_7.png'),
+    #     "color" : "#B200A2"
+    # },
+    # "A" : {
+    #     "img" : Image.open(image_dir / 'mta_A.png'),
+    #     "color" : "#0039A6"
+    # },
+    # "C" : {
+    #     "img" : Image.open(image_dir / 'mta_C.png'),
+    #     "color" : "#0039A6"
+    # },
+    # "E" : {
+    #     "img" : Image.open(image_dir / 'mta_E.png'),
+    #     "color" : "#0039A6"
+    # },
+    # "G" : {
+    #     "img" : Image.open(image_dir / 'mta_G.png'),
+    #     "color" : "#6CBE45"
+    # },
+    # "B" : {
+    #     "img" : Image.open(image_dir / 'mta_B.png'),
+    #     "color" : "#FF6800"
+    # },
+    # "D" : {
+    #     "img" : Image.open(image_dir / 'mta_D.png'),
+    #     "color" : "#FF6800"
+    # },
+    # "F" : {
+    #     "img" : Image.open(image_dir / 'mta_F.png'),
+    #     "color" : "#FF6800"
+    # },
+    # "M" : {
+    #     "img" : Image.open(image_dir / 'mta_M.png'),
+    #     "color" : "#FF6800"
+    # },
+    # "J" : {
+    #     "img" : Image.open(image_dir / 'mta_J.png'),
+    #     "color" : "#824100"
+    # },
+    # "Z" : {
+    #     "img" : Image.open(image_dir / 'mta_Z.png'),
+    #     "color" : "#824100"
+    # },
+    # "L" : {
+    #     "img" : Image.open(image_dir / 'mta_L.png'),
+    #     "color" : "#5c5b5b"
+    # },
+    # "GS" : {
+    #     "img" : Image.open(image_dir / 'mta_GS.png'),
+    #     "color" : "#3c3e42"
+    # },
+    # "H" : {
+    #     "img" : Image.open(image_dir / 'mta_H.png'),
+    #     "color" : "#3c3e42"
+    # },
+    # "FS" : {
+    #     "img" : Image.open(image_dir / 'mta_FS.png'),
+    #     "color" : "#3c3e42"
+    # },
+    # "N" : {
+    #     "img" : Image.open(image_dir / 'mta_N.png'),
+    #     "color" : "#FCBB0A"
+    # },
+    # "Q" : {
+    #     "img" : Image.open(image_dir / 'mta_Q.png'),
+    #     "color" : "#FCBB0A"
+    # },
+    # "R" : {
+    #     "img" : Image.open(image_dir / 'mta_R.png'),
+    #     "color" : "#FCBB0A"
+    # },
+    # "W" : {
+    #     "img" : Image.open(image_dir / 'mta_W.png'),
+    #     "color" : "#FCBB0A"
+    # },
+    # "SI" : {
+    #     "img" : Image.open(image_dir / 'mta_SI.png'),
+    #     "color" : "#0039A6"
+    # },
+    # "6X": {
+    #     "img" : Image.open(image_dir / 'mta_6X.png'),
+    #     "color" : "#057500"
+    # },
+    # "7X": {
+    #     "img" : Image.open(image_dir / 'mta_7X.png'),
+    #     "color" : "#B200A2"
+    # },
+    # "FX": {
+    #     "img" : Image.open(image_dir / 'mta_FX.png'),
+    #     "color" : "#FF6800"
+    # }
+}
+
+def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    hex_color = hex_color.lstrip('#')
+    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+def mta_get_route_image(route_id):
+    if route_id in route_images:
+        item = route_images[route_id]
+        return item["img"], hex_to_rgb(item["color"])
+    return None
+
+

@@ -10,6 +10,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, List
 from mbta import MBTA, TrainStation, PredictionStatus
+from mta import MTA, mta_train_station_to_str
 from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
@@ -34,6 +35,7 @@ mode_broadcaster = StatusBroadcaster()
 mode_broadcaster.set_status(DEFAULT_SIGN_MODE)
 
 mbta = MBTA(api_key=config.MBTA_API_KEY)
+mta = MTA(config.MTA_API_KEY)
 
 
 def setup_gpio():
@@ -91,8 +93,16 @@ def ui_task():
                 })
                 render_queue.put({
                     "type": RenderMessageType.MBTA_BANNER,
-                    "content": ["Alewife train" , "is now arriving."]
-                });
+                    "content": ["Alewife train", "is now arriving."]
+                })
+            elif message["type"] == UIMessageType.MTA_CHANGE_STATION:
+                new_station = message.get("station")
+                mta.set_current_station(new_station)
+                print(f"Station changed to: {new_station}")
+                render_queue.put({
+                    "type": RenderMessageType.TEXT,
+                    "content": mta_train_station_to_str(new_station)
+                })
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
                 render_queue.put({
@@ -126,6 +136,8 @@ def render_task():
                 display.render_music_content(message["content"])
             if message.get("type") == RenderMessageType.FRAME:
                 display.render_frame_content(message["content"])
+            if message.get("type") == RenderMessageType.MTA:
+                display.render_mta_content(message["content"])
         except queue.Empty:
             continue
 
@@ -163,7 +175,7 @@ def mbta_provider_task():
                         "content": mbta.get_arriving_banner(arr_prediction)
                     })
                     # in total this banner is displayed for 3+5 seconds
-                    time.sleep(3) 
+                    time.sleep(3)
                 mbta.update_latest_predictions(predictions, [0, 1])
             time.sleep(5)
         else:
@@ -183,7 +195,8 @@ def music_provider_task():
                 img_status, img = spotify.get_album_cover(currently_playing)
                 if img_status == SpotifyResponse.OK:
                     currently_playing.cover.data = img
-                    print(f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
+                    print(
+                        f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
                 spotify.update_current_song(currently_playing)
             elif status == SpotifyResponse.OK:
                 pass
@@ -201,7 +214,8 @@ def music_provider_task():
 
 
 def web_server_task():
-    server = Server(ui_queue, mode_broadcaster, mbta.station_broadcaster)
+    server = Server(ui_queue, mode_broadcaster,
+                    mbta.station_broadcaster)
     server.web_server_task()
 
 
@@ -225,6 +239,25 @@ def widget_provider_task():
         time.sleep(REFRESH_RATE)
 
 
+def mta_provider_task():
+    while True:
+        if mode_broadcaster.get_status() == SignMode.MTA:
+            station = mta.get_current_station()
+            if station is not None:
+                predictions = []
+                if not config.MTA_FAKE_DATA:
+                    predictions = mta.get_predictions(station)
+                else:
+                    predictions = mta.get_fake_predictions()
+                render_queue.put({
+                    "type": RenderMessageType.MTA,
+                    "content": predictions
+                })
+            time.sleep(5)
+        else:
+            time.sleep(REFRESH_RATE)
+
+
 def main():
     # Setup
     if not config.EMULATE_RGB_MATRIX:
@@ -238,6 +271,7 @@ def main():
     music_thread = threading.Thread(target=music_provider_task, daemon=True)
     web_server_thread = threading.Thread(target=web_server_task, daemon=True)
     widget_thread = threading.Thread(target=widget_provider_task, daemon=True)
+    mta_thread = threading.Thread(target=mta_provider_task, daemon=True)
 
     ui_thread.start()
     render_thread.start()
@@ -246,6 +280,7 @@ def main():
     music_thread.start()
     web_server_thread.start()
     widget_thread.start()
+    mta_thread.start()
 
     try:
         while True:

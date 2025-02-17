@@ -6,9 +6,11 @@ else:
 from io import BytesIO
 from typing import List, Tuple, Any
 from mbta import Prediction, PredictionStatus
+from mta import TrainTime, mta_get_route_image
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
 from animation import AnimationManager, MBTABannerAnimation, MoveAnimation, TextScrollAnimation
+import numpy as np
 import os
 
 PANEL_WIDTH = 32
@@ -17,6 +19,11 @@ PANEL_COUNT = 5
 SCREEN_WIDTH = PANEL_WIDTH * PANEL_COUNT
 SCREEN_HEIGHT = PANEL_HEIGHT
 
+def get_image_with_color(image: Image.Image, color: tuple[int, int, int]) -> Image.Image:
+    image = np.array(image.convert("RGB"))
+    image = (image / 255) * np.array(color)
+    image = image.astype(np.uint8)
+    return Image.fromarray(image, mode="RGB")
 
 class Display:
     def __init__(self):
@@ -229,6 +236,22 @@ class Display:
 
     def render_swap_content(self, content: None):
         self.swap_canvas()
+
+    def render_mta_content(self, content: List[TrainTime]):
+        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
+        draw = self._get_draw_context_antialiased(image)
+        for i, train in enumerate(content):
+            minutes = int(round(train['time'] / 60.0))
+            route_img_data = mta_get_route_image(train['route_id'])
+            x_cursor = 0
+            if route_img_data is not None:
+                route_img, color = route_img_data
+                route_img = get_image_with_color(route_img, color)
+                image.paste(route_img, (0, 16 * i))
+                x_cursor = 16 + 3
+            draw.text((x_cursor, 2 + 16 * i), train['long_name'], font=Fonts.MTA, fill=Colors.WHITE)
+            draw.text((SCREEN_WIDTH+1, 2 + 16 * i), f"{minutes}min", font=Fonts.MTA, fill=Colors.WHITE, anchor="rt")
+        self._update_display(image)
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:
         """Helper function to format time strings"""

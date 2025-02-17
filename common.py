@@ -19,7 +19,7 @@ class SignMode(Enum):
     CLOCK = 2
     MUSIC = 3
     WIDGET = 4
-
+    MTA = 5
 
 class UIMessageType(Enum):
     TEST = 0
@@ -27,6 +27,7 @@ class UIMessageType(Enum):
     MODE_CHANGE = 2
     MBTA_CHANGE_STATION = 3
     MBTA_TEST_BANNER = 4
+    MTA_CHANGE_STATION = 5
 
 
 class RenderMessageType(Enum):
@@ -37,6 +38,7 @@ class RenderMessageType(Enum):
     MUSIC = 4
     FRAME = 5
     SWAP = 6
+    MTA = 7
 
 
 class Rect:
@@ -62,6 +64,8 @@ class Fonts:
         CURRENT_FOLDER, "fonts/Picopixel.ttf"), 7)
     LCD = ImageFont.truetype(os.path.join(
         CURRENT_FOLDER, "fonts/LCD.ttf"), 8)
+    MTA = ImageFont.truetype(os.path.join(
+        CURRENT_FOLDER, "fonts/MTASans-Medium.otf"), 10)
 
 
 class Colors:
