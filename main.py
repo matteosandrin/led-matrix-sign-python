@@ -41,9 +41,10 @@ mta = MTA(config.MTA_API_KEY)
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='LED Matrix Display Controller')
+    parser = argparse.ArgumentParser(
+        description='LED Matrix Display Controller')
     parser.add_argument('--mode', type=str, choices=[mode.name for mode in SignMode],
-                      help='Set the default sign mode')
+                        help='Set the default sign mode')
     return parser.parse_args()
 
 
@@ -160,8 +161,8 @@ def clock_provider_task():
             render_queue.put({
                 "type": RenderMessageType.CLOCK,
                 "content": {
-                    "type" : ClockType.MTA,
-                    "time" : datetime.now()
+                    "type": ClockType.MTA,
+                    "time": datetime.now()
                 }
             })
         time.sleep(REFRESH_RATE)
@@ -281,28 +282,21 @@ def main():
     print(f"Initial mode: {initial_mode}")
     mode_broadcaster.set_status(initial_mode)
 
-    # Setup
     if not config.EMULATE_RGB_MATRIX:
         setup_gpio()
 
-    # Start threads
-    ui_thread = threading.Thread(target=ui_task, daemon=True)
-    render_thread = threading.Thread(target=render_task, daemon=True)
-    clock_thread = threading.Thread(target=clock_provider_task, daemon=True)
-    mbta_thread = threading.Thread(target=mbta_provider_task, daemon=True)
-    music_thread = threading.Thread(target=music_provider_task, daemon=True)
-    web_server_thread = threading.Thread(target=web_server_task, daemon=True)
-    widget_thread = threading.Thread(target=widget_provider_task, daemon=True)
-    mta_thread = threading.Thread(target=mta_provider_task, daemon=True)
-
-    ui_thread.start()
-    render_thread.start()
-    clock_thread.start()
-    mbta_thread.start()
-    music_thread.start()
-    web_server_thread.start()
-    widget_thread.start()
-    mta_thread.start()
+    threads = [
+        threading.Thread(target=ui_task, daemon=True),
+        threading.Thread(target=render_task, daemon=True),
+        threading.Thread(target=web_server_task, daemon=True),
+        threading.Thread(target=clock_provider_task, daemon=True),
+        threading.Thread(target=mbta_provider_task, daemon=True),
+        threading.Thread(target=music_provider_task, daemon=True),
+        threading.Thread(target=widget_provider_task, daemon=True),
+        threading.Thread(target=mta_provider_task, daemon=True)
+    ]
+    for thread in threads:
+        thread.start()
 
     try:
         while True:
