@@ -227,7 +227,7 @@ def music_provider_task():
 
 def web_server_task():
     server = Server(ui_queue, mode_broadcaster,
-                    mbta.station_broadcaster)
+                    mbta.station_broadcaster, mta.station_broadcaster)
     server.web_server_task()
 
 

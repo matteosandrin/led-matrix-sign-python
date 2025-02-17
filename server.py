@@ -1,7 +1,7 @@
 from queue import Queue
 from flask import Flask, render_template, request
 from mbta import TrainStation, MBTA
-from mta import mta_stations_by_route, mta_station_by_id
+from mta import mta_stations_by_route, mta_train_station_to_str
 from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
 import config
@@ -9,11 +9,12 @@ import config
 class Server:
     def __init__(
             self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster,
-            station_broadcaster: StatusBroadcaster):
+            station_broadcaster: StatusBroadcaster, mta_station_broadcaster: StatusBroadcaster):
         self.app = Flask(__name__)
         self.ui_queue = ui_queue
         self.mode_broadcaster = mode_broadcaster
         self.station_broadcaster = station_broadcaster
+        self.mta_station_broadcaster = mta_station_broadcaster
         # Register routes
         self.app.route('/')(self.index)
         self.app.route('/set/mode')(self.set_mode_route)
@@ -29,19 +30,22 @@ class Server:
         params = {
             "sign_modes": sign_modes,
             "current_mode": current_mode_index,
+            "current_mode_label": current_mode.name,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
         }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
             current_station_index = list(TrainStation).index(current_station)
-
             stations = [MBTA.train_station_to_str(
                 station) for station in TrainStation]
             params["stations"] = stations
             params["current_station"] = current_station_index
+            params["current_station_label"] = MBTA.train_station_to_str(current_station)
         if current_mode == SignMode.MTA:
             stations_by_route = mta_stations_by_route()
+            current_station = self.mta_station_broadcaster.get_status()
             params["mta_stations_by_route"] = stations_by_route
+            params["mta_current_station_label"] = mta_train_station_to_str(current_station)
         return render_template('index.html', **params)
 
     def set_mode_route(self):
