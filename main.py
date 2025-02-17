@@ -1,5 +1,6 @@
 from pprint import pprint
-from common import config, SignMode, UIMessageType, RenderMessageType
+from common import SignMode, UIMessageType, RenderMessageType
+import config
 import argparse
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions

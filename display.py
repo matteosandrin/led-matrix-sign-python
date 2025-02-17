@@ -1,4 +1,5 @@
-from common import config, Fonts, Colors, Rect
+from common import Fonts, Colors, Rect
+import config
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
