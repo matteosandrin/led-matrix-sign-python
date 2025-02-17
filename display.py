@@ -245,7 +245,8 @@ class Display:
             route_img_data = mta_get_route_image(train['route_id'])
             x_cursor = 0
             if route_img_data is not None:
-                route_img = get_image_with_color(route_img_data["img"], route_img_data["color"])
+                route_img, color = route_img_data
+                route_img = get_image_with_color(route_img, color)
                 image.paste(route_img, (0, 16 * i))
                 x_cursor = 16 + 3
             draw.text((x_cursor, 2 + 16 * i), train['long_name'], font=Fonts.MTA, fill=Colors.WHITE)
