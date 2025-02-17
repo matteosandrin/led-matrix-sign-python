@@ -11,6 +11,7 @@ from pprint import pprint
 from display import get_image_with_color
 import numpy as np
 
+
 class Widget(ABC):
     def __init__(self, bbox: Rect, refresh_rate: float = 1.0):
         self.bbox = bbox
@@ -56,10 +57,11 @@ class Widget(ABC):
                 "content": (self.bbox, self._image.copy())
             }
 
+
 class ClockWidget(Widget):
     def __init__(self, bbox: Rect):
         super().__init__(bbox, refresh_rate=0.1)
-        
+
     def update(self):
         with self._image_lock:
             self._image.paste((0, 0, 0), (0, 0, self.bbox.w, self.bbox.h))
@@ -68,7 +70,9 @@ class ClockWidget(Widget):
                 time_str = now.strftime("%H:%M:%S")
             else:
                 time_str = now.strftime("%H %M %S")
-            self._draw.text((0, 0), time_str, font=Fonts.MBTA, fill=Colors.WHITE)
+            self._draw.text((0, 0), time_str, font=Fonts.MBTA,
+                            fill=Colors.WHITE)
+
 
 class WeatherWidget(Widget):
     def __init__(self, bbox: Rect, ipdata_api_key: str):
@@ -79,7 +83,7 @@ class WeatherWidget(Widget):
             -20: (0, 60, 98),      # dark blue
             -10: (120, 162, 204),  # darker blue
             0: (164, 195, 210),    # light blue
-            10: (121, 210, 179),   # turquoise  
+            10: (121, 210, 179),   # turquoise
             20: (252, 245, 112),   # yellow
             30: (255, 150, 79),    # orange
             40: (255, 192, 159),   # red
@@ -91,16 +95,18 @@ class WeatherWidget(Widget):
                 "api-key": self.ipdata_api_key
             })
             response.raise_for_status()
-            lat, lon = response.json()["latitude"], response.json()["longitude"]
+            lat, lon = response.json()["latitude"], response.json()[
+                "longitude"]
             tz = response.json()["time_zone"]["name"]
-            description = response.json()["city"] + ", " + response.json()["region"] + ", " + response.json()["country_name"]
+            description = response.json()["city"] + ", "
+            + response.json()["region"] + ", "
+            + response.json()["country_name"]
             print(f"Weather location: ({lat}, {lon}) {description}")
             print(f"Weather timezone: {tz}")
             return (lat, lon, tz)
         except Exception as err:
             print(f'Error fetching location data: {err}')
             return None
-        
 
     def get_weather(self):
         if self.location is not None:
@@ -113,14 +119,15 @@ class WeatherWidget(Widget):
             "latitude": lat,
             "longitude": lon,
             "daily": "temperature_2m_max,temperature_2m_min",
-            "hourly" : "weather_code",
+            "hourly": "weather_code",
             "temporal_resolution": "hourly_3",
             "current": "temperature_2m,weather_code",
-            "timezone": tz, 
+            "timezone": tz,
             "forecast_days": "1"
         }
         try:
-            response = requests.get("https://api.open-meteo.com/v1/forecast", params=params)
+            response = requests.get(
+                "https://api.open-meteo.com/v1/forecast", params=params)
             response.raise_for_status()
             pprint(response.json())
             return response.json()
@@ -136,7 +143,7 @@ class WeatherWidget(Widget):
         if temp >= temps[-1]:
             return self.temp_color_map[temps[-1]]
         for i in range(len(temps) - 1):
-            t1, t2 = temps[i], temps[i + 1]            
+            t1, t2 = temps[i], temps[i + 1]
             if t1 <= temp <= t2:
                 c1 = self.temp_color_map[t1]
                 c2 = self.temp_color_map[t2]
@@ -163,13 +170,17 @@ class WeatherWidget(Widget):
         arrow_down = get_image_with_color(Images.ARROW_DOWN, min_color)
         deg_symbol_max = get_image_with_color(Images.DEG_SYMBOL, max_color)
         deg_symbol_min = get_image_with_color(Images.DEG_SYMBOL, min_color)
-        self._draw.text((right_anchor, 0), f"{current_temp}", font=Fonts.MBTA, fill=current_color, anchor="rt")
+        self._draw.text(
+            (right_anchor, 0), f"{current_temp}", font=Fonts.MBTA, fill=current_color, anchor="rt")
         self._image.paste(arrow_up, (0, 16))
-        self._draw.text((right_anchor, 16), f"{max_temp}", font=Fonts.LCD, fill=max_color, anchor="rt")
+        self._draw.text(
+            (right_anchor, 16), f"{max_temp}", font=Fonts.LCD, fill=max_color, anchor="rt")
         self._image.paste(deg_symbol_max, (right_anchor, 16))
         self._image.paste(arrow_down, (0, 16+8))
-        self._draw.text((right_anchor, 16+8), f"{min_temp}", font=Fonts.LCD, fill=min_color, anchor="rt")
+        self._draw.text((right_anchor, 16+8),
+                        f"{min_temp}", font=Fonts.LCD, fill=min_color, anchor="rt")
         self._image.paste(deg_symbol_min, (right_anchor, 16+8))
+
 
 class WidgetManager:
     def __init__(self, render_queue: queue.Queue):
@@ -212,4 +223,4 @@ class WidgetManager:
             self.render_queue.put({
                 "type": RenderMessageType.SWAP
             })
-            time.sleep(0.1)  # Throttle updates 
+            time.sleep(0.1)  # Throttle updates

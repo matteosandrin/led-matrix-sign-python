@@ -20,11 +20,13 @@ PANEL_COUNT = 5
 SCREEN_WIDTH = PANEL_WIDTH * PANEL_COUNT
 SCREEN_HEIGHT = PANEL_HEIGHT
 
+
 def get_image_with_color(image: Image.Image, color: tuple[int, int, int]) -> Image.Image:
     image = np.array(image.convert("RGB"))
     image = (image / 255) * np.array(color)
     image = image.astype(np.uint8)
     return Image.fromarray(image, mode="RGB")
+
 
 class Display:
     def __init__(self):
@@ -243,7 +245,8 @@ class Display:
         draw = self._get_draw_context_antialiased(image)
         for i, train in enumerate(content):
             minutes = int(round(train['time'] / 60.0))
-            route_img_data = mta_get_route_image(train['route_id'], train['is_express'])
+            route_img_data = mta_get_route_image(
+                train['route_id'], train['is_express'])
             x_cursor = 0
             if route_img_data is not None:
                 route_img, color = route_img_data
@@ -253,9 +256,12 @@ class Display:
             minutes_str = f"{minutes}min"
             minutes_str_width = self._get_text_length(minutes_str, Fonts.MTA)
             train_str_available_width = SCREEN_WIDTH - x_cursor - minutes_str_width
-            train_str = self._mta_trim_train_name(train['long_name'], Fonts.MTA, train_str_available_width)
-            draw.text((x_cursor, 2 + 16 * i), train_str, font=Fonts.MTA, fill=Colors.MTA_GREEN)
-            draw.text((SCREEN_WIDTH+1, 2 + 16 * i), minutes_str, font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
+            train_str = self._mta_trim_train_name(
+                train['long_name'], Fonts.MTA, train_str_available_width)
+            draw.text((x_cursor, 2 + 16 * i), train_str,
+                      font=Fonts.MTA, fill=Colors.MTA_GREEN)
+            draw.text((SCREEN_WIDTH+1, 2 + 16 * i), minutes_str,
+                      font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
         self._update_display(image)
 
     def render_clock_content(self, content):
@@ -269,7 +275,8 @@ class Display:
                 clock_time.strftime("%-I:%M:%S %p")
             ]
             for i, line in enumerate(lines):
-                draw.text((SCREEN_WIDTH / 2, 2 + 16 * i), line, font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="mt")
+                draw.text((SCREEN_WIDTH / 2, 2 + 16 * i), line,
+                          font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="mt")
         self._update_display(image)
 
     def _mta_trim_train_name(self, text: str, font: ImageFont, max_width: int) -> str:

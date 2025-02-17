@@ -7,12 +7,13 @@ from queue import Queue
 from abc import ABC, abstractmethod
 import threading
 
-ANIMATION_REFRESH_RATE = 1 / 60.0 # 60 fps
+ANIMATION_REFRESH_RATE = 1 / 60.0  # 60 fps
+
 
 class Animation(ABC):
     def __init__(self, bbox: Rect, speed: float, loop: bool):
         self.bbox = bbox
-        self.speed = speed # frames per second
+        self.speed = speed  # frames per second
         self.loop = loop
         self.frames = []
         self.current_frame = 0
@@ -27,9 +28,9 @@ class Animation(ABC):
         """Advances to the next frame. Returns True if animation is complete."""
         if not self.frames:
             return False
-            
+
         self.current_frame = (self.current_frame + 1) % len(self.frames)
-        
+
         # Return True if animation should end (non-looping and back to start)
         return not self.loop and self.current_frame == 0
 
@@ -44,14 +45,15 @@ class Animation(ABC):
         Returns (frame, is_complete) tuple, where frame is None if no frames exist."""
         if not self.frames:
             return None, False
-            
+
         frame = self.frames[self.current_frame]
         self.current_frame = (self.current_frame + 1) % len(self.frames)
-        
+
         # Check if animation should end (non-looping and back to start)
         is_complete = not self.loop and self.current_frame == 0
-        
+
         return frame, is_complete
+
 
 class TextScrollAnimation(Animation):
     def __init__(
@@ -84,9 +86,10 @@ class TextScrollAnimation(Animation):
             frames.append((self.bbox, image))
         return frames
 
+
 class MoveAnimation(Animation):
     def __init__(
-            self, start_bbox: Rect, end_bbox: Rect, 
+            self, start_bbox: Rect, end_bbox: Rect,
             image: Image.Image, speed: float = 60, loop: bool = False):
         super().__init__(start_bbox, speed, loop)
         self.start_bbox = start_bbox
@@ -100,12 +103,14 @@ class MoveAnimation(Animation):
         y_delta = self.end_bbox.y - self.start_bbox.y
         delta = math.sqrt(x_delta ** 2 + y_delta ** 2)
         frame_count = int(delta)
-        
+
         for i in range(0, frame_count + 1):
             x_pos = self.start_bbox.x + (x_delta * i / frame_count)
             y_pos = self.start_bbox.y + (y_delta * i / frame_count)
-            frames.append((Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), self.image))
+            frames.append(
+                (Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), self.image))
         return frames
+
 
 class MBTABannerAnimation(MoveAnimation):
     def __init__(
@@ -115,23 +120,24 @@ class MBTABannerAnimation(MoveAnimation):
         image = Image.new('RGB', (start_bbox.w, start_bbox.h))
         draw = ImageDraw.Draw(image)
         draw.fontmode = "1"  # antialiasing off
-        
+
         # Truncate and center text
         line1 = line1[:16]
         line2 = line2[:16]
         font = Fonts.MBTA
         color = Colors.MBTA_AMBER
-        
+
         line1_width = draw.textlength(line1, font=font)
         line2_width = draw.textlength(line2, font=font)
         x1 = (start_bbox.w - line1_width) // 2
         x2 = (start_bbox.w - line2_width) // 2
-        
+
         draw.text((x1, 0), line1, font=font, fill=color)
         draw.text((x2, 16), line2, font=font, fill=color)
-        
+
         # Initialize the move animation with our banner image
         super().__init__(start_bbox, end_bbox, image, speed=60, loop=False)
+
 
 class AnimationGroup:
     def __init__(self, speed: float):
@@ -152,6 +158,7 @@ class AnimationGroup:
     def should_update(self, frame_count: int) -> bool:
         return frame_count - self.last_update >= math.floor(60 / self.speed)
 
+
 class AnimationManager:
     def __init__(self, render_queue: Queue):
         self.render_queue = render_queue
@@ -165,15 +172,17 @@ class AnimationManager:
         with self.lock:
             self.animations[key] = animation
             if animation.speed not in self.animation_groups:
-                self.animation_groups[animation.speed] = AnimationGroup(animation.speed)
+                self.animation_groups[animation.speed] = AnimationGroup(
+                    animation.speed)
             self.animation_groups[animation.speed].add_animation(key)
-    
+
     def add_animations(self, animations: Dict[str, Animation]):
         with self.lock:
             for key, animation in animations.items():
                 self.animations[key] = animation
                 if animation.speed not in self.animation_groups:
-                    self.animation_groups[animation.speed] = AnimationGroup(animation.speed)
+                    self.animation_groups[animation.speed] = AnimationGroup(
+                        animation.speed)
                 self.animation_groups[animation.speed].add_animation(key)
 
     def remove_animation(self, key: str):
@@ -193,7 +202,8 @@ class AnimationManager:
     def start(self):
         if not self.is_running:
             self.is_running = True
-            self.thread = threading.Thread(target=self._run_animations, daemon=True)
+            self.thread = threading.Thread(
+                target=self._run_animations, daemon=True)
             self.thread.start()
 
     def stop(self):
@@ -209,7 +219,7 @@ class AnimationManager:
         while self.is_running:
             completed_keys = []
             start_time = time.time()
-            
+
             update_count = 0
             for speed, group in list(self.animation_groups.items()):
                 if group.should_update(frame_count):
@@ -229,12 +239,13 @@ class AnimationManager:
                 self.render_queue.put({
                     "type": RenderMessageType.SWAP
                 })
-                
+
             for key in completed_keys:
                 self.remove_animation(key)
-                
+
             frame_count += 1
             elapsed_time = time.time() - start_time
-            sleep_time = min(ANIMATION_REFRESH_RATE, ANIMATION_REFRESH_RATE - elapsed_time)
+            sleep_time = min(ANIMATION_REFRESH_RATE,
+                             ANIMATION_REFRESH_RATE - elapsed_time)
             if sleep_time > 0:
                 time.sleep(sleep_time)

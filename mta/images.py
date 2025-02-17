@@ -6,35 +6,35 @@ from common import hex_to_rgb
 base_dir = Path(__file__).parent
 image_dir = base_dir.parent / 'img'
 route_images: Dict[str, Dict] = {
-    "1" : {
-        "img" : Image.open(image_dir / 'mta_1.png'),
-        "color" : "#EE0900"
+    "1": {
+        "img": Image.open(image_dir / 'mta_1.png'),
+        "color": "#EE0900"
     },
-    "2" : {
-        "img" : Image.open(image_dir / 'mta_2.png'),
-        "color" : "#EE0900"
+    "2": {
+        "img": Image.open(image_dir / 'mta_2.png'),
+        "color": "#EE0900"
     },
-    "3" : {
-        "img" : Image.open(image_dir / 'mta_3.png'),
-        "color" : "#EE0900"
+    "3": {
+        "img": Image.open(image_dir / 'mta_3.png'),
+        "color": "#EE0900"
     },
-    "4" : {
-        "img" : Image.open(image_dir / 'mta_4.png'),
-        "express_img" : Image.open(image_dir / 'mta_4_express.png'),
-        "color" : "#057500"
+    "4": {
+        "img": Image.open(image_dir / 'mta_4.png'),
+        "express_img": Image.open(image_dir / 'mta_4_express.png'),
+        "color": "#057500"
     },
-    "5" : {
-        "img" : Image.open(image_dir / 'mta_5.png'),
-        "color" : "#057500"
+    "5": {
+        "img": Image.open(image_dir / 'mta_5.png'),
+        "color": "#057500"
     },
-    "6" : {
-        "img" : Image.open(image_dir / 'mta_6.png'),
-        "express_img" : Image.open(image_dir / 'mta_6_express.png'),
-        "color" : "#057500"
+    "6": {
+        "img": Image.open(image_dir / 'mta_6.png'),
+        "express_img": Image.open(image_dir / 'mta_6_express.png'),
+        "color": "#057500"
     },
-    "7" : {
-        "img" : Image.open(image_dir / 'mta_7.png'),
-        "color" : "#B200A2"
+    "7": {
+        "img": Image.open(image_dir / 'mta_7.png'),
+        "color": "#B200A2"
     },
     # "A" : {
     #     "img" : Image.open(image_dir / 'mta_A.png'),
@@ -60,13 +60,13 @@ route_images: Dict[str, Dict] = {
     #     "img" : Image.open(image_dir / 'mta_D.png'),
     #     "color" : "#FF6800"
     # },
-    "F" : {
-        "img" : Image.open(image_dir / 'mta_F.png'),
-        "color" : "#FF6800"
+    "F": {
+        "img": Image.open(image_dir / 'mta_F.png'),
+        "color": "#FF6800"
     },
-    "M" : {
-        "img" : Image.open(image_dir / 'mta_M.png'),
-        "color" : "#FF6800"
+    "M": {
+        "img": Image.open(image_dir / 'mta_M.png'),
+        "color": "#FF6800"
     },
     # "J" : {
     #     "img" : Image.open(image_dir / 'mta_J.png'),
@@ -114,6 +114,7 @@ route_images: Dict[str, Dict] = {
     # },
 }
 
+
 def mta_get_route_image(route_id, is_express: bool = False):
     if route_id in route_images:
         item = route_images[route_id]
@@ -121,5 +122,3 @@ def mta_get_route_image(route_id, is_express: bool = False):
             return item["express_img"], hex_to_rgb(item["color"])
         return item["img"], hex_to_rgb(item["color"])
     return None
-
-

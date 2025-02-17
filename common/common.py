@@ -15,6 +15,7 @@ class SignMode(Enum):
     WIDGET = 4
     MTA = 5
 
+
 class UIMessageType(Enum):
     TEST = 0
     MODE_SHIFT = 1
@@ -35,10 +36,12 @@ class RenderMessageType(Enum):
     MTA = 7
     CLOCK = 8
 
+
 class ClockType(Enum):
     DEFAULT = 0
     MBTA = 1
     MTA = 2
+
 
 class Rect:
     def __init__(self, x: int, y: int, w: int, h: int):
@@ -49,21 +52,24 @@ class Rect:
 
     def to_tuple(self):
         return (self.x, self.y, self.w, self.h)
-    
+
     def to_crop_tuple(self):
         return (self.x, self.y, self.x + self.w, self.y + self.h)
 
 
 class Fonts:
     MBTA = ImageFont.truetype(str(fonts_dir / 'MBTASans-Regular.otf'), 8)
-    SILKSCREEN = ImageFont.truetype(str(fonts_dir / 'Silkscreen-Normal.ttf'), 8)
+    SILKSCREEN = ImageFont.truetype(
+        str(fonts_dir / 'Silkscreen-Normal.ttf'), 8)
     PICOPIXEL = ImageFont.truetype(str(fonts_dir / 'Picopixel.ttf'), 7)
     LCD = ImageFont.truetype(str(fonts_dir / 'LCD.ttf'), 8)
     MTA = ImageFont.truetype(str(fonts_dir / 'MTASans-Medium.otf'), 10)
 
+
 def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     hex_color = hex_color.lstrip('#')
     return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
 
 class Colors:
     BLACK = (0, 0, 0)
@@ -71,6 +77,7 @@ class Colors:
     MBTA_AMBER = (255, 191, 0)
     SPOTIFY_GREEN = (29, 185, 84)
     MTA_GREEN = hex_to_rgb("#d9ff2e")
+
 
 class Images:
     ARROW_UP = Image.open(img_dir / 'arrow-up.png')

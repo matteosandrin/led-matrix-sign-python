@@ -6,6 +6,7 @@ from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
 import config
 
+
 class Server:
     def __init__(
             self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster,
@@ -40,12 +41,14 @@ class Server:
                 station) for station in TrainStation]
             params["stations"] = stations
             params["current_station"] = current_station_index
-            params["current_station_label"] = MBTA.train_station_to_str(current_station)
+            params["current_station_label"] = MBTA.train_station_to_str(
+                current_station)
         if current_mode == SignMode.MTA:
             stations_by_route = mta_stations_by_route()
             current_station = self.mta_station_broadcaster.get_status()
             params["mta_stations_by_route"] = stations_by_route
-            params["mta_current_station_label"] = mta_train_station_to_str(current_station)
+            params["mta_current_station_label"] = mta_train_station_to_str(
+                current_station)
         return render_template('index.html', **params)
 
     def set_mode_route(self):
