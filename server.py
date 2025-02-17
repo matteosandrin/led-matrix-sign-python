@@ -6,8 +6,6 @@ from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
 import config
 
-print("EMULATE_RGB_MATRIX:", config.EMULATE_RGB_MATRIX)
-
 class Server:
     def __init__(
             self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster,
@@ -33,7 +31,6 @@ class Server:
             "current_mode": current_mode_index,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
         }
-        print(params)
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
             current_station_index = list(TrainStation).index(current_station)
