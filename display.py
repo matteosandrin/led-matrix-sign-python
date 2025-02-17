@@ -242,7 +242,7 @@ class Display:
         draw = self._get_draw_context_antialiased(image)
         for i, train in enumerate(content):
             minutes = int(round(train['time'] / 60.0))
-            route_img_data = mta_get_route_image(train['route_id'])
+            route_img_data = mta_get_route_image(train['route_id'], train['is_express'])
             x_cursor = 0
             if route_img_data is not None:
                 route_img, color = route_img_data

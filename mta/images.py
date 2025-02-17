@@ -13,20 +13,22 @@ route_images: Dict[str, Dict] = {
         "img" : Image.open(image_dir / 'mta_2.png'),
         "color" : "#EE0900"
     },
-    # "3" : {
-    #     "img" : Image.open(image_dir / 'mta_3.png'),
-    #     "color" : "#EE0900"
-    # },
-    # "4" : {
-    #     "img" : Image.open(image_dir / 'mta_4.png'),
-    #     "color" : "#057500"
-    # },
-    # "5" : {
-    #     "img" : Image.open(image_dir / 'mta_5.png'),
-    #     "color" : "#057500"
-    # },
+    "3" : {
+        "img" : Image.open(image_dir / 'mta_3.png'),
+        "color" : "#EE0900"
+    },
+    "4" : {
+        "img" : Image.open(image_dir / 'mta_4.png'),
+        "express_img" : Image.open(image_dir / 'mta_4_express.png'),
+        "color" : "#057500"
+    },
+    "5" : {
+        "img" : Image.open(image_dir / 'mta_5.png'),
+        "color" : "#057500"
+    },
     "6" : {
         "img" : Image.open(image_dir / 'mta_6.png'),
+        "express_img" : Image.open(image_dir / 'mta_6_express.png'),
         "color" : "#057500"
     },
     # "7" : {
@@ -109,27 +111,17 @@ route_images: Dict[str, Dict] = {
     #     "img" : Image.open(image_dir / 'mta_SI.png'),
     #     "color" : "#0039A6"
     # },
-    # "6X": {
-    #     "img" : Image.open(image_dir / 'mta_6X.png'),
-    #     "color" : "#057500"
-    # },
-    # "7X": {
-    #     "img" : Image.open(image_dir / 'mta_7X.png'),
-    #     "color" : "#B200A2"
-    # },
-    # "FX": {
-    #     "img" : Image.open(image_dir / 'mta_FX.png'),
-    #     "color" : "#FF6800"
-    # }
 }
 
 def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
     hex_color = hex_color.lstrip('#')
     return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
 
-def mta_get_route_image(route_id):
+def mta_get_route_image(route_id, is_express: bool = False):
     if route_id in route_images:
         item = route_images[route_id]
+        if is_express and "express_img" in item:
+            return item["express_img"], hex_to_rgb(item["color"])
         return item["img"], hex_to_rgb(item["color"])
     return None
 

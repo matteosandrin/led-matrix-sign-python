@@ -1,3 +1,4 @@
+from pprint import pprint
 from common import config, SignMode, UIMessageType, RenderMessageType
 import argparse
 if config.EMULATE_RGB_MATRIX:
@@ -256,6 +257,7 @@ def mta_provider_task():
                     predictions = mta.get_predictions(station)
                 else:
                     predictions = mta.get_fake_predictions()
+                pprint(predictions[:2])
                 render_queue.put({
                     "type": RenderMessageType.MTA,
                     "content": predictions
