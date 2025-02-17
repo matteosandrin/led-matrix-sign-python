@@ -6,31 +6,40 @@ from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
 import config
 import subprocess
+import os.path
+
 
 def exec_git_command(command: list[str]) -> str:
     try:
+        file_dir = os.path.dirname(os.path.abspath(__file__))
         result = subprocess.run(
             command,
             capture_output=True,
             text=True,
-            check=True
+            check=True,
+            cwd=file_dir
         )
         return result.stdout.strip()
     except subprocess.CalledProcessError:
-        return "Unknown" # Return fallback if git command fails
+        return "Unknown"
     except FileNotFoundError:
-        return "Git not found" # Return fallback if git is not installed
+        return "Git not found"
+
 
 def get_git_last_commit_date():
     return exec_git_command(['git', 'log', '-1', '--format=%ci', '--date=local'])
-    
+
+
 def get_git_last_commit_hash():
     return exec_git_command(['git', 'log', '-1', '--format=%H'])
 
+
 def get_github_commit_url():
-    remote = exec_git_command(['git', 'remote', 'get-url', 'origin']).replace('.git', '')
+    remote = exec_git_command(
+        ['git', 'remote', 'get-url', 'origin']).replace('.git', '')
     commit_hash = get_git_last_commit_hash()
     return f"{remote}/commit/{commit_hash}"
+
 
 class Server:
     def __init__(
@@ -142,5 +151,3 @@ class Server:
 
     def set_test_message(self, message: str):
         self.ui_queue.put({"type": UIMessageType.TEST, "content": message})
-
-    
