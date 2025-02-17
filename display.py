@@ -250,9 +250,33 @@ class Display:
                 route_img = get_image_with_color(route_img, color)
                 image.paste(route_img, (0, 16 * i))
                 x_cursor = 16 + 3
-            draw.text((x_cursor, 2 + 16 * i), train['long_name'], font=Fonts.MTA, fill=Colors.MTA_GREEN)
-            draw.text((SCREEN_WIDTH+1, 2 + 16 * i), f"{minutes}min", font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
+            minutes_str = f"{minutes}min"
+            minutes_str_width = self._get_text_length(minutes_str, Fonts.MTA)
+            train_str_available_width = SCREEN_WIDTH - x_cursor - minutes_str_width
+            train_str = self._mta_trim_train_name(train['long_name'], Fonts.MTA, train_str_available_width)
+            draw.text((x_cursor, 2 + 16 * i), train_str, font=Fonts.MTA, fill=Colors.MTA_GREEN)
+            draw.text((SCREEN_WIDTH+1, 2 + 16 * i), minutes_str, font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
         self._update_display(image)
+
+    def _mta_trim_train_name(self, text: str, font: ImageFont, max_width: int) -> str:
+        draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
+        if draw.textlength(text, font=font) <= max_width:
+            return text
+        if "-" in text:
+            parts = text.split("-")
+            parts = parts[:-1]
+            return self._mta_trim_train_name("-".join(parts), font, max_width)
+        if " " in text:
+            parts = text.split(" ")
+            parts = parts[:-1]
+            return self._mta_trim_train_name(" ".join(parts), font, max_width)
+        return self._trim_text_to_fit(text, font, max_width)
+
+    def _trim_text_to_fit(self, text: str, font: ImageFont, max_width: int) -> str:
+        draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
+        while draw.textlength(text, font=font) > max_width:
+            text = text[:-1]
+        return text
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:
         """Helper function to format time strings"""
