@@ -5,7 +5,32 @@ from mta import mta_stations_by_route, mta_train_station_to_str
 from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
 import config
+import subprocess
 
+def exec_git_command(command: list[str]) -> str:
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError:
+        return "Unknown" # Return fallback if git command fails
+    except FileNotFoundError:
+        return "Git not found" # Return fallback if git is not installed
+
+def get_git_last_commit_date():
+    return exec_git_command(['git', 'log', '-1', '--format=%ci', '--date=local'])
+    
+def get_git_last_commit_hash():
+    return exec_git_command(['git', 'log', '-1', '--format=%H'])
+
+def get_github_commit_url():
+    remote = exec_git_command(['git', 'remote', 'get-url', 'origin']).replace('.git', '')
+    commit_hash = get_git_last_commit_hash()
+    return f"{remote}/commit/{commit_hash}"
 
 class Server:
     def __init__(
@@ -33,6 +58,9 @@ class Server:
             "current_mode": current_mode_index,
             "current_mode_label": current_mode.name,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
+            "git_last_commit_date": get_git_last_commit_date(),
+            "git_last_commit_hash": get_git_last_commit_hash(),
+            "github_commit_url": get_github_commit_url()
         }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
@@ -114,3 +142,5 @@ class Server:
 
     def set_test_message(self, message: str):
         self.ui_queue.put({"type": UIMessageType.TEST, "content": message})
+
+    

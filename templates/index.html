@@ -12,6 +12,9 @@
 </head>
 <body>
   <h1>LED Matrix Display</h1>
+  <p>
+    Last commit was on <a href="{{ github_commit_url }}">{{ git_last_commit_date }}</a>
+  </p>
   {% if EMULATE_RGB_MATRIX %}
     <h2>Emulator</h2>
     <details>
@@ -60,7 +63,7 @@
 
   <form method="GET" action="/set/mode" onsubmit="handleFormSubmit(event, this)">
     <h2>Set sign mode</h2>
-    <p>Current mode: <span style="font-weight: bold;">{{ current_mode_label }}</span></p>
+    <p>Current sign mode is <span style="font-weight: bold;">{{ current_mode_label }}</span></p>
     <select name="id">
       {% for mode in sign_modes %}
         <option value="{{ loop.index0 }}" {% if current_mode == loop.index0 %}selected{% endif %}>{{ mode }}</option>
@@ -71,7 +74,7 @@
   {% if current_mode == 1 %} <!-- SignMode.MBTA -->
     <form method="GET" action="/set/station" onsubmit="handleFormSubmit(event, this)">
       <h2>Set MBTA station</h2>
-      <p>Current station: <span style="font-weight: bold;">{{ current_station_label }}</span></p>
+      <p>Current station is <span style="font-weight: bold;">{{ current_station_label }}</span></p>
       <select name="id">
       {% for station in stations %}
         <option value="{{ loop.index0 }}" {% if current_station == loop.index0 %}selected{% endif %}>{{ station }}</option>
@@ -87,7 +90,7 @@
   {% if current_mode == 5 %} <!-- SignMode.MTA -->
     <form method="GET" action="/set/mta-station" onsubmit="handleFormSubmit(event, this)">
       <h2>Set MTA station</h2>
-      <p>Current station: <span style="font-weight: bold;">{{ mta_current_station_label }}</span></p>
+      <p>Current station is <span style="font-weight: bold;">{{ mta_current_station_label }}</span></p>
       <select name="mta-route">
         {% for route in mta_stations_by_route.keys() | sort %}
           <option value="{{ route }}">{{ route }}</option>
