@@ -1,4 +1,5 @@
 from common import config, SignMode, UIMessageType, RenderMessageType
+import argparse
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
@@ -32,10 +33,16 @@ provider_queue = queue.Queue(maxsize=32)
 render_queue = queue.Queue(maxsize=32)
 
 mode_broadcaster = StatusBroadcaster()
-mode_broadcaster.set_status(DEFAULT_SIGN_MODE)
 
 mbta = MBTA(api_key=config.MBTA_API_KEY)
 mta = MTA(config.MTA_API_KEY)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='LED Matrix Display Controller')
+    parser.add_argument('--mode', type=str, choices=[mode.name for mode in SignMode],
+                      help='Set the default sign mode')
+    return parser.parse_args()
 
 
 def setup_gpio():
@@ -259,6 +266,15 @@ def mta_provider_task():
 
 
 def main():
+    args = parse_args()
+    initial_mode = DEFAULT_SIGN_MODE
+    if args.mode:
+        initial_mode = SignMode[args.mode]
+    else:
+        initial_mode = DEFAULT_SIGN_MODE
+    print(f"Initial mode: {initial_mode}")
+    mode_broadcaster.set_status(initial_mode)
+
     # Setup
     if not config.EMULATE_RGB_MATRIX:
         setup_gpio()
