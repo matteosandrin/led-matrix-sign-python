@@ -9,38 +9,6 @@ import subprocess
 import os.path
 
 
-def exec_git_command(command: list[str]) -> str:
-    try:
-        file_dir = os.path.dirname(os.path.abspath(__file__))
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=file_dir
-        )
-        return result.stdout.strip()
-    except subprocess.CalledProcessError:
-        return "Unknown"
-    except FileNotFoundError:
-        return "Git not found"
-
-
-def get_git_last_commit_date():
-    return exec_git_command(['git', 'log', '-1', '--format=%ci', '--date=local'])
-
-
-def get_git_last_commit_hash():
-    return exec_git_command(['git', 'log', '-1', '--format=%H'])
-
-
-def get_github_commit_url():
-    remote = exec_git_command(
-        ['git', 'remote', 'get-url', 'origin']).replace('.git', '')
-    commit_hash = get_git_last_commit_hash()
-    return f"{remote}/commit/{commit_hash}"
-
-
 class Server:
     def __init__(
             self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster,
@@ -67,9 +35,6 @@ class Server:
             "current_mode": current_mode_index,
             "current_mode_label": current_mode.name,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
-            "git_last_commit_date": get_git_last_commit_date(),
-            "git_last_commit_hash": get_git_last_commit_hash(),
-            "github_commit_url": get_github_commit_url()
         }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
