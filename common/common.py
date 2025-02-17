@@ -56,12 +56,16 @@ class Fonts:
     LCD = ImageFont.truetype(str(fonts_dir / 'LCD.ttf'), 8)
     MTA = ImageFont.truetype(str(fonts_dir / 'MTASans-Medium.otf'), 10)
 
+def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    hex_color = hex_color.lstrip('#')
+    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
 
 class Colors:
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     MBTA_AMBER = (255, 191, 0)
     SPOTIFY_GREEN = (29, 185, 84)
+    MTA_GREEN = hex_to_rgb("#d9ff2e")
 
 class Images:
     ARROW_UP = Image.open(img_dir / 'arrow-up.png')

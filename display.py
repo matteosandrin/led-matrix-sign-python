@@ -250,8 +250,8 @@ class Display:
                 route_img = get_image_with_color(route_img, color)
                 image.paste(route_img, (0, 16 * i))
                 x_cursor = 16 + 3
-            draw.text((x_cursor, 2 + 16 * i), train['long_name'], font=Fonts.MTA, fill=Colors.WHITE)
-            draw.text((SCREEN_WIDTH+1, 2 + 16 * i), f"{minutes}min", font=Fonts.MTA, fill=Colors.WHITE, anchor="rt")
+            draw.text((x_cursor, 2 + 16 * i), train['long_name'], font=Fonts.MTA, fill=Colors.MTA_GREEN)
+            draw.text((SCREEN_WIDTH+1, 2 + 16 * i), f"{minutes}min", font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
         self._update_display(image)
 
     def _format_time(self, seconds: int, is_negative: bool) -> str:

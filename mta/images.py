@@ -1,6 +1,7 @@
 from PIL import Image
 from pathlib import Path
 from typing import Dict
+from common import hex_to_rgb
 
 base_dir = Path(__file__).parent
 image_dir = base_dir.parent / 'img'
@@ -112,10 +113,6 @@ route_images: Dict[str, Dict] = {
     #     "color" : "#0039A6"
     # },
 }
-
-def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
-    hex_color = hex_color.lstrip('#')
-    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
 
 def mta_get_route_image(route_id, is_express: bool = False):
     if route_id in route_images:
