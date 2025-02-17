@@ -98,9 +98,9 @@ class WeatherWidget(Widget):
             lat, lon = response.json()["latitude"], response.json()[
                 "longitude"]
             tz = response.json()["time_zone"]["name"]
-            description = response.json()["city"] + ", "
-            + response.json()["region"] + ", "
-            + response.json()["country_name"]
+            description = response.json()["city"] + \
+                ", " + response.json()["region"] + \
+                ", " + response.json()["country_name"]
             print(f"Weather location: ({lat}, {lon}) {description}")
             print(f"Weather timezone: {tz}")
             return (lat, lon, tz)
