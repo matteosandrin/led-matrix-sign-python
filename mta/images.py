@@ -60,14 +60,14 @@ route_images: Dict[str, Dict] = {
     #     "img" : Image.open(image_dir / 'mta_D.png'),
     #     "color" : "#FF6800"
     # },
-    # "F" : {
-    #     "img" : Image.open(image_dir / 'mta_F.png'),
-    #     "color" : "#FF6800"
-    # },
-    # "M" : {
-    #     "img" : Image.open(image_dir / 'mta_M.png'),
-    #     "color" : "#FF6800"
-    # },
+    "F" : {
+        "img" : Image.open(image_dir / 'mta_F.png'),
+        "color" : "#FF6800"
+    },
+    "M" : {
+        "img" : Image.open(image_dir / 'mta_M.png'),
+        "color" : "#FF6800"
+    },
     # "J" : {
     #     "img" : Image.open(image_dir / 'mta_J.png'),
     #     "color" : "#824100"
