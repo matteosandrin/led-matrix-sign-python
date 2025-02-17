@@ -1,5 +1,5 @@
 from pprint import pprint
-from common import SignMode, UIMessageType, RenderMessageType
+from common import SignMode, UIMessageType, RenderMessageType, ClockType
 import config
 import argparse
 if config.EMULATE_RGB_MATRIX:
@@ -147,6 +147,8 @@ def render_task():
                 display.render_frame_content(message["content"])
             if message.get("type") == RenderMessageType.MTA:
                 display.render_mta_content(message["content"])
+            if message.get("type") == RenderMessageType.CLOCK:
+                display.render_clock_content(message["content"])
         except queue.Empty:
             continue
 
@@ -155,11 +157,12 @@ def clock_provider_task():
     while True:
         current_mode = mode_broadcaster.get_status()
         if current_mode == SignMode.CLOCK:
-            now = datetime.now()
-            time_str = now.strftime("%A, %B %d %Y\n%H:%M:%S")
             render_queue.put({
-                "type": RenderMessageType.TEXT,
-                "content": time_str
+                "type": RenderMessageType.CLOCK,
+                "content": {
+                    "type" : ClockType.MTA,
+                    "time" : datetime.now()
+                }
             })
         time.sleep(REFRESH_RATE)
 

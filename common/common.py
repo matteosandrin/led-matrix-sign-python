@@ -33,7 +33,12 @@ class RenderMessageType(Enum):
     FRAME = 5
     SWAP = 6
     MTA = 7
+    CLOCK = 8
 
+class ClockType(Enum):
+    DEFAULT = 0
+    MBTA = 1
+    MTA = 2
 
 class Rect:
     def __init__(self, x: int, y: int, w: int, h: int):

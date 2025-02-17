@@ -1,4 +1,4 @@
-from common import Fonts, Colors, Rect
+from common import Fonts, Colors, Rect, ClockType
 import config
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
@@ -256,6 +256,20 @@ class Display:
             train_str = self._mta_trim_train_name(train['long_name'], Fonts.MTA, train_str_available_width)
             draw.text((x_cursor, 2 + 16 * i), train_str, font=Fonts.MTA, fill=Colors.MTA_GREEN)
             draw.text((SCREEN_WIDTH+1, 2 + 16 * i), minutes_str, font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
+        self._update_display(image)
+
+    def render_clock_content(self, content):
+        clock_type = content["type"]
+        clock_time = content["time"]
+        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
+        draw = self._get_draw_context_antialiased(image)
+        if clock_type == ClockType.MTA:
+            lines = [
+                clock_time.strftime("%a, %b %-d, %Y"),
+                clock_time.strftime("%-I:%M:%S %p")
+            ]
+            for i, line in enumerate(lines):
+                draw.text((SCREEN_WIDTH / 2, 2 + 16 * i), line, font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="mt")
         self._update_display(image)
 
     def _mta_trim_train_name(self, text: str, font: ImageFont, max_width: int) -> str:
