@@ -76,7 +76,8 @@ class Colors:
     WHITE = (255, 255, 255)
     MBTA_AMBER = (255, 191, 0)
     SPOTIFY_GREEN = (29, 185, 84)
-    MTA_GREEN = hex_to_rgb("#d9ff2e")
+    MTA_GREEN = hex_to_rgb("#D9FF2E")
+    MTA_RED_AMBER = hex_to_rgb("#E25822")
 
 
 class Images:
