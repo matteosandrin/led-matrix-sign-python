@@ -68,7 +68,7 @@ alert_messages: List[str] = [
 ]
 
 
-def mta_stations_by_route() -> Dict[str, List[MTAStation]]:
+def stations_by_route() -> Dict[str, List[MTAStation]]:
     stations_by_route = {}
     for station in stations:
         for route in station.routes:
@@ -78,14 +78,14 @@ def mta_stations_by_route() -> Dict[str, List[MTAStation]]:
     return stations_by_route
 
 
-def mta_station_by_id(stop_id: str) -> Optional[MTAStation]:
+def station_by_id(stop_id: str) -> Optional[MTAStation]:
     for station in stations:
         if station.stop_id == stop_id:
             return station
     return None
 
 
-def mta_train_station_to_str(station: str) -> str:
+def train_station_to_str(station: str) -> str:
     for s in stations:
         if s.stop_id == station:
             return s.stop_name

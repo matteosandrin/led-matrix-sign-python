@@ -7,10 +7,10 @@ else:
 from io import BytesIO
 from typing import List, Tuple, Any
 from mbta import Prediction, PredictionStatus
-from mta import TrainTime, mta_get_route_image
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
 from animation import AnimationManager, MBTABannerAnimation, MoveAnimation, TextScrollAnimation
+import mta
 import numpy as np
 import os
 
@@ -240,12 +240,12 @@ class Display:
     def render_swap_content(self, content: None):
         self.swap_canvas()
 
-    def render_mta_content(self, content: List[TrainTime]):
+    def render_mta_content(self, content: List[mta.TrainTime]):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
         for i, train in enumerate(content):
             minutes = int(round(train.time / 60.0))
-            route_img_data = mta_get_route_image(
+            route_img_data = mta.get_route_image(
                 train.route_id, train.is_express)
             x_cursor = 0
             if route_img_data is not None:

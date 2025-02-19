@@ -115,7 +115,7 @@ route_images: Dict[str, Dict] = {
 }
 
 
-def mta_get_route_image(route_id, is_express: bool = False):
+def get_route_image(route_id, is_express: bool = False):
     if route_id in route_images:
         item = route_images[route_id]
         if is_express and "express_img" in item:

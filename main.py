@@ -13,7 +13,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, List
 from mbta import MBTA, MBTATrainStations, PredictionStatus
-from mta import MTA, mta_train_station_to_str
 from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
@@ -21,7 +20,7 @@ from music import Spotify, SpotifyResponse
 from animation import AnimationManager
 from widget import WidgetManager, ClockWidget, WeatherWidget
 from common import Rect
-
+import mta
 
 # Constants
 BUTTON_PIN = 18
@@ -37,7 +36,7 @@ render_queue = queue.Queue(maxsize=32)
 mode_broadcaster = StatusBroadcaster()
 
 mbta = MBTA(api_key=config.MBTA_API_KEY)
-mta = MTA(config.MTA_API_KEY)
+mta_client = mta.MTA(config.MTA_API_KEY)
 
 
 def parse_args():
@@ -107,11 +106,11 @@ def ui_task():
                 })
             elif message["type"] == UIMessageType.MTA_CHANGE_STATION:
                 new_station = message.get("station")
-                mta.set_current_station(new_station)
+                mta_client.set_current_station(new_station)
                 print(f"Station changed to: {new_station}")
                 render_queue.put({
                     "type": RenderMessageType.TEXT,
-                    "content": mta_train_station_to_str(new_station)
+                    "content": mta.train_station_to_str(new_station)
                 })
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
@@ -228,7 +227,7 @@ def music_provider_task():
 
 def web_server_task():
     server = Server(ui_queue, mode_broadcaster,
-                    mbta.station_broadcaster, mta.station_broadcaster)
+                    mbta.station_broadcaster, mta_client.station_broadcaster)
     server.web_server_task()
 
 
@@ -255,13 +254,13 @@ def widget_provider_task():
 def mta_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
-            station = mta.get_current_station()
+            station = mta_client.get_current_station()
             if station is not None:
                 predictions = []
                 if not config.MTA_FAKE_DATA:
-                    predictions = mta.get_predictions(station)
+                    predictions = mta_client.get_predictions(station)
                 else:
-                    predictions = mta.get_fake_predictions()
+                    predictions = mta_client.get_fake_predictions()
                 pprint(predictions[:2])
                 render_queue.put({
                     "type": RenderMessageType.MTA,

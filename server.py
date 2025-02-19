@@ -1,9 +1,9 @@
 from queue import Queue
 from flask import Flask, render_template, request
 from mbta import MBTATrainStations, MBTA
-from mta import mta_stations_by_route, mta_train_station_to_str
 from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
+import mta
 import config
 import subprocess
 import os.path
@@ -43,10 +43,10 @@ class Server:
             params["mbta_current_station_label"] = MBTA.train_station_to_str(
                 current_station)
         if current_mode == SignMode.MTA:
-            stations_by_route = mta_stations_by_route()
+            stations_by_route = mta.stations_by_route()
             current_station = self.mta_station_broadcaster.get_status()
             params["mta_stations_by_route"] = stations_by_route
-            params["mta_current_station_label"] = mta_train_station_to_str(
+            params["mta_current_station_label"] = mta.train_station_to_str(
                 current_station)
         return render_template('index.html', **params)
 
