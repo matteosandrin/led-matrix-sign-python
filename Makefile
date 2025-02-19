@@ -1,4 +1,4 @@
-SERVICE_NAME = led-matrix-display.service
+SERVICE_NAME = led-matrix-sign.service
 
 start:
 	sudo systemctl start $(SERVICE_NAME)
