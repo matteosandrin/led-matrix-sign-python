@@ -20,7 +20,7 @@ class TrainTime:
     is_express: bool
 
 @dataclass
-class Station:
+class MTAStation:
     stop_id: str
     stop_name: str
     latitude: float
@@ -32,7 +32,7 @@ class Station:
 
 station_data = json.load(
     open(os.path.join(CURRENT_FOLDER, "stations.json")))
-stations: List[Station] = [Station(**s) for s in station_data]
+stations: List[MTAStation] = [MTAStation(**s) for s in station_data]
 
 # Complex stations mapping
 complex_stations: Dict[str, List[str]] = {
@@ -68,7 +68,7 @@ alert_messages: List[str] = [
 ]
 
 
-def mta_stations_by_route() -> Dict[str, List[Station]]:
+def mta_stations_by_route() -> Dict[str, List[MTAStation]]:
     stations_by_route = {}
     for station in stations:
         for route in station.routes:
@@ -78,7 +78,7 @@ def mta_stations_by_route() -> Dict[str, List[Station]]:
     return stations_by_route
 
 
-def mta_station_by_id(stop_id: str) -> Optional[Station]:
+def mta_station_by_id(stop_id: str) -> Optional[MTAStation]:
     for station in stations:
         if station.stop_id == stop_id:
             return station
