@@ -5,11 +5,12 @@ from pprint import pprint
 import json
 import os
 from broadcaster import StatusBroadcaster
+from dataclasses import dataclass
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-
-class TrainTime(TypedDict):
+@dataclass
+class TrainTime:
     route_id: str
     direction_id: str
     long_name: str
@@ -126,40 +127,40 @@ class MTA():
                         wait_time = train['realtimeArrival'] - \
                             (train['timestamp'] - train['serviceDay'])
                         if wait_time >= 0:
-                            train_times.append({
-                                'route_id': route_id,
-                                'direction_id': train['directionId'],
-                                'long_name': train['tripHeadsign'],
-                                'stop_headsign': route_entry['headsign'],
-                                'time': wait_time,
-                                'trip_id': train.get('tripId', '').replace('MTASBWY:', ''),
-                                'is_express': 'express' in route_entry['route']['longName'].lower()
-                            })
-            return sorted(train_times, key=lambda x: x['time'])
+                            train_times.append(TrainTime(
+                                route_id=route_id,
+                                direction_id=train['directionId'],
+                                long_name=train['tripHeadsign'],
+                                stop_headsign=route_entry['headsign'],
+                                time=wait_time,
+                                trip_id=train.get('tripId', '').replace('MTASBWY:', ''),
+                                is_express='express' in route_entry['route']['longName'].lower()
+                            ))
+            return sorted(train_times, key=lambda x: x.time)
         except Exception as err:
             print('unable to fetch nearby api', err)
             return None
 
     def get_fake_predictions(self) -> List[TrainTime]:
         return [
-            {
-                'route_id': "1",
-                'direction_id': "1",
-                'long_name': "South Ferry",
-                'stop_headsign': "Downtown",
-                'time': 780,
-                'trip_id': 893,
-                'is_express': False
-            },
-            {
-                'route_id': "2",
-                'direction_id': "0",
-                'long_name': "Van Cortlandt Park",
-                'stop_headsign': "Uptown & The Bronx",
-                'time': 240,
-                'trip_id': 893,
-                'is_express': False
-            }
+            TrainTime(
+                route_id="1",
+                direction_id="1",
+                long_name="South Ferry",
+                stop_headsign="Downtown",
+                time=780,
+                trip_id="893",
+                is_express=False
+            ),
+            TrainTime(
+                route_id="2",
+                direction_id="0",
+                long_name="Van Cortlandt Park",
+                stop_headsign="Uptown & The Bronx",
+                time=240,
+                trip_id="893",
+                is_express=False
+            )
         ]
 
     def get_current_station(self) -> Optional[str]:
