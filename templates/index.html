@@ -60,21 +60,21 @@
 
   <form method="GET" action="/set/mode" onsubmit="handleFormSubmit(event, this)">
     <h2>Set sign mode</h2>
-    <p>Current sign mode is <span style="font-weight: bold;">{{ current_mode_label }}</span></p>
+    <p>Current sign mode is <span style="font-weight: bold;">{{ current_mode.name }}</span></p>
     <select name="id">
-      {% for mode in sign_modes %}
-        <option value="{{ loop.index0 }}" {% if current_mode == loop.index0 %}selected{% endif %}>{{ mode }}</option>
+      {% for mode in SignMode %}
+        <option value="{{ mode.value }}" {% if current_mode == mode %}selected{% endif %}>{{ mode.name }}</option>
       {% endfor %}
     </select>
     <input type="submit" value="Set sign mode">
   </form>
-  {% if current_mode == 1 %} <!-- SignMode.MBTA -->
+  {% if current_mode == SignMode.MBTA %}
     <form method="GET" action="/set/station" onsubmit="handleFormSubmit(event, this)">
       <h2>Set MBTA station</h2>
-      <p>Current station is <span style="font-weight: bold;">{{ current_station_label }}</span></p>
+      <p>Current station is <span style="font-weight: bold;">{{ mbta_current_station_label }}</span></p>
       <select name="id">
-      {% for station in stations %}
-        <option value="{{ loop.index0 }}" {% if current_station == loop.index0 %}selected{% endif %}>{{ station }}</option>
+      {% for station in mbta_stations %}
+        <option value="{{ loop.index0 }}" {% if mbta_current_station == loop.index0 %}selected{% endif %}>{{ station }}</option>
       {% endfor %}
       </select>
       <input type="submit" value="Set station">
@@ -84,7 +84,7 @@
       <input type="submit" value="Trigger banner">
     </form>
   {% endif %}
-  {% if current_mode == 5 %} <!-- SignMode.MTA -->
+  {% if current_mode == SignMode.MTA %}
     <form method="GET" action="/set/mta-station" onsubmit="handleFormSubmit(event, this)">
       <h2>Set MTA station</h2>
       <p>Current station is <span style="font-weight: bold;">{{ mta_current_station_label }}</span></p>
@@ -122,7 +122,7 @@
       }
     </script>
   {% endif %}
-  {% if current_mode == 0 %} <!-- SignMode.TEST -->
+  {% if current_mode == SignMode.TEST %}
     <form method="GET" action="/set/test" onsubmit="handleFormSubmit(event, this)">
       <h2>Set test message</h2>
       <input type="text" name="msg" value="">

@@ -28,12 +28,10 @@ class Server:
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
-        current_mode_index = list(SignMode).index(current_mode)
         sign_modes = [mode.name for mode in SignMode]
         params = {
-            "sign_modes": sign_modes,
-            "current_mode": current_mode_index,
-            "current_mode_label": current_mode.name,
+            "SignMode": SignMode,
+            "current_mode": current_mode,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
         }
         if current_mode == SignMode.MBTA:
@@ -41,9 +39,9 @@ class Server:
             current_station_index = list(MBTATrainStations).index(current_station)
             stations = [MBTA.train_station_to_str(
                 station) for station in MBTATrainStations]
-            params["stations"] = stations
-            params["current_station"] = current_station_index
-            params["current_station_label"] = MBTA.train_station_to_str(
+            params["mbta_stations"] = stations
+            params["mbta_current_station"] = current_station_index
+            params["mbta_current_station_label"] = MBTA.train_station_to_str(
                 current_station)
         if current_mode == SignMode.MTA:
             stations_by_route = mta_stations_by_route()
