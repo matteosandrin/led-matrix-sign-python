@@ -69,7 +69,7 @@
     <input type="submit" value="Set sign mode">
   </form>
   {% if current_mode == SignMode.MBTA %}
-    <form method="GET" action="/set/station" onsubmit="handleFormSubmit(event, this)">
+    <form method="GET" action="/set/mbta-station" onsubmit="handleFormSubmit(event, this)">
       <h2>Set MBTA station</h2>
       <p>Current station is <span style="font-weight: bold;">{{ mbta_current_station_label }}</span></p>
       <select name="id">

@@ -22,10 +22,10 @@ class Server:
         # Register routes
         self.app.route('/')(self.index)
         self.app.route('/set/mode')(self.set_mode_route)
-        self.app.route('/set/station')(self.set_station_route)
+        self.app.route('/set/mbta-station')(self.set_mbta_station_route)
+        self.app.route('/set/mta-station')(self.set_mta_station_route)
         self.app.route('/set/test')(self.set_test_message_route)
         self.app.route('/trigger/banner')(self.trigger_banner_route)
-        self.app.route('/set/mta-station')(self.set_mta_station_route)
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
@@ -58,18 +58,19 @@ class Server:
             return render_template('result.html', message='Mode not provided')
         try:
             mode = list(SignMode)[int(value)]
-            self.set_mode(mode)
+            self.ui_queue.put({"type": UIMessageType.MODE_CHANGE, "mode": mode})
             return f'Mode set to {mode.name}', 200
         except Exception as e:
             return f'Invalid mode: {value}', 400
 
-    def set_station_route(self):
+    def set_mbta_station_route(self):
         value = request.args.get('id')
         if value is None:
             return f'Station not provided', 400
         try:
             station = list(mbta.TrainStations)[int(value)]
-            self.set_station(station)
+            self.ui_queue.put(
+                {"type": UIMessageType.MBTA_CHANGE_STATION, "station": station})
             return f'Station set to {station}', 200
         except Exception as e:
             return f'Invalid station: {value}', 400
@@ -79,7 +80,8 @@ class Server:
         if value is None:
             return f'Station not provided', 400
         try:
-            self.set_mta_station(value)
+            self.ui_queue.put(
+                {"type": UIMessageType.MTA_CHANGE_STATION, "station": value})
             return f'Station set to {value}', 200
         except Exception as e:
             return f'Invalid station: {value}', 400
@@ -95,23 +97,9 @@ class Server:
         value = request.args.get('msg')
         if value is None:
             return 'Message not provided', 400
-        self.set_test_message(value)
+        self.ui_queue.put({"type": UIMessageType.TEST, "content": message})
         return f'Message set to {value}', 200
 
     def web_server_task(self):
         self.app.run(host='0.0.0.0', port=5000,
                      debug=False, use_reloader=False)
-
-    def set_mode(self, mode: SignMode):
-        self.ui_queue.put({"type": UIMessageType.MODE_CHANGE, "mode": mode})
-
-    def set_station(self, station: mbta.TrainStations):
-        self.ui_queue.put(
-            {"type": UIMessageType.MBTA_CHANGE_STATION, "station": station})
-
-    def set_mta_station(self, station: str):
-        self.ui_queue.put(
-            {"type": UIMessageType.MTA_CHANGE_STATION, "station": station})
-
-    def set_test_message(self, message: str):
-        self.ui_queue.put({"type": UIMessageType.TEST, "content": message})
