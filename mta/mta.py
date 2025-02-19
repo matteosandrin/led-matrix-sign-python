@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
+
 @dataclass
 class TrainTime:
     route_id: str
@@ -18,6 +19,7 @@ class TrainTime:
     time: int
     trip_id: Optional[str]
     is_express: bool
+
 
 @dataclass
 class MTAStation:
@@ -64,7 +66,7 @@ alert_messages: List[str] = [
     "Backpacks and other large containers are subject to random search by the police. Thank you for your cooperation.",
     "Please be careful. Do not put your hand or your bag in a train door that is closing.",
     "The next train to arrive on the uptown local track is not in service. Please stand away from the platform edge.",
-    "Please help us keep trains moving. Let customers leave the train before you enter the train; please do not hold train doors open.",
+    "Please help us keep trains moving. Let customers leave the train before you enter the train; please do not hold train doors open."
 ]
 
 
@@ -128,15 +130,18 @@ class MTA():
                         wait_time = train['realtimeArrival'] - \
                             (train['timestamp'] - train['serviceDay'])
                         if wait_time >= 0:
-                            train_times.append(TrainTime(
-                                route_id=route_id,
-                                direction_id=train['directionId'],
-                                long_name=train['tripHeadsign'],
-                                stop_headsign=route_entry['headsign'],
-                                time=wait_time,
-                                trip_id=train.get('tripId', '').replace('MTASBWY:', ''),
-                                is_express='express' in route_entry['route']['longName'].lower()
-                            ))
+                            train_times.append(
+                                TrainTime(
+                                    route_id=route_id,
+                                    direction_id=train['directionId'],
+                                    long_name=train['tripHeadsign'],
+                                    stop_headsign=route_entry['headsign'],
+                                    time=wait_time, trip_id=train.get(
+                                        'tripId', '').replace(
+                                        'MTASBWY:', ''),
+                                    is_express='express'
+                                    in route_entry['route']
+                                    ['longName'].lower()))
             return sorted(train_times, key=lambda x: x.time)
         except Exception as err:
             print('unable to fetch nearby api', err)

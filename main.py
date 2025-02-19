@@ -42,8 +42,9 @@ mta_client = mta.MTA(config.MTA_API_KEY)
 def parse_args():
     parser = argparse.ArgumentParser(
         description='LED Matrix Display Controller')
-    parser.add_argument('--mode', type=str, choices=[mode.name for mode in SignMode],
-                        help='Set the default sign mode')
+    parser.add_argument(
+        '--mode', type=str, choices=[mode.name for mode in SignMode],
+        help='Set the default sign mode')
     return parser.parse_args()
 
 
@@ -182,10 +183,10 @@ def mbta_provider_task():
                     predictions)
                 if arr_prediction is not None:
                     print("showing arriving banner")
-                    render_queue.put({
-                        "type": RenderMessageType.MBTA_BANNER,
-                        "content": mbta_client.get_arriving_banner(arr_prediction)
-                    })
+                    render_queue.put(
+                        {"type": RenderMessageType.MBTA_BANNER,
+                         "content": mbta_client.get_arriving_banner(
+                             arr_prediction)})
                     # in total this banner is displayed for 3+5 seconds
                     time.sleep(3)
                 mbta_client.update_latest_predictions(predictions, [0, 1])

@@ -171,14 +171,17 @@ class WeatherWidget(Widget):
         deg_symbol_max = get_image_with_color(Images.DEG_SYMBOL, max_color)
         deg_symbol_min = get_image_with_color(Images.DEG_SYMBOL, min_color)
         self._draw.text(
-            (right_anchor, 0), f"{current_temp}", font=Fonts.MBTA, fill=current_color, anchor="rt")
+            (right_anchor, 0),
+            f"{current_temp}", font=Fonts.MBTA, fill=current_color, anchor="rt")
         self._image.paste(arrow_up, (0, 16))
         self._draw.text(
-            (right_anchor, 16), f"{max_temp}", font=Fonts.LCD, fill=max_color, anchor="rt")
+            (right_anchor, 16),
+            f"{max_temp}", font=Fonts.LCD, fill=max_color, anchor="rt")
         self._image.paste(deg_symbol_max, (right_anchor, 16))
         self._image.paste(arrow_down, (0, 16+8))
-        self._draw.text((right_anchor, 16+8),
-                        f"{min_temp}", font=Fonts.LCD, fill=min_color, anchor="rt")
+        self._draw.text(
+            (right_anchor, 16 + 8),
+            f"{min_temp}", font=Fonts.LCD, fill=min_color, anchor="rt")
         self._image.paste(deg_symbol_min, (right_anchor, 16+8))
 
 

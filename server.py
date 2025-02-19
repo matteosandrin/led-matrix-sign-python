@@ -12,7 +12,8 @@ import os.path
 class Server:
     def __init__(
             self, ui_queue: Queue, mode_broadcaster: StatusBroadcaster,
-            station_broadcaster: StatusBroadcaster, mta_station_broadcaster: StatusBroadcaster):
+            station_broadcaster: StatusBroadcaster,
+            mta_station_broadcaster: StatusBroadcaster):
         self.app = Flask(__name__)
         self.ui_queue = ui_queue
         self.mode_broadcaster = mode_broadcaster
@@ -35,7 +36,8 @@ class Server:
         }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
-            current_station_index = list(mbta.TrainStations).index(current_station)
+            current_station_index = list(
+                mbta.TrainStations).index(current_station)
             stations = [mbta.train_station_to_str(
                 station) for station in mbta.TrainStations]
             params["mbta_stations"] = stations

@@ -44,6 +44,7 @@ class TrainStations(Enum):
 
 DEFAULT_TRAIN_STATION = TrainStations.HARVARD
 
+
 def train_station_to_str(station: TrainStations) -> str:
     station_names = {
         TrainStations.ALEWIFE: "Alewife",
@@ -255,4 +256,3 @@ class MBTA:
     def set_station(self, station: TrainStations) -> None:
         self.station_broadcaster.set_status(station)
         self.latest_predictions = self._get_placeholder_predictions()
-

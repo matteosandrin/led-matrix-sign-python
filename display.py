@@ -21,7 +21,8 @@ SCREEN_WIDTH = PANEL_WIDTH * PANEL_COUNT
 SCREEN_HEIGHT = PANEL_HEIGHT
 
 
-def get_image_with_color(image: Image.Image, color: tuple[int, int, int]) -> Image.Image:
+def get_image_with_color(
+        image: Image.Image, color: tuple[int, int, int]) -> Image.Image:
     image = np.array(image.convert("RGB"))
     image = (image / 255) * np.array(color)
     image = image.astype(np.uint8)
@@ -139,7 +140,8 @@ class Display:
     def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
         status, song = content
 
-        if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED, SpotifyResponse.OK_NEW_SONG]:
+        if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED,
+                      SpotifyResponse.OK_NEW_SONG]:
 
             progress_bar_image = self._get_progress_bar_image(song)
             self.canvas.SetImage(progress_bar_image, 32,
@@ -151,7 +153,8 @@ class Display:
                 title_and_artist_image = self._get_title_and_artist_image(song)
                 self.canvas.SetImage(title_and_artist_image, 32, 0)
                 animations = {}
-                if self._get_text_length(song.title, Fonts.SILKSCREEN) > title_and_artist_image.width:
+                if self._get_text_length(
+                        song.title, Fonts.SILKSCREEN) > title_and_artist_image.width:
                     animations["song_title"] = TextScrollAnimation(
                         Rect(32, 0, title_and_artist_image.width, 8), 10,
                         True, song.title, Fonts.SILKSCREEN, Colors.WHITE)
@@ -279,7 +282,8 @@ class Display:
                           font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="mt")
         self._update_display(image)
 
-    def _mta_trim_train_name(self, text: str, font: ImageFont, max_width: int) -> str:
+    def _mta_trim_train_name(
+            self, text: str, font: ImageFont, max_width: int) -> str:
         draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
         if draw.textlength(text, font=font) <= max_width:
             return text
@@ -293,7 +297,8 @@ class Display:
             return self._mta_trim_train_name(" ".join(parts), font, max_width)
         return self._trim_text_to_fit(text, font, max_width)
 
-    def _trim_text_to_fit(self, text: str, font: ImageFont, max_width: int) -> str:
+    def _trim_text_to_fit(
+            self, text: str, font: ImageFont, max_width: int) -> str:
         draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
         while draw.textlength(text, font=font) > max_width:
             text = text[:-1]
