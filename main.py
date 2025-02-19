@@ -12,7 +12,7 @@ import queue
 from datetime import datetime
 from enum import Enum
 from typing import Optional, List
-from mbta import MBTA, TrainStation, PredictionStatus
+from mbta import MBTA, MBTATrainStations, PredictionStatus
 from mta import MTA, mta_train_station_to_str
 from display import Display
 from server import Server
@@ -90,7 +90,7 @@ def ui_task():
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
                 new_station = message.get("station")
-                if new_station in TrainStation:
+                if new_station in MBTATrainStations:
                     mbta.set_station(new_station)
                     print(f"Station changed to: {new_station}")
                     render_queue.put({

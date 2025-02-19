@@ -1,6 +1,6 @@
 from queue import Queue
 from flask import Flask, render_template, request
-from mbta import TrainStation, MBTA
+from mbta import MBTATrainStations, MBTA
 from mta import mta_stations_by_route, mta_train_station_to_str
 from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
@@ -38,9 +38,9 @@ class Server:
         }
         if current_mode == SignMode.MBTA:
             current_station = self.station_broadcaster.get_status()
-            current_station_index = list(TrainStation).index(current_station)
+            current_station_index = list(MBTATrainStations).index(current_station)
             stations = [MBTA.train_station_to_str(
-                station) for station in TrainStation]
+                station) for station in MBTATrainStations]
             params["stations"] = stations
             params["current_station"] = current_station_index
             params["current_station_label"] = MBTA.train_station_to_str(
@@ -69,7 +69,7 @@ class Server:
         if value is None:
             return f'Station not provided', 400
         try:
-            station = list(TrainStation)[int(value)]
+            station = list(MBTATrainStations)[int(value)]
             self.set_station(station)
             return f'Station set to {station}', 200
         except Exception as e:
@@ -106,7 +106,7 @@ class Server:
     def set_mode(self, mode: SignMode):
         self.ui_queue.put({"type": UIMessageType.MODE_CHANGE, "mode": mode})
 
-    def set_station(self, station: TrainStation):
+    def set_station(self, station: MBTATrainStations):
         self.ui_queue.put(
             {"type": UIMessageType.MBTA_CHANGE_STATION, "station": station})
 

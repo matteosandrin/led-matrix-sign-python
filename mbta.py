@@ -28,7 +28,7 @@ class PredictionStatus(Enum):
     ERROR_EMPTY = auto()
 
 
-class TrainStation(Enum):
+class MBTATrainStations(Enum):
     ALEWIFE = "place-alfcl"
     DAVIS = "place-davis"
     PORTER = "place-portr"
@@ -42,7 +42,7 @@ class TrainStation(Enum):
     TEST = "test"
 
 
-DEFAULT_TRAIN_STATION = TrainStation.HARVARD
+DEFAULT_TRAIN_STATION = MBTATrainStations.HARVARD
 
 
 class MBTA:
@@ -54,14 +54,14 @@ class MBTA:
         self.station_broadcaster.set_status(DEFAULT_TRAIN_STATION)
 
     @property
-    def station(self) -> TrainStation:
+    def station(self) -> MBTATrainStations:
         return self.station_broadcaster.get_status()
 
     def get_predictions(self, num_predictions: int, directions: List[int],
                         nth_positions: List[int]) -> tuple[PredictionStatus, List[Prediction]]:
         dst = [Prediction() for _ in range(num_predictions)]
 
-        if self.station == TrainStation.TEST:
+        if self.station == MBTATrainStations.TEST:
             dst = self._get_placeholder_predictions()
             dst[0].value = "5 min"
             dst[1].value = "12 min"
@@ -236,23 +236,23 @@ class MBTA:
         placeholders[1].value = ""
         return placeholders
 
-    def set_station(self, station: TrainStation) -> None:
+    def set_station(self, station: MBTATrainStations) -> None:
         self.station_broadcaster.set_status(station)
         self.latest_predictions = self._get_placeholder_predictions()
 
     @staticmethod
-    def train_station_to_str(station: TrainStation) -> str:
+    def train_station_to_str(station: MBTATrainStations) -> str:
         station_names = {
-            TrainStation.ALEWIFE: "Alewife",
-            TrainStation.DAVIS: "Davis",
-            TrainStation.PORTER: "Porter",
-            TrainStation.HARVARD: "Harvard",
-            TrainStation.CENTRAL: "Central",
-            TrainStation.KENDALL: "Kendall/MIT",
-            TrainStation.CHARLES_MGH: "Charles/MGH",
-            TrainStation.PARK_STREET: "Park Street",
-            TrainStation.DOWNTOWN_CROSSING: "Downtown Crossing",
-            TrainStation.SOUTH_STATION: "South Station",
-            TrainStation.TEST: "Test station"
+            MBTATrainStations.ALEWIFE: "Alewife",
+            MBTATrainStations.DAVIS: "Davis",
+            MBTATrainStations.PORTER: "Porter",
+            MBTATrainStations.HARVARD: "Harvard",
+            MBTATrainStations.CENTRAL: "Central",
+            MBTATrainStations.KENDALL: "Kendall/MIT",
+            MBTATrainStations.CHARLES_MGH: "Charles/MGH",
+            MBTATrainStations.PARK_STREET: "Park Street",
+            MBTATrainStations.DOWNTOWN_CROSSING: "Downtown Crossing",
+            MBTATrainStations.SOUTH_STATION: "South Station",
+            MBTATrainStations.TEST: "Test station"
         }
         return station_names.get(station, "TRAIN_STATION_UNKNOWN")
