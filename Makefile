@@ -9,10 +9,15 @@ stop:
 restart:
 	sudo systemctl restart $(SERVICE_NAME)
 
+update:
+	stop
+	git pull origin master
+	start
+
 logs:
 	journalctl -u $(SERVICE_NAME) -f
 
 fonts-img:
 	python3 fonts-img.py
 
-.PHONY: start stop restart logs fonts-img
+.PHONY: start stop restart update logs fonts-img
