@@ -12,7 +12,6 @@ import queue
 from datetime import datetime
 from enum import Enum
 from typing import Optional, List
-from mbta import MBTA, MBTATrainStations, PredictionStatus
 from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
@@ -21,6 +20,7 @@ from animation import AnimationManager
 from widget import WidgetManager, ClockWidget, WeatherWidget
 from common import Rect
 import mta
+import mbta
 
 # Constants
 BUTTON_PIN = 18
@@ -35,7 +35,7 @@ render_queue = queue.Queue(maxsize=32)
 
 mode_broadcaster = StatusBroadcaster()
 
-mbta = MBTA(api_key=config.MBTA_API_KEY)
+mbta_client = mbta.MBTA(api_key=config.MBTA_API_KEY)
 mta_client = mta.MTA(config.MTA_API_KEY)
 
 
@@ -89,12 +89,12 @@ def ui_task():
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
                 new_station = message.get("station")
-                if new_station in MBTATrainStations:
-                    mbta.set_station(new_station)
+                if new_station in mbta.TrainStations:
+                    mbta_client.set_station(new_station)
                     print(f"Station changed to: {new_station}")
                     render_queue.put({
                         "type": RenderMessageType.TEXT,
-                        "content": MBTA.train_station_to_str(new_station)
+                        "content": mbta.train_station_to_str(new_station)
                     })
             elif message["type"] == UIMessageType.MBTA_TEST_BANNER:
                 render_queue.put({
@@ -170,25 +170,25 @@ def clock_provider_task():
 def mbta_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MBTA:
-            status, predictions = mbta.get_predictions_both_directions()
+            status, predictions = mbta_client.get_predictions_both_directions()
             render_queue.put({
                 "type": RenderMessageType.MBTA,
                 "content": [status, predictions]
             })
             print(status)
             print(predictions)
-            if status == PredictionStatus.OK:
-                arr_prediction = mbta.find_prediction_with_arriving_banner(
+            if status == mbta.PredictionStatus.OK:
+                arr_prediction = mbta_client.find_prediction_with_arriving_banner(
                     predictions)
                 if arr_prediction is not None:
                     print("showing arriving banner")
                     render_queue.put({
                         "type": RenderMessageType.MBTA_BANNER,
-                        "content": mbta.get_arriving_banner(arr_prediction)
+                        "content": mbta_client.get_arriving_banner(arr_prediction)
                     })
                     # in total this banner is displayed for 3+5 seconds
                     time.sleep(3)
-                mbta.update_latest_predictions(predictions, [0, 1])
+                mbta_client.update_latest_predictions(predictions, [0, 1])
             time.sleep(5)
         else:
             time.sleep(REFRESH_RATE)
@@ -227,7 +227,7 @@ def music_provider_task():
 
 def web_server_task():
     server = Server(ui_queue, mode_broadcaster,
-                    mbta.station_broadcaster, mta_client.station_broadcaster)
+                    mbta_client.station_broadcaster, mta_client.station_broadcaster)
     server.web_server_task()
 
 

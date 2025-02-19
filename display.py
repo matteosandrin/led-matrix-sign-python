@@ -6,11 +6,11 @@ else:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from io import BytesIO
 from typing import List, Tuple, Any
-from mbta import Prediction, PredictionStatus
 from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
 from animation import AnimationManager, MBTABannerAnimation, MoveAnimation, TextScrollAnimation
 import mta
+import mbta
 import numpy as np
 import os
 
@@ -77,16 +77,16 @@ class Display:
         self._update_display(image)
 
     def render_mbta_content(
-            self, content: Tuple[PredictionStatus, List[Prediction]]):
+            self, content: Tuple[mbta.PredictionStatus, List[mbta.Prediction]]):
         # Create new image with black background
         image = Image.new(
             'RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
         status, predictions = content
 
-        if status in [PredictionStatus.OK,
-                      PredictionStatus.ERROR_SHOW_CACHED,
-                      PredictionStatus.ERROR_EMPTY]:
+        if status in [mbta.PredictionStatus.OK,
+                      mbta.PredictionStatus.ERROR_SHOW_CACHED,
+                      mbta.PredictionStatus.ERROR_EMPTY]:
 
             # Swap predictions if first line is empty
             if not predictions[0].label:
@@ -111,7 +111,7 @@ class Display:
                       font=Fonts.MBTA, fill=Colors.MBTA_AMBER)
 
             # Draw cached data indicator if needed
-            if status == PredictionStatus.ERROR_SHOW_CACHED:
+            if status == mbta.PredictionStatus.ERROR_SHOW_CACHED:
                 draw.point((SCREEN_WIDTH - 1, 0), fill=Colors.MBTA_AMBER)
         else:
             draw.text((0, 0), "Failed to fetch MBTA data",

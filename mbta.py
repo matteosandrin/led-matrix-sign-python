@@ -28,7 +28,7 @@ class PredictionStatus(Enum):
     ERROR_EMPTY = auto()
 
 
-class MBTATrainStations(Enum):
+class TrainStations(Enum):
     ALEWIFE = "place-alfcl"
     DAVIS = "place-davis"
     PORTER = "place-portr"
@@ -42,7 +42,23 @@ class MBTATrainStations(Enum):
     TEST = "test"
 
 
-DEFAULT_TRAIN_STATION = MBTATrainStations.HARVARD
+DEFAULT_TRAIN_STATION = TrainStations.HARVARD
+
+def train_station_to_str(station: TrainStations) -> str:
+    station_names = {
+        TrainStations.ALEWIFE: "Alewife",
+        TrainStations.DAVIS: "Davis",
+        TrainStations.PORTER: "Porter",
+        TrainStations.HARVARD: "Harvard",
+        TrainStations.CENTRAL: "Central",
+        TrainStations.KENDALL: "Kendall/MIT",
+        TrainStations.CHARLES_MGH: "Charles/MGH",
+        TrainStations.PARK_STREET: "Park Street",
+        TrainStations.DOWNTOWN_CROSSING: "Downtown Crossing",
+        TrainStations.SOUTH_STATION: "South Station",
+        TrainStations.TEST: "Test station"
+    }
+    return station_names.get(station, "TRAIN_STATION_UNKNOWN")
 
 
 class MBTA:
@@ -54,14 +70,14 @@ class MBTA:
         self.station_broadcaster.set_status(DEFAULT_TRAIN_STATION)
 
     @property
-    def station(self) -> MBTATrainStations:
+    def station(self) -> TrainStations:
         return self.station_broadcaster.get_status()
 
     def get_predictions(self, num_predictions: int, directions: List[int],
                         nth_positions: List[int]) -> tuple[PredictionStatus, List[Prediction]]:
         dst = [Prediction() for _ in range(num_predictions)]
 
-        if self.station == MBTATrainStations.TEST:
+        if self.station == TrainStations.TEST:
             dst = self._get_placeholder_predictions()
             dst[0].value = "5 min"
             dst[1].value = "12 min"
@@ -236,23 +252,7 @@ class MBTA:
         placeholders[1].value = ""
         return placeholders
 
-    def set_station(self, station: MBTATrainStations) -> None:
+    def set_station(self, station: TrainStations) -> None:
         self.station_broadcaster.set_status(station)
         self.latest_predictions = self._get_placeholder_predictions()
 
-    @staticmethod
-    def train_station_to_str(station: MBTATrainStations) -> str:
-        station_names = {
-            MBTATrainStations.ALEWIFE: "Alewife",
-            MBTATrainStations.DAVIS: "Davis",
-            MBTATrainStations.PORTER: "Porter",
-            MBTATrainStations.HARVARD: "Harvard",
-            MBTATrainStations.CENTRAL: "Central",
-            MBTATrainStations.KENDALL: "Kendall/MIT",
-            MBTATrainStations.CHARLES_MGH: "Charles/MGH",
-            MBTATrainStations.PARK_STREET: "Park Street",
-            MBTATrainStations.DOWNTOWN_CROSSING: "Downtown Crossing",
-            MBTATrainStations.SOUTH_STATION: "South Station",
-            MBTATrainStations.TEST: "Test station"
-        }
-        return station_names.get(station, "TRAIN_STATION_UNKNOWN")
