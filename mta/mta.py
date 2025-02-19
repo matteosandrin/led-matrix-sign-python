@@ -22,7 +22,7 @@ class TrainTime:
 
 
 @dataclass
-class MTAStation:
+class Station:
     stop_id: str
     stop_name: str
     latitude: float
@@ -34,7 +34,7 @@ class MTAStation:
 
 station_data = json.load(
     open(os.path.join(CURRENT_FOLDER, "stations.json")))
-stations: List[MTAStation] = [MTAStation(**s) for s in station_data]
+stations: List[Station] = [Station(**s) for s in station_data]
 
 # Complex stations mapping
 complex_stations: Dict[str, List[str]] = {
@@ -66,11 +66,10 @@ alert_messages: List[str] = [
     "Backpacks and other large containers are subject to random search by the police. Thank you for your cooperation.",
     "Please be careful. Do not put your hand or your bag in a train door that is closing.",
     "The next train to arrive on the uptown local track is not in service. Please stand away from the platform edge.",
-    "Please help us keep trains moving. Let customers leave the train before you enter the train; please do not hold train doors open."
-]
+    "Please help us keep trains moving. Let customers leave the train before you enter the train; please do not hold train doors open."]
 
 
-def stations_by_route() -> Dict[str, List[MTAStation]]:
+def stations_by_route() -> Dict[str, List[Station]]:
     stations_by_route = {}
     for station in stations:
         for route in station.routes:
@@ -80,7 +79,7 @@ def stations_by_route() -> Dict[str, List[MTAStation]]:
     return stations_by_route
 
 
-def station_by_id(stop_id: str) -> Optional[MTAStation]:
+def station_by_id(stop_id: str) -> Optional[Station]:
     for station in stations:
         if station.stop_id == stop_id:
             return station
