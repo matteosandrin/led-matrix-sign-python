@@ -28,7 +28,6 @@ class Server:
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
-        sign_modes = [mode.name for mode in SignMode]
         params = {
             "SignMode": SignMode,
             "current_mode": current_mode,
