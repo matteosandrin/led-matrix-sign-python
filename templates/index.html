@@ -98,6 +98,10 @@
       </select>
       <input type="submit" value="Set station">
     </form>
+    <form method="GET" action="/trigger/mta-alert" onsubmit="handleFormSubmit(event, this)">
+      <h2>Trigger MTA alert</h2>
+      <input type="submit" value="Trigger alert">
+    </form>
     <script>
       const routeSelect = document.querySelector('select[name="mta-route"]');
       const stationSelect = document.getElementById('mta-station');

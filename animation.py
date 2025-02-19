@@ -57,12 +57,15 @@ class Animation(ABC):
 
 class TextScrollAnimation(Animation):
     def __init__(
-            self, bbox: Rect, speed: float, loop: bool,
-            text: str, font: ImageFont, color: Tuple[int, int, int]):
+            self, bbox: Rect, speed: float, loop: bool, wrap: bool,
+            text: str, font: ImageFont, color: Tuple[int, int, int], text_pos=(0,0)):
         super().__init__(bbox, speed, loop)
         self.text = text
-        if len(self.text) > 0 and self.text[-1] != " ":
-            self.text += " " * 4
+        self.text_pos = text_pos
+        self.wrap = wrap
+        if self.wrap:
+            if len(self.text) > 0 and self.text[-1] != " ":
+                self.text += " " * 4
         self.font = font
         self.color = color
         self.frames = self.render_frames()
@@ -75,15 +78,26 @@ class TextScrollAnimation(Animation):
 
     def render_frames(self):
         frames = []
-        delta = int(max(self.bbox.w, self.text_width()))
-        for i in range(0, delta):
-            image = Image.new('RGB', (self.bbox.w, self.bbox.h))
-            draw = ImageDraw.Draw(image)
-            draw.fontmode = "1"  # antialiasing off
-            x_pos1, x_pos2 = -i, -i + self.text_width()
-            draw.text((x_pos1, 0), self.text, font=self.font, fill=self.color)
-            draw.text((x_pos2, 0), self.text, font=self.font, fill=self.color)
-            frames.append((self.bbox, image))
+        tx, ty = self.text_pos
+        if self.wrap:
+            delta = int(max(self.bbox.w, self.text_width()))
+            for i in range(0, delta):
+                image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+                draw = ImageDraw.Draw(image)
+                draw.fontmode = "1"  # antialiasing off
+                x_pos1, x_pos2 = -i, -i + self.text_width()
+                draw.text((x_pos1+tx, ty), self.text, font=self.font, fill=self.color)
+                draw.text((x_pos2+tx, ty), self.text, font=self.font, fill=self.color)
+                frames.append((self.bbox, image))
+        else:
+            delta = int(self.text_width())
+            for i in range(0, delta):
+                image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+                draw = ImageDraw.Draw(image)
+                draw.fontmode = "1"  # antialiasing off
+                x_pos = -i
+                draw.text((x_pos+tx, ty), self.text, font=self.font, fill=self.color)
+                frames.append((self.bbox, image))
         return frames
 
 
@@ -213,6 +227,10 @@ class AnimationManager:
 
     def clear(self):
         self.animations = {}
+
+    def is_animation_running(self, key: str) -> bool:
+        with self.lock:
+            return key in self.animations
 
     def _run_animations(self):
         frame_count = 0

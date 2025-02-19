@@ -119,6 +119,11 @@ def ui_task():
                     "type": RenderMessageType.TEXT,
                     "content": new_message
                 })
+            elif message["type"] == UIMessageType.MTA_ALERT:
+                render_queue.put({
+                    "type": RenderMessageType.MTA_ALERT,
+                    "content": message.get("content")
+                })
 
         except queue.Empty:
             time.sleep(REFRESH_RATE)
@@ -150,6 +155,8 @@ def render_task():
                 display.render_mta_content(message["content"])
             if message.get("type") == RenderMessageType.CLOCK:
                 display.render_clock_content(message["content"])
+            if message.get("type") == RenderMessageType.MTA_ALERT:
+                display.render_mta_alert_content(message["content"])
         except queue.Empty:
             continue
 

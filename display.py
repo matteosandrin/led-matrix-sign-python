@@ -157,11 +157,11 @@ class Display:
                         song.title, Fonts.SILKSCREEN) > title_and_artist_image.width:
                     animations["song_title"] = TextScrollAnimation(
                         Rect(32, 0, title_and_artist_image.width, 8), 10,
-                        True, song.title, Fonts.SILKSCREEN, Colors.WHITE)
+                        True, True, song.title, Fonts.SILKSCREEN, Colors.WHITE)
                 if self._get_text_length(song.artist, Fonts.SILKSCREEN) > title_and_artist_image.width:
                     animations["song_artist"] = TextScrollAnimation(
                         Rect(32, 8, title_and_artist_image.width, 8), 10,
-                        True, song.artist, Fonts.SILKSCREEN, Colors.WHITE)
+                        True, True, song.artist, Fonts.SILKSCREEN, Colors.WHITE)
                 self.animation_manager.add_animations(animations)
             if song.cover.data is not None:
                 album_art_image = Image.open(
@@ -245,6 +245,13 @@ class Display:
 
     def render_mta_content(self, content: List[mta.TrainTime]):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
+        if self.animation_manager.is_animation_running("mta_alert"):
+            # if there is an alert in progress, we only draw the top half of the
+            # screen, so the alert can be displayed in the bottom half
+            half_screen_h = int(SCREEN_HEIGHT / 2)
+            image = Image.new(
+                'RGB', (SCREEN_WIDTH, half_screen_h),
+                Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
         for i, train in enumerate(content):
             minutes = int(round(train.time / 60.0))
@@ -266,6 +273,13 @@ class Display:
             draw.text((SCREEN_WIDTH+1, 2 + 16 * i), minutes_str,
                       font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
         self._update_display(image)
+
+    def render_mta_alert_content(self, content: str):
+        half_screen_h = int(SCREEN_HEIGHT / 2)
+        alert_animation = TextScrollAnimation(
+            Rect(0, half_screen_h + 2, SCREEN_WIDTH, half_screen_h - 2),
+            30, False, False, content, Fonts.MTA, Colors.MTA_RED_AMBER, text_pos=(0, 2))
+        self.animation_manager.add_animation("mta_alert", alert_animation)
 
     def render_clock_content(self, content):
         clock_type = content["type"]
