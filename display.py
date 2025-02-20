@@ -169,7 +169,7 @@ class Display:
                     formats=['JPEG'])
                 album_art_image = album_art_image.resize((32, 32))
                 self.canvas.SetImage(album_art_image, 0, 0)
-            self.matrix.SwapOnVSync(self.canvas)
+            self.swap_canvas()
 
         elif status == SpotifyResponse.EMPTY:
             image = Image.new(
