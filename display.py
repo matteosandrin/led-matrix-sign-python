@@ -277,8 +277,9 @@ class Display:
     def render_mta_alert_content(self, content: str):
         half_screen_h = int(SCREEN_HEIGHT / 2)
         alert_animation = TextScrollAnimation(
-            Rect(0, half_screen_h, SCREEN_WIDTH, half_screen_h),
-            30, False, False, content, Fonts.MTA, Colors.MTA_RED_AMBER, text_pos=(0, 2))
+            bbox=Rect(0, half_screen_h, SCREEN_WIDTH, half_screen_h),
+            speed=30, loop=False, wrap=False,
+            text=content, font=Fonts.MTA, color=Colors.MTA_RED_AMBER, text_pos=(0, 2))
         self.animation_manager.add_animation("mta_alert", alert_animation)
 
     def render_clock_content(self, content):
