@@ -71,22 +71,22 @@ def ui_task():
                 current_mode = mode_broadcaster.get_status()
                 current_index = modes.index(current_mode)
                 next_index = (current_index + 1) % len(modes)
-                mode_broadcaster.set_status(modes[next_index])
-                print(f"Mode changed to: {modes[next_index]}")
                 # clear the display
                 render_queue.put({
                     "type": RenderMessageType.CLEAR,
                 })
+                mode_broadcaster.set_status(modes[next_index])
+                print(f"Mode changed to: {modes[next_index]}")
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
                 new_mode = message.get("mode")
                 if new_mode in SignMode:
-                    mode_broadcaster.set_status(new_mode)
-                    print(f"Mode changed to: {new_mode}")
                     # clear the display
                     render_queue.put({
                         "type": RenderMessageType.CLEAR
                     })
+                    mode_broadcaster.set_status(new_mode)
+                    print(f"Mode changed to: {new_mode}")
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
                 new_station = message.get("station")
@@ -230,6 +230,8 @@ def music_provider_task():
             })
             time.sleep(1)
         else:
+            if spotify.get_current_song() is not None:
+                spotify.clear_current_song()
             time.sleep(REFRESH_RATE)
 
 
