@@ -47,6 +47,7 @@ class Display:
         self.animation_manager = AnimationManager(render_queue)
         self.animation_manager.start()
         self.last_mbta_image = None
+        self.last_mta_image = None
 
     def clear(self):
         self.animation_manager.clear()
