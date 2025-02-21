@@ -1,5 +1,7 @@
 # LED Matrix Sign
 
+[![](img/led-matrix-sign.jpg)](img/led-matrix-sign.jpg)
+
 ## Setup
 
 Install Python dependencies.
