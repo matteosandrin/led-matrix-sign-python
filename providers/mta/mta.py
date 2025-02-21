@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, TypedDict
 from pprint import pprint
 import json
 import os
-from broadcaster import StatusBroadcaster
+from common.broadcaster import StatusBroadcaster
 from dataclasses import dataclass
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))

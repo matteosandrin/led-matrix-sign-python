@@ -9,8 +9,8 @@ import providers.mta as mta
 import queue
 import threading
 import time
-from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect
+from common.broadcaster import StatusBroadcaster
 from datetime import datetime
 from display import Display
 from pprint import pprint

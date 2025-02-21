@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 from enum import Enum, auto
 from dataclasses import dataclass
 import requests
+from common.broadcaster import StatusBroadcaster
 from typing import List, Dict, Optional
-from broadcaster import StatusBroadcaster
 
 # Constants
 DIRECTION_SOUTHBOUND = 0

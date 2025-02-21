@@ -1,7 +1,7 @@
 from queue import Queue
 from flask import Flask, render_template, request
-from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
+from common.broadcaster import StatusBroadcaster
 import config
 import subprocess
 import os.path
