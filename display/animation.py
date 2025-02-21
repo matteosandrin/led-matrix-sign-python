@@ -17,7 +17,6 @@ class Animation(ABC):
         self.loop = loop
         self._frame_generator = None
         self._current_frame = None
-        self.on_complete = None
 
     @abstractmethod
     def frame_generator(self):
@@ -38,9 +37,6 @@ class Animation(ABC):
                 self._current_frame = next(self._frame_generator)
                 return self._current_frame, False
             return self._current_frame, True
-
-    def set_completion_callback(self, callback):
-        self.on_complete = callback
 
 
 class TextScrollAnimation(Animation):
@@ -236,8 +232,6 @@ class AnimationManager:
                             })
                             update_count += 1
                         if is_complete:
-                            if animation.on_complete:
-                                animation.on_complete()
                             completed_keys.append(key)
                     group.last_update = frame_count
             if update_count > 0:
