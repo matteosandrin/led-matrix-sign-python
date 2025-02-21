@@ -62,7 +62,7 @@ complex_stations: Dict[str, List[str]] = {
 }
 
 alert_messages: List[str] = [
-    "This is an important message from the New York City Polic Department. Keep your belongings in your sight at all times. Protect yourself.",
+    "This is an important message from the New York City Police Department. Keep your belongings in your sight at all times. Protect yourself.",
     "Backpacks and other large containers are subject to random search by the police. Thank you for your cooperation.",
     "Please be careful. Do not put your hand or your bag in a train door that is closing.",
     "The next train to arrive on the uptown local track is not in service. Please stand away from the platform edge.",
