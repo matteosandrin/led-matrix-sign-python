@@ -2,7 +2,7 @@ import mta
 from typing import List
 from PIL import Image, ImageFont
 from common import Colors, Fonts, Rect
-from animation import TextScrollAnimation
+from .animation import TextScrollAnimation
 from .utils import get_image_with_color
 
 

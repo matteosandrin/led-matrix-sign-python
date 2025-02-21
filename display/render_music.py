@@ -3,7 +3,7 @@ from PIL import Image
 from music import SpotifyResponse, Song
 from io import BytesIO
 from common import Colors, Fonts, Rect
-from animation import TextScrollAnimation
+from .animation import TextScrollAnimation
 
 
 def render_music_content(display, content: Tuple[SpotifyResponse, Song]):

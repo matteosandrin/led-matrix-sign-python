@@ -2,7 +2,7 @@ import mbta
 from typing import Tuple, List
 from PIL import Image
 from common import Colors, Fonts, Rect
-from animation import MBTABannerAnimation, MoveAnimation
+from .animation import MBTABannerAnimation, MoveAnimation
 
 
 def render_mbta_content(

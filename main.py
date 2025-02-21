@@ -16,7 +16,7 @@ from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
 from music import Spotify, SpotifyResponse
-from animation import AnimationManager
+from display.animation import AnimationManager
 from widget import WidgetManager, ClockWidget, WeatherWidget
 from common import Rect
 import mta

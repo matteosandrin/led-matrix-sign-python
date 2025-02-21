@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 from music import Song, SpotifyResponse
 from io import BytesIO
 from common import Fonts, Colors, Rect, ClockType
-from animation import AnimationManager, MBTABannerAnimation, MoveAnimation, TextScrollAnimation
+from .animation import AnimationManager, MBTABannerAnimation, MoveAnimation, TextScrollAnimation
 from .render_music import render_music_content
 from .render_mta import render_mta_content, render_mta_alert_content
 from .render_mbta import render_mbta_content, render_mbta_banner_content
