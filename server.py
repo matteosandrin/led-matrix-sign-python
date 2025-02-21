@@ -7,6 +7,7 @@ import mbta
 import config
 import subprocess
 import os.path
+import random
 
 
 class Server:
@@ -26,6 +27,7 @@ class Server:
         self.app.route('/set/mta-station')(self.set_mta_station_route)
         self.app.route('/set/test')(self.set_test_message_route)
         self.app.route('/trigger/banner')(self.trigger_banner_route)
+        self.app.route('/trigger/mta-alert')(self.trigger_mta_alert_route)
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
@@ -99,6 +101,13 @@ class Server:
             return 'Message not provided', 400
         self.ui_queue.put({"type": UIMessageType.TEST, "content": message})
         return f'Message set to {value}', 200
+
+    def trigger_mta_alert_route(self):
+        self.ui_queue.put({
+            "type": UIMessageType.MTA_ALERT,
+            "content": mta.alert_messages[random.randint(0, len(mta.alert_messages) - 1)]
+        })
+        return 'MTA alert triggered', 200
 
     def web_server_task(self):
         self.app.run(host='0.0.0.0', port=5000,

@@ -15,57 +15,43 @@ class Animation(ABC):
         self.bbox = bbox
         self.speed = speed  # frames per second
         self.loop = loop
-        self.frames = []
-        self.current_frame = 0
-        self.last_update = 0
+        self._frame_generator = None
+        self._current_frame = None
 
     @abstractmethod
-    def render_frames(self):
-        """Generate and return a list of frames for the animation"""
+    def frame_generator(self):
+        """Generate frames for the animation one at a time"""
         pass
 
-    def advance_frame(self) -> bool:
-        """Advances to the next frame. Returns True if animation is complete."""
-        if not self.frames:
-            return False
+    def get_next_frame(self) -> Tuple[any, bool]:
+        """Returns (frame, is_complete) tuple. Frame is None if no frames exist."""
+        if self._frame_generator is None:
+            self._frame_generator = self.frame_generator()
 
-        self.current_frame = (self.current_frame + 1) % len(self.frames)
-
-        # Return True if animation should end (non-looping and back to start)
-        return not self.loop and self.current_frame == 0
-
-    def get_current_frame(self):
-        """Returns the current frame or None if no frames exist"""
-        if not self.frames:
-            return None
-        return self.frames[self.current_frame]
-
-    def next_frame(self):
-        """Returns the next frame and advances frame counter. 
-        Returns (frame, is_complete) tuple, where frame is None if no frames exist."""
-        if not self.frames:
-            return None, False
-
-        frame = self.frames[self.current_frame]
-        self.current_frame = (self.current_frame + 1) % len(self.frames)
-
-        # Check if animation should end (non-looping and back to start)
-        is_complete = not self.loop and self.current_frame == 0
-
-        return frame, is_complete
+        try:
+            self._current_frame = next(self._frame_generator)
+            return self._current_frame, False
+        except StopIteration:
+            if self.loop:
+                self._frame_generator = self.frame_generator()
+                self._current_frame = next(self._frame_generator)
+                return self._current_frame, False
+            return self._current_frame, True
 
 
 class TextScrollAnimation(Animation):
     def __init__(
-            self, bbox: Rect, speed: float, loop: bool,
-            text: str, font: ImageFont, color: Tuple[int, int, int]):
+            self, bbox: Rect, speed: float, loop: bool, wrap: bool, text: str,
+            font: ImageFont, color: Tuple[int, int, int],
+            text_pos=(0, 0)):
         super().__init__(bbox, speed, loop)
         self.text = text
-        if len(self.text) > 0 and self.text[-1] != " ":
+        self.text_pos = text_pos
+        self.wrap = wrap
+        if self.wrap and len(self.text) > 0 and self.text[-1] != " ":
             self.text += " " * 4
         self.font = font
         self.color = color
-        self.frames = self.render_frames()
 
     def text_width(self):
         image = Image.new('RGB', (self.bbox.w, self.bbox.h))
@@ -73,18 +59,32 @@ class TextScrollAnimation(Animation):
         draw.fontmode = "1"  # antialiasing off
         return draw.textlength(self.text, font=self.font)
 
-    def render_frames(self):
-        frames = []
-        delta = int(max(self.bbox.w, self.text_width()))
-        for i in range(0, delta):
-            image = Image.new('RGB', (self.bbox.w, self.bbox.h))
-            draw = ImageDraw.Draw(image)
-            draw.fontmode = "1"  # antialiasing off
-            x_pos1, x_pos2 = -i, -i + self.text_width()
-            draw.text((x_pos1, 0), self.text, font=self.font, fill=self.color)
-            draw.text((x_pos2, 0), self.text, font=self.font, fill=self.color)
-            frames.append((self.bbox, image))
-        return frames
+    def frame_generator(self):
+        tx, ty = self.text_pos
+        start_time = time.time()
+
+        if self.wrap:
+            delta = int(max(self.bbox.w, self.text_width()))
+            for i in range(0, delta):
+                image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+                draw = ImageDraw.Draw(image)
+                draw.fontmode = "1"  # antialiasing off
+                x_pos1, x_pos2 = -i, -i + self.text_width()
+                draw.text((x_pos1+tx, ty), self.text,
+                          font=self.font, fill=self.color)
+                draw.text((x_pos2+tx, ty), self.text,
+                          font=self.font, fill=self.color)
+                yield (self.bbox, image)
+        else:
+            delta = int(self.text_width())
+            for i in range(0, delta):
+                image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+                draw = ImageDraw.Draw(image)
+                draw.fontmode = "1"  # antialiasing off
+                x_pos = -i
+                draw.text((x_pos+tx, ty), self.text,
+                          font=self.font, fill=self.color)
+                yield (self.bbox, image)
 
 
 class MoveAnimation(Animation):
@@ -95,10 +95,8 @@ class MoveAnimation(Animation):
         self.start_bbox = start_bbox
         self.end_bbox = end_bbox
         self.image = image
-        self.frames = self.render_frames()
 
-    def render_frames(self):
-        frames = []
+    def frame_generator(self):
         x_delta = self.end_bbox.x - self.start_bbox.x
         y_delta = self.end_bbox.y - self.start_bbox.y
         delta = math.sqrt(x_delta ** 2 + y_delta ** 2)
@@ -107,9 +105,7 @@ class MoveAnimation(Animation):
         for i in range(0, frame_count + 1):
             x_pos = self.start_bbox.x + (x_delta * i / frame_count)
             y_pos = self.start_bbox.y + (y_delta * i / frame_count)
-            frames.append(
-                (Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), self.image))
-        return frames
+            yield (Rect(x_pos, y_pos, self.bbox.w, self.bbox.h), self.image)
 
 
 class MBTABannerAnimation(MoveAnimation):
@@ -212,7 +208,15 @@ class AnimationManager:
             self.thread.join()
 
     def clear(self):
-        self.animations = {}
+        self.stop()
+        with self.lock:
+            self.animations = {}
+            self.animation_groups = {}
+        self.start()
+
+    def is_animation_running(self, key: str) -> bool:
+        with self.lock:
+            return key in self.animations
 
     def _run_animations(self):
         frame_count = 0
@@ -225,7 +229,10 @@ class AnimationManager:
                 if group.should_update(frame_count):
                     for key in group.animation_keys:
                         animation = self.get_animation(key)
-                        frame, is_complete = animation.next_frame()
+                        if animation is None:  # Skip if animation was removed
+                            completed_keys.append(key)
+                            continue
+                        frame, is_complete = animation.get_next_frame()
                         if frame is not None:
                             self.render_queue.put({
                                 "type": RenderMessageType.FRAME,

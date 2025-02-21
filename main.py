@@ -71,22 +71,22 @@ def ui_task():
                 current_mode = mode_broadcaster.get_status()
                 current_index = modes.index(current_mode)
                 next_index = (current_index + 1) % len(modes)
-                mode_broadcaster.set_status(modes[next_index])
-                print(f"Mode changed to: {modes[next_index]}")
                 # clear the display
                 render_queue.put({
                     "type": RenderMessageType.CLEAR,
                 })
+                mode_broadcaster.set_status(modes[next_index])
+                print(f"Mode changed to: {modes[next_index]}")
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
                 new_mode = message.get("mode")
                 if new_mode in SignMode:
-                    mode_broadcaster.set_status(new_mode)
-                    print(f"Mode changed to: {new_mode}")
                     # clear the display
                     render_queue.put({
                         "type": RenderMessageType.CLEAR
                     })
+                    mode_broadcaster.set_status(new_mode)
+                    print(f"Mode changed to: {new_mode}")
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
                 new_station = message.get("station")
@@ -119,6 +119,11 @@ def ui_task():
                     "type": RenderMessageType.TEXT,
                     "content": new_message
                 })
+            elif message["type"] == UIMessageType.MTA_ALERT:
+                render_queue.put({
+                    "type": RenderMessageType.MTA_ALERT,
+                    "content": message.get("content")
+                })
 
         except queue.Empty:
             time.sleep(REFRESH_RATE)
@@ -150,6 +155,8 @@ def render_task():
                 display.render_mta_content(message["content"])
             if message.get("type") == RenderMessageType.CLOCK:
                 display.render_clock_content(message["content"])
+            if message.get("type") == RenderMessageType.MTA_ALERT:
+                display.render_mta_alert_content(message["content"])
         except queue.Empty:
             continue
 
@@ -223,6 +230,8 @@ def music_provider_task():
             })
             time.sleep(1)
         else:
+            if spotify.get_current_song() is not None:
+                spotify.clear_current_song()
             time.sleep(REFRESH_RATE)
 
 

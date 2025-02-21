@@ -172,9 +172,11 @@ class Spotify:
         self.current_song.progress_ms = 0
 
     def clear_current_song(self):
-        self.current_song = Song()
+        self.current_song = None
 
     def is_current_song_new(self, cmp: Song) -> bool:
+        if self.current_song is None:
+            return True
         return (cmp.artist != self.current_song.artist or
                 cmp.title != self.current_song.title)
 
