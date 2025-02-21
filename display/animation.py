@@ -156,7 +156,7 @@ class AnimationGroup:
         return len(self.animation_keys) == 0
 
     def should_update(self, frame_count: int) -> bool:
-        return frame_count - self.last_update >= math.floor(60 / self.speed)
+        return frame_count - self.last_update >= math.floor(1 / (ANIMATION_REFRESH_RATE * self.speed))
 
 
 class AnimationManager:
