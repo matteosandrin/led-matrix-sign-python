@@ -47,7 +47,7 @@ class TextScrollAnimation(Animation):
     def __init__(
             self, bbox: Rect, speed: float, loop: bool, wrap: bool, text: str,
             font: ImageFont, color: Tuple[int, int, int],
-            text_pos=(0, 0)):
+            text_pos=(0, 0), start_blank: bool = False):
         super().__init__(bbox, speed, loop)
         self.text = text
         self.text_pos = text_pos
@@ -56,7 +56,7 @@ class TextScrollAnimation(Animation):
             self.text += " " * 4
         self.font = font
         self.color = color
-
+        self.start_blank = start_blank
     def text_width(self):
         image = Image.new('RGB', (self.bbox.w, self.bbox.h))
         draw = ImageDraw.Draw(image)
@@ -65,30 +65,22 @@ class TextScrollAnimation(Animation):
 
     def frame_generator(self):
         tx, ty = self.text_pos
-        start_time = time.time()
-
-        if self.wrap:
-            delta = int(max(self.bbox.w, self.text_width()))
-            for i in range(0, delta):
-                image = Image.new('RGB', (self.bbox.w, self.bbox.h))
-                draw = ImageDraw.Draw(image)
-                draw.fontmode = "1"  # antialiasing off
-                x_pos1, x_pos2 = -i, -i + self.text_width()
-                draw.text((x_pos1+tx, ty), self.text,
-                          font=self.font, fill=self.color)
+        start = 0
+        if self.start_blank:
+            start = self.bbox.w
+        end = -int(max(self.bbox.w, self.text_width()))
+        for i in range(start, end, -1):
+            image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+            draw = ImageDraw.Draw(image)
+            draw.fontmode = "1"  # antialiasing off
+            x_pos1 = i 
+            draw.text((i+tx, ty), self.text,
+                        font=self.font, fill=self.color)
+            if self.wrap:
+                x_pos2 = i + self.text_width()
                 draw.text((x_pos2+tx, ty), self.text,
-                          font=self.font, fill=self.color)
-                yield (self.bbox, image)
-        else:
-            delta = int(self.text_width())
-            for i in range(0, delta):
-                image = Image.new('RGB', (self.bbox.w, self.bbox.h))
-                draw = ImageDraw.Draw(image)
-                draw.fontmode = "1"  # antialiasing off
-                x_pos = -i
-                draw.text((x_pos+tx, ty), self.text,
-                          font=self.font, fill=self.color)
-                yield (self.bbox, image)
+                            font=self.font, fill=self.color)
+            yield (self.bbox, image)
 
 
 class MoveAnimation(Animation):

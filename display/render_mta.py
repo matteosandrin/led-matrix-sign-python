@@ -48,7 +48,7 @@ def render_mta_alert_content(display, content: str):
     alert_animation = TextScrollAnimation(
         bbox=Rect(0, half_screen_h, display.SCREEN_WIDTH, half_screen_h),
         speed=60, loop=False, wrap=False, text=content, font=Fonts.MTA,
-        color=Colors.MTA_RED_AMBER, text_pos=(0, 2))
+        color=Colors.MTA_RED_AMBER, text_pos=(0, 2), start_blank=True)
     alert_animation.set_completion_callback(render_alert_complete)
     display.animation_manager.add_animation("mta_alert", alert_animation)
 
