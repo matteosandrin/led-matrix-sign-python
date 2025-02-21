@@ -40,7 +40,7 @@ class Spotify:
     def __init__(self, client_id: str, client_secret: str, refresh_token: str):
         self.access_token = ""
         self.last_refresh_time = 0
-        self.current_song = Song()
+        self.current_song = None
         self.session = requests.Session()
         self.secrets = {
             "client_id": client_id,
@@ -94,7 +94,7 @@ class Spotify:
         result.timestamp_ms = int(time.time() * 1000)
 
         status = self.fetch_currently_playing()
-        if status == SpotifyResponse.EMPTY and self.current_song.timestamp_ms > 0:
+        if status == SpotifyResponse.EMPTY and self.current_song is not None:
             return SpotifyResponse.OK_SHOW_CACHED, self.current_song
         if status != SpotifyResponse.OK:
             return status, None
