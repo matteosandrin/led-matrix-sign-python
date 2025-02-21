@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict
 from common import hex_to_rgb
 
-base_dir = Path(__file__).parent
+base_dir = Path(__file__).parent.parent
 image_dir = base_dir.parent / 'img'
 route_images: Dict[str, Dict] = {
     "1": {

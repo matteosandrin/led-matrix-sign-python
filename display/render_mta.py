@@ -1,4 +1,4 @@
-import mta
+import providers.mta as mta
 from typing import List
 from PIL import Image, ImageFont
 from common import Colors, Fonts, Rect

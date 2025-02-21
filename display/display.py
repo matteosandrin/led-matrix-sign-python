@@ -3,16 +3,16 @@ if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
-import mbta
-import mta
 import numpy as np
+import providers.mbta as mbta
+import providers.mta as mta
 from .animation import AnimationManager
 from .render_mbta import render_mbta_content, render_mbta_banner_content
 from .render_mta import render_mta_content, render_mta_alert_content
 from .render_music import render_music_content
 from common import Fonts, Colors, Rect, ClockType
-from music import Song, SpotifyResponse
 from PIL import Image, ImageDraw, ImageFont
+from providers.music import Song, SpotifyResponse
 from queue import Queue
 from typing import List, Tuple, Any
 

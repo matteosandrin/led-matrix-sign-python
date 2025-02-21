@@ -2,11 +2,11 @@ from queue import Queue
 from flask import Flask, render_template, request
 from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType
-import mta
-import mbta
 import config
 import subprocess
 import os.path
+import providers.mta as mta
+import providers.mbta as mbta
 import random
 
 

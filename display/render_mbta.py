@@ -1,4 +1,4 @@
-import mbta
+import providers.mbta as mbta
 from typing import Tuple, List
 from PIL import Image
 from common import Colors, Fonts, Rect

@@ -4,8 +4,8 @@ if config.EMULATE_RGB_MATRIX:
 else:
     import RPi.GPIO as GPIO
 import argparse
-import mbta
-import mta
+import providers.mbta as mbta
+import providers.mta as mta
 import queue
 import threading
 import time
@@ -13,10 +13,10 @@ from broadcaster import StatusBroadcaster
 from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect
 from datetime import datetime
 from display import Display
-from music import Spotify, SpotifyResponse
 from pprint import pprint
+from providers.music import Spotify, SpotifyResponse
+from providers.widget import WidgetManager, ClockWidget, WeatherWidget
 from server import Server
-from widget import WidgetManager, ClockWidget, WeatherWidget
 # Constants
 BUTTON_PIN = 18
 REFRESH_RATE = 0.1  # seconds
