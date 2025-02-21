@@ -10,9 +10,9 @@ restart:
 	sudo systemctl restart $(SERVICE_NAME)
 
 update:
-	stop
+	make stop
 	git pull origin master
-	start
+	make start
 
 logs:
 	journalctl -u $(SERVICE_NAME) -f
