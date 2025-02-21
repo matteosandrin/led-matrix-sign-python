@@ -16,7 +16,6 @@ from display import Display
 from server import Server
 from broadcaster import StatusBroadcaster
 from music import Spotify, SpotifyResponse
-from display.animation import AnimationManager
 from widget import WidgetManager, ClockWidget, WeatherWidget
 from common import Rect
 import mta
@@ -131,9 +130,7 @@ def ui_task():
 
 
 def render_task():
-    display = Display()
-    animation_manager = AnimationManager(render_queue)
-    display.set_animation_manager(animation_manager)
+    display = Display(render_queue)
     while True:
         try:
             message = render_queue.get(timeout=REFRESH_RATE)

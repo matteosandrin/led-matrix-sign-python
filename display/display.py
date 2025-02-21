@@ -8,6 +8,7 @@ import numpy as np
 import mta
 import mbta
 from typing import List, Tuple, Any
+from queue import Queue
 from PIL import Image, ImageDraw, ImageFont
 from music import Song, SpotifyResponse
 from io import BytesIO
@@ -25,7 +26,7 @@ SCREEN_HEIGHT = PANEL_HEIGHT
 
 
 class Display:
-    def __init__(self):
+    def __init__(self, render_queue: Queue):
         # Configure RGB matrix
         options = RGBMatrixOptions()
         options.rows = PANEL_HEIGHT
@@ -45,12 +46,9 @@ class Display:
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
         self.PANEL_WIDTH = PANEL_WIDTH
         self.default_font = Fonts.SILKSCREEN
-        self.animation_manager = None
-        self.last_mbta_image = None
-
-    def set_animation_manager(self, animation_manager: AnimationManager):
-        self.animation_manager = animation_manager
+        self.animation_manager = AnimationManager(render_queue)
         self.animation_manager.start()
+        self.last_mbta_image = None
 
     def clear(self):
         self.animation_manager.clear()
