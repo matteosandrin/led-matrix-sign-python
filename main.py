@@ -1,26 +1,22 @@
-from pprint import pprint
-from common import SignMode, UIMessageType, RenderMessageType, ClockType
 import config
-import argparse
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
     import RPi.GPIO as GPIO
-import time
-import threading
-import queue
-from datetime import datetime
-from enum import Enum
-from typing import Optional, List
-from display import Display
-from server import Server
-from broadcaster import StatusBroadcaster
-from music import Spotify, SpotifyResponse
-from widget import WidgetManager, ClockWidget, WeatherWidget
-from common import Rect
-import mta
+import argparse
 import mbta
-
+import mta
+import queue
+import threading
+import time
+from broadcaster import StatusBroadcaster
+from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect
+from datetime import datetime
+from display import Display
+from music import Spotify, SpotifyResponse
+from pprint import pprint
+from server import Server
+from widget import WidgetManager, ClockWidget, WeatherWidget
 # Constants
 BUTTON_PIN = 18
 REFRESH_RATE = 0.1  # seconds

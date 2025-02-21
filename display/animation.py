@@ -1,11 +1,11 @@
 import math
+import threading
 import time
+from abc import ABC, abstractmethod
 from common import RenderMessageType, Fonts, Colors, Rect
 from PIL import Image, ImageDraw, ImageFont
-from typing import Dict, Tuple
 from queue import Queue
-from abc import ABC, abstractmethod
-import threading
+from typing import Dict, Tuple
 
 ANIMATION_REFRESH_RATE = 1 / 60.0  # 60 fps
 
