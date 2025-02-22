@@ -1,3 +1,4 @@
+import random
 import config
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
@@ -255,6 +256,7 @@ def widget_provider_task():
 
 
 def mta_provider_task():
+    last_alert_time = time.time()
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta_client.get_current_station()
@@ -269,8 +271,15 @@ def mta_provider_task():
                     "type": RenderMessageType.MTA,
                     "content": predictions
                 })
+                if time.time() - last_alert_time > 60 * 5:
+                    last_alert_time = time.time()
+                    render_queue.put({
+                        "type": RenderMessageType.MTA_ALERT,
+                        "content": mta.alert_messages[random.randint(0, len(mta.alert_messages) - 1)]
+                    })
             time.sleep(5)
         else:
+            last_alert_time = time.time()
             time.sleep(REFRESH_RATE)
 
 
