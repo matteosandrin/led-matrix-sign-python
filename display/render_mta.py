@@ -2,7 +2,7 @@ import providers.mta as mta
 from typing import List
 from PIL import Image, ImageFont
 from common import Colors, Fonts, Rect
-from .animation import TextScrollAnimation
+from .animation import MTAAlertAnimation
 from .utils import get_image_with_color
 
 
@@ -41,10 +41,9 @@ def render_mta_content(display, content: List[mta.TrainTime]):
 
 def render_mta_alert_content(display, content: str):
     half_screen_h = int(display.SCREEN_HEIGHT / 2)
-    alert_animation = TextScrollAnimation(
-        bbox=Rect(0, half_screen_h, display.SCREEN_WIDTH, half_screen_h),
-        speed=60, loop=False, wrap=False, text=content, font=Fonts.MTA,
-        color=Colors.MTA_RED_AMBER, text_pos=(0, 2), start_blank=True)
+    bbox = Rect(0, half_screen_h, display.SCREEN_WIDTH, half_screen_h)
+    last_frame = display.last_mta_image.copy().crop(bbox.to_crop_tuple())
+    alert_animation = MTAAlertAnimation(text=content, bbox=bbox, last_frame=last_frame)
     display.animation_manager.add_animation("mta_alert", alert_animation)
 
 

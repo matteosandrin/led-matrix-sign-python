@@ -53,6 +53,7 @@ class TextScrollAnimation(Animation):
         self.font = font
         self.color = color
         self.start_blank = start_blank
+
     def text_width(self):
         image = Image.new('RGB', (self.bbox.w, self.bbox.h))
         draw = ImageDraw.Draw(image)
@@ -69,13 +70,13 @@ class TextScrollAnimation(Animation):
             image = Image.new('RGB', (self.bbox.w, self.bbox.h))
             draw = ImageDraw.Draw(image)
             draw.fontmode = "1"  # antialiasing off
-            x_pos1 = i 
+            x_pos1 = i
             draw.text((i+tx, ty), self.text,
-                        font=self.font, fill=self.color)
+                      font=self.font, fill=self.color)
             if self.wrap:
                 x_pos2 = i + self.text_width()
                 draw.text((x_pos2+tx, ty), self.text,
-                            font=self.font, fill=self.color)
+                          font=self.font, fill=self.color)
             yield (self.bbox, image)
 
 
@@ -125,6 +126,21 @@ class MBTABannerAnimation(MoveAnimation):
 
         # Initialize the move animation with our banner image
         super().__init__(start_bbox, end_bbox, image, speed=60, loop=False)
+
+
+class MTAAlertAnimation(TextScrollAnimation):
+    def __init__(self, text: str, bbox: Rect, last_frame: Image.Image):
+        # the last frame is shown right after the text scrolls off the screen,
+        # while we wait for the next train update to complete.
+        self.last_frame = last_frame
+        super().__init__(bbox=bbox,
+                         speed=60, loop=False, wrap=False, text=text, font=Fonts.MTA,
+                         color=Colors.MTA_RED_AMBER, text_pos=(0, 2), start_blank=True)
+
+    def frame_generator(self):
+        for frame in super().frame_generator():
+            yield frame
+        yield (self.bbox, self.last_frame)
 
 
 class AnimationGroup:
