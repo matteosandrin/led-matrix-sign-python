@@ -277,10 +277,10 @@ def mta_provider_task():
 def main():
     args = parse_args()
     initial_mode = DEFAULT_SIGN_MODE
+    if hasattr(config, 'DEFAULT_SIGN_MODE'):
+        initial_mode = config.DEFAULT_SIGN_MODE
     if args.mode:
         initial_mode = SignMode[args.mode]
-    else:
-        initial_mode = DEFAULT_SIGN_MODE
     print(f"Initial mode: {initial_mode}")
     mode_broadcaster.set_status(initial_mode)
 
