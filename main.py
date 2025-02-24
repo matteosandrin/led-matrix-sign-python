@@ -21,7 +21,6 @@ from server import Server
 # Constants
 BUTTON_PIN = 18
 REFRESH_RATE = 0.1  # seconds
-SIGN_MODE_KEY = "sign_mode"
 DEFAULT_SIGN_MODE = SignMode.MBTA
 
 # Global queues
