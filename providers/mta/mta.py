@@ -175,6 +175,7 @@ class MTA():
     def set_current_station(self, station: str):
         self.station_broadcaster.set_status(station)
 
+
 class AlertMessages:
     def __init__(self):
         self.available_messages = alert_messages.copy()
@@ -185,7 +186,8 @@ class AlertMessages:
         # Every message is shown once per cycle. The same message is never shown
         # twice in a row.
         if len(self.available_messages) == 0:
-            self.available_messages = [m for m in self.used_messages if m != self.last_message]
+            self.available_messages = [
+                m for m in self.used_messages if m != self.last_message]
             self.used_messages = []
             if self.last_message:
                 self.used_messages.append(self.last_message)
