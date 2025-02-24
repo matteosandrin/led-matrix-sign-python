@@ -132,26 +132,32 @@ def render_task():
             message = render_queue.get(timeout=REFRESH_RATE)
             if message.get("type") == RenderMessageType.CLEAR:
                 display.clear()
+            if message.get("type") == RenderMessageType.FRAME:
+                display.render_frame_content(message["content"])
             if message.get("type") == RenderMessageType.SWAP:
                 display.swap_canvas()
             if message.get("type") == RenderMessageType.TEXT:
                 display.render_text_content(message["content"])
+            if message.get("type") == RenderMessageType.CLOCK:
+                display.render_clock_content(message["content"])
             if message.get("type") == RenderMessageType.MBTA:
                 display.render_mbta_content(message["content"])
             if message.get("type") == RenderMessageType.MBTA_BANNER:
                 display.render_mbta_banner_content(message["content"])
-            if message.get("type") == RenderMessageType.MUSIC:
-                display.render_music_content(message["content"])
-            if message.get("type") == RenderMessageType.FRAME:
-                display.render_frame_content(message["content"])
             if message.get("type") == RenderMessageType.MTA:
                 display.render_mta_content(message["content"])
-            if message.get("type") == RenderMessageType.CLOCK:
-                display.render_clock_content(message["content"])
             if message.get("type") == RenderMessageType.MTA_ALERT:
                 display.render_mta_alert_content(message["content"])
+            if message.get("type") == RenderMessageType.MUSIC:
+                display.render_music_content(message["content"])
         except queue.Empty:
             continue
+
+
+def web_server_task():
+    server = Server(ui_queue, mode_broadcaster,
+                    mbta_client.station_broadcaster, mta_client.station_broadcaster)
+    server.web_server_task()
 
 
 def clock_provider_task():
@@ -195,6 +201,35 @@ def mbta_provider_task():
             time.sleep(REFRESH_RATE)
 
 
+def mta_provider_task():
+    last_alert_time = time.time()
+    alert_messages = mta.AlertMessages()
+    while True:
+        if mode_broadcaster.get_status() == SignMode.MTA:
+            station = mta_client.get_current_station()
+            if station is not None:
+                predictions = []
+                if not config.MTA_FAKE_DATA:
+                    predictions = mta_client.get_predictions(station)
+                else:
+                    predictions = mta_client.get_fake_predictions()
+                pprint(predictions[:2])
+                render_queue.put({
+                    "type": RenderMessageType.MTA,
+                    "content": predictions
+                })
+                if time.time() - last_alert_time > 60 * 5:
+                    last_alert_time = time.time()
+                    render_queue.put({
+                        "type": RenderMessageType.MTA_ALERT,
+                        "content": alert_messages.next()
+                    })
+            time.sleep(5)
+        else:
+            last_alert_time = time.time()
+            time.sleep(REFRESH_RATE)
+
+
 def music_provider_task():
     spotify = Spotify(config.SPOTIFY_CLIENT_ID,
                       config.SPOTIFY_CLIENT_SECRET, config.SPOTIFY_REFRESH_TOKEN)
@@ -228,12 +263,6 @@ def music_provider_task():
             time.sleep(REFRESH_RATE)
 
 
-def web_server_task():
-    server = Server(ui_queue, mode_broadcaster,
-                    mbta_client.station_broadcaster, mta_client.station_broadcaster)
-    server.web_server_task()
-
-
 def widget_provider_task():
     widget_manager = WidgetManager(render_queue)
     widget_manager.add_widget(ClockWidget(
@@ -252,35 +281,6 @@ def widget_provider_task():
             if widget_manager.active:
                 widget_manager.stop()
         time.sleep(REFRESH_RATE)
-
-
-def mta_provider_task():
-    last_alert_time = time.time()
-    alert_messages = mta.AlertMessages()
-    while True:
-        if mode_broadcaster.get_status() == SignMode.MTA:
-            station = mta_client.get_current_station()
-            if station is not None:
-                predictions = []
-                if not config.MTA_FAKE_DATA:
-                    predictions = mta_client.get_predictions(station)
-                else:
-                    predictions = mta_client.get_fake_predictions()
-                pprint(predictions[:2])
-                render_queue.put({
-                    "type": RenderMessageType.MTA,
-                    "content": predictions
-                })
-                if time.time() - last_alert_time > 60 * 5:
-                    last_alert_time = time.time()
-                    render_queue.put({
-                        "type": RenderMessageType.MTA_ALERT,
-                        "content": alert_messages.next()
-                    })
-            time.sleep(5)
-        else:
-            last_alert_time = time.time()
-            time.sleep(REFRESH_RATE)
 
 
 def main():

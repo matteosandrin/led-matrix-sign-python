@@ -9,11 +9,11 @@ img_dir = CURRENT_FOLDER.parent / 'img'
 
 class SignMode(Enum):
     TEST = 0
-    MBTA = 1
-    CLOCK = 2
-    MUSIC = 3
-    WIDGET = 4
-    MTA = 5
+    CLOCK = 1
+    MBTA = 2
+    MTA = 3
+    MUSIC = 4
+    WIDGET = 5
 
 
 class UIMessageType(Enum):
@@ -28,15 +28,15 @@ class UIMessageType(Enum):
 
 class RenderMessageType(Enum):
     CLEAR = 0
-    TEXT = 1
-    MBTA = 2
-    MBTA_BANNER = 3
-    MUSIC = 4
-    FRAME = 5
-    SWAP = 6
+    FRAME = 1
+    SWAP = 2
+    TEXT = 3
+    CLOCK = 4
+    MBTA = 5
+    MBTA_BANNER = 6
     MTA = 7
-    CLOCK = 8
-    MTA_ALERT = 9
+    MTA_ALERT = 8
+    MUSIC = 9
 
 
 class ClockType(Enum):
