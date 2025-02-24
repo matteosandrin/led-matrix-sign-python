@@ -257,6 +257,7 @@ def widget_provider_task():
 
 def mta_provider_task():
     last_alert_time = time.time()
+    alert_messages = mta.AlertMessages()
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta_client.get_current_station()
@@ -275,7 +276,7 @@ def mta_provider_task():
                     last_alert_time = time.time()
                     render_queue.put({
                         "type": RenderMessageType.MTA_ALERT,
-                        "content": mta.alert_messages[random.randint(0, len(mta.alert_messages) - 1)]
+                        "content": alert_messages.next()
                     })
             time.sleep(5)
         else:

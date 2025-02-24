@@ -105,7 +105,7 @@ class Server:
     def trigger_mta_alert_route(self):
         self.ui_queue.put({
             "type": UIMessageType.MTA_ALERT,
-            "content": mta.alert_messages[random.randint(0, len(mta.alert_messages) - 1)]
+            "content": mta.AlertMessages.random()
         })
         return 'MTA alert triggered', 200
 

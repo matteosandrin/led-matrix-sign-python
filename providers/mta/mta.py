@@ -1,11 +1,12 @@
-from datetime import datetime
-import requests
-from typing import Dict, List, Optional, TypedDict
-from pprint import pprint
 import json
 import os
+import random
+import requests
 from common.broadcaster import StatusBroadcaster
 from dataclasses import dataclass
+from datetime import datetime
+from pprint import pprint
+from typing import Dict, List, Optional, TypedDict
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -173,3 +174,27 @@ class MTA():
 
     def set_current_station(self, station: str):
         self.station_broadcaster.set_status(station)
+
+class AlertMessages:
+    def __init__(self):
+        self.available_messages = alert_messages.copy()
+        self.used_messages = []
+        self.last_message = None
+
+    def next(self) -> str:
+        # Every message is shown once per cycle. The same message is never shown
+        # twice in a row.
+        if len(self.available_messages) == 0:
+            self.available_messages = [m for m in self.used_messages if m != self.last_message]
+            self.used_messages = []
+            if self.last_message:
+                self.used_messages.append(self.last_message)
+        message = random.choice(self.available_messages)
+        self.available_messages.remove(message)
+        self.used_messages.append(message)
+        self.last_message = message
+        return message
+
+    @classmethod
+    def random(cls) -> str:
+        return random.choice(alert_messages)
