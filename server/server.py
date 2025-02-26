@@ -26,7 +26,7 @@ class Server:
         self.app.route('/set/mbta-station')(self.set_mbta_station_route)
         self.app.route('/set/mta-station')(self.set_mta_station_route)
         self.app.route('/set/test')(self.set_test_message_route)
-        self.app.route('/trigger/banner')(self.trigger_banner_route)
+        self.app.route('/trigger/mbta-alert')(self.trigger_mbta_alert_route)
         self.app.route('/trigger/mta-alert')(self.trigger_mta_alert_route)
 
     def index(self):
@@ -87,7 +87,7 @@ class Server:
         except Exception as e:
             return f'Invalid station: {value}', 400
 
-    def trigger_banner_route(self):
+    def trigger_mbta_alert_route(self):
         self.ui_queue.put({
             "type": UIMessageType.MBTA_TEST_BANNER,
             "content": ["Alewife train", "is now arriving."]
