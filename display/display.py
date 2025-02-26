@@ -25,7 +25,6 @@ SCREEN_HEIGHT = PANEL_HEIGHT
 
 class Display:
     def __init__(self, render_queue: Queue):
-        # Configure RGB matrix
         options = RGBMatrixOptions()
         options.rows = PANEL_HEIGHT
         options.cols = PANEL_WIDTH
@@ -50,26 +49,27 @@ class Display:
         self.last_mta_image = None
 
     def render(self, message):
+        content = message.get("content")
         if message.get("type") == RenderMessageType.CLEAR:
             self.clear()
         if message.get("type") == RenderMessageType.FRAME:
-            self.render_frame_content(message["content"])
+            self.render_frame_content(content)
         if message.get("type") == RenderMessageType.SWAP:
             self.swap_canvas()
         if message.get("type") == RenderMessageType.TEXT:
-            self.render_text_content(message["content"])
+            self.render_text_content(content)
         if message.get("type") == RenderMessageType.CLOCK:
-            self.render_clock_content(message["content"])
+            self.render_clock_content(content)
         if message.get("type") == RenderMessageType.MBTA:
-            self.render_mbta_content(message["content"])
+            render_mbta_content(self, content)
         if message.get("type") == RenderMessageType.MBTA_BANNER:
-            self.render_mbta_banner_content(message["content"])
+            render_mbta_banner_content(self, content)
         if message.get("type") == RenderMessageType.MTA:
-            self.render_mta_content(message["content"])
+            render_mta_content(self, content)
         if message.get("type") == RenderMessageType.MTA_ALERT:
-            self.render_mta_alert_content(message["content"])
+            render_mta_alert_content(self, content)
         if message.get("type") == RenderMessageType.MUSIC:
-            self.render_music_content(message["content"])
+            render_music_content(self, content)
 
     def clear(self):
         self.animation_manager.clear()
@@ -83,31 +83,11 @@ class Display:
         bbox, frame = content
         self.canvas.SetImage(frame, int(bbox.x), int(bbox.y))
 
-    def render_swap_content(self, content: None):
-        self.swap_canvas()
-
     def render_text_content(self, text: str):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
         draw = self._get_draw_context_antialiased(image)
         draw.text((0, 0), text, font=self.default_font, fill=Colors.WHITE)
         self._update_display(image)
-
-    def render_mta_content(self, content: List[mta.TrainTime]):
-        render_mta_content(self, content)
-
-    def render_mta_alert_content(self, content: str):
-        render_mta_alert_content(self, content)
-
-    def render_mbta_content(
-            self, content: Tuple
-            [mbta.PredictionStatus, List[mbta.Prediction]]):
-        render_mbta_content(self, content)
-
-    def render_mbta_banner_content(self, content: List[str]):
-        render_mbta_banner_content(self, content)
-
-    def render_music_content(self, content: Tuple[SpotifyResponse, Song]):
-        render_music_content(self, content)
 
     def render_clock_content(self, content):
         clock_type = content["type"]
