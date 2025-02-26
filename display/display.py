@@ -123,12 +123,3 @@ class Display:
         while draw.textlength(text, font=font) > max_width:
             text = text[:-1]
         return text
-
-    def _format_time(self, seconds: int, is_negative: bool) -> str:
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
-        seconds = seconds % 60
-
-        if hours > 0:
-            return f"{'-' if is_negative else ''}{hours:02d}:{minutes:02d}:{seconds:02d}"
-        return f"{'-' if is_negative else ''}{minutes:02d}:{seconds:02d}"

@@ -79,8 +79,8 @@ def _get_progress_bar_image(display, song: Song):
             fill=Colors.SPOTIFY_GREEN)
 
     # Draw time progress
-    progress_time = display._format_time(song.progress_ms // 1000, False)
-    time_to_end = display._format_time(
+    progress_time = _format_elapsed_time(song.progress_ms // 1000, False)
+    time_to_end = _format_elapsed_time(
         (song.duration_ms - song.progress_ms) // 1000, True)
 
     small_font = Fonts.PICOPIXEL
@@ -103,3 +103,12 @@ def _get_title_and_artist_image(display, song: Song):
     draw.text((0, 8), song.artist,
               font=Fonts.SILKSCREEN, fill=Colors.WHITE)
     return image
+
+def _format_elapsed_time(seconds: int, is_negative: bool) -> str:
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+
+    if hours > 0:
+        return f"{'-' if is_negative else ''}{hours:02d}:{minutes:02d}:{seconds:02d}"
+    return f"{'-' if is_negative else ''}{minutes:02d}:{seconds:02d}"
