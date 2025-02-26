@@ -37,13 +37,9 @@ class Server:
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
         }
         if current_mode == SignMode.MBTA:
+            stations_by_route = mbta.stations_by_route()
             current_station = self.station_broadcaster.get_status()
-            current_station_index = list(
-                mbta.TrainStations).index(current_station)
-            stations = [mbta.train_station_to_str(
-                station) for station in mbta.TrainStations]
-            params["mbta_stations"] = stations
-            params["mbta_current_station"] = current_station_index
+            params["mbta_stations_by_route"] = stations_by_route
             params["mbta_current_station_label"] = mbta.train_station_to_str(
                 current_station)
         if current_mode == SignMode.MTA:
@@ -70,10 +66,13 @@ class Server:
         if value is None:
             return f'Station not provided', 400
         try:
-            station = list(mbta.TrainStations)[int(value)]
-            self.ui_queue.put(
-                {"type": UIMessageType.MBTA_CHANGE_STATION, "station": station})
-            return f'Station set to {station}', 200
+            station = mbta.station_by_id(value)
+            if station is not None:
+                self.ui_queue.put(
+                    {"type": UIMessageType.MBTA_CHANGE_STATION, "station": value})
+                return f'Station set to {value}', 200
+            else:
+                raise Exception(f'Invalid station: {value}')
         except Exception as e:
             return f'Invalid station: {value}', 400
 

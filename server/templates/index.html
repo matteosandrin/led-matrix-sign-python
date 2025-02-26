@@ -72,10 +72,13 @@
     <form method="GET" action="/set/mbta-station" onsubmit="handleFormSubmit(event, this)">
       <h2>Set MBTA station</h2>
       <p>Current station is <span style="font-weight: bold;">{{ mbta_current_station_label }}</span></p>
-      <select name="id">
-      {% for station in mbta_stations %}
-        <option value="{{ loop.index0 }}" {% if mbta_current_station == loop.index0 %}selected{% endif %}>{{ station }}</option>
-      {% endfor %}
+      <select name="mbta-route">
+        {% for route in mbta_stations_by_route.keys() | sort %}
+          <option value="{{ route }}">{{ route }}</option>
+        {% endfor %}
+      </select>
+      <select name="id" id="mbta-station">
+        <option value="">Select a station</option>
       </select>
       <input type="submit" value="Set station">
     </form>
@@ -83,6 +86,29 @@
       <h2>Trigger banner</h2>
       <input type="submit" value="Trigger banner">
     </form>
+    <script>
+      const mbtaRouteSelect = document.querySelector('select[name="mbta-route"]');
+      const mbtaStationSelect = document.getElementById('mbta-station');
+      const mbtaStationsByRoute = JSON.parse('{{ mbta_stations_by_route | tojson }}');
+
+      mbtaRouteSelect.addEventListener('change', (event) => {
+        const selectedRoute = event.target.value;
+        setStationSelector(selectedRoute);
+      });
+
+      setStationSelector(mbtaRouteSelect.value);
+
+      function setStationSelector(route) {
+        const stations = mbtaStationsByRoute[route];
+        mbtaStationSelect.innerHTML = '';
+        stations.forEach(station => {
+          const option = document.createElement('option');
+          option.value = station.stop_id;
+          option.textContent = station.stop_name;
+          mbtaStationSelect.appendChild(option);
+        });
+      }
+    </script>
   {% endif %}
   {% if current_mode == SignMode.MTA %}
     <form method="GET" action="/set/mta-station" onsubmit="handleFormSubmit(event, this)">
@@ -103,25 +129,25 @@
       <input type="submit" value="Trigger alert">
     </form>
     <script>
-      const routeSelect = document.querySelector('select[name="mta-route"]');
-      const stationSelect = document.getElementById('mta-station');
-      const stationsByRoute = JSON.parse('{{ mta_stations_by_route | tojson }}');
+      const mtaRouteSelect = document.querySelector('select[name="mta-route"]');
+      const mtaStationSelect = document.getElementById('mta-station');
+      const mtaStationsByRoute = JSON.parse('{{ mta_stations_by_route | tojson }}');
 
-      routeSelect.addEventListener('change', (event) => {
+      mtaRouteSelect.addEventListener('change', (event) => {
         const selectedRoute = event.target.value;
         setStationSelector(selectedRoute);
       });
 
-      setStationSelector(routeSelect.value);
+      setStationSelector(mtaRouteSelect.value);
 
       function setStationSelector(route) {
-        const stations = stationsByRoute[route];
-        stationSelect.innerHTML = '';
+        const stations = mtaStationsByRoute[route];
+        mtaStationSelect.innerHTML = '';
         stations.forEach(station => {
           const option = document.createElement('option');
           option.value = station.stop_id;
           option.textContent = station.stop_name;
-          stationSelect.appendChild(option);
+          mtaStationSelect.appendChild(option);
         });
       }
     </script>

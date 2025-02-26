@@ -1,0 +1,627 @@
+[
+  {
+    "stop_id": "place-alfcl",
+    "stop_name": "Alewife",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-andrw",
+    "stop_name": "Andrew",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-asmnl",
+    "stop_name": "Ashmont",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-brntn",
+    "stop_name": "Braintree",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-brdwy",
+    "stop_name": "Broadway",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-cntsq",
+    "stop_name": "Central",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-chmnl",
+    "stop_name": "Charles/MGH",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-davis",
+    "stop_name": "Davis",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-dwnxg",
+    "stop_name": "Downtown Crossing",
+    "routes": ["Orange", "Red"]
+  },
+  {
+    "stop_id": "place-fldcr",
+    "stop_name": "Fields Corner",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-harsq",
+    "stop_name": "Harvard",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-jfk",
+    "stop_name": "JFK/UMass",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-knncl",
+    "stop_name": "Kendall/MIT",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-nqncy",
+    "stop_name": "North Quincy",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-pktrm",
+    "stop_name": "Park Street",
+    "routes": ["Green", "Red"]
+  },
+  {
+    "stop_id": "place-portr",
+    "stop_name": "Porter",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-qamnl",
+    "stop_name": "Quincy Adams",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-qnctr",
+    "stop_name": "Quincy Center",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-shmnl",
+    "stop_name": "Savin Hill",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-smmnl",
+    "stop_name": "Shawmut",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-sstat",
+    "stop_name": "South Station",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-wlsta",
+    "stop_name": "Wollaston",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-butlr",
+    "stop_name": "Butler",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-capst",
+    "stop_name": "Capen Street",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-cedgr",
+    "stop_name": "Cedar Grove",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-cenav",
+    "stop_name": "Central Avenue",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-matt",
+    "stop_name": "Mattapan",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-miltt",
+    "stop_name": "Milton",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-valrd",
+    "stop_name": "Valley Road",
+    "routes": ["Red"]
+  },
+  {
+    "stop_id": "place-astao",
+    "stop_name": "Assembly",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-bbsta",
+    "stop_name": "Back Bay",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-chncl",
+    "stop_name": "Chinatown",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-ccmnl",
+    "stop_name": "Community College",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-forhl",
+    "stop_name": "Forest Hills",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-grnst",
+    "stop_name": "Green Street",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-haecl",
+    "stop_name": "Haymarket",
+    "routes": ["Green", "Orange"]
+  },
+  {
+    "stop_id": "place-jaksn",
+    "stop_name": "Jackson Square",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-mlmnl",
+    "stop_name": "Malden Center",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-masta",
+    "stop_name": "Massachusetts Avenue",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-north",
+    "stop_name": "North Station",
+    "routes": ["Green", "Orange"]
+  },
+  {
+    "stop_id": "place-ogmnl",
+    "stop_name": "Oak Grove",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-rcmnl",
+    "stop_name": "Roxbury Crossing",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-rugg",
+    "stop_name": "Ruggles",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-state",
+    "stop_name": "State",
+    "routes": ["Blue", "Orange"]
+  },
+  {
+    "stop_id": "place-sbmnl",
+    "stop_name": "Stony Brook",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-sull",
+    "stop_name": "Sullivan Square",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-tumnl",
+    "stop_name": "Tufts Medical Center",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-welln",
+    "stop_name": "Wellington",
+    "routes": ["Orange"]
+  },
+  {
+    "stop_id": "place-alsgr",
+    "stop_name": "Allston Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-amory",
+    "stop_name": "Amory Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-armnl",
+    "stop_name": "Arlington",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-babck",
+    "stop_name": "Babcock Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-bckhl",
+    "stop_name": "Back of the Hill",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-balsq",
+    "stop_name": "Ball Square",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-bcnfd",
+    "stop_name": "Beaconsfield",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-bland",
+    "stop_name": "Blandford Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-lake",
+    "stop_name": "Boston College",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-bucen",
+    "stop_name": "Boston University Central",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-buest",
+    "stop_name": "Boston University East",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-boyls",
+    "stop_name": "Boylston",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-bndhl",
+    "stop_name": "Brandon Hall",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-brmnl",
+    "stop_name": "Brigham Circle",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-brkhl",
+    "stop_name": "Brookline Hills",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-bvmnl",
+    "stop_name": "Brookline Village",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-chhil",
+    "stop_name": "Chestnut Hill",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-chill",
+    "stop_name": "Chestnut Hill Avenue",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-chswk",
+    "stop_name": "Chiswick Road",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-clmnl",
+    "stop_name": "Cleveland Circle",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-cool",
+    "stop_name": "Coolidge Corner",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-coecl",
+    "stop_name": "Copley",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-denrd",
+    "stop_name": "Dean Road",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-esomr",
+    "stop_name": "East Somerville",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-eliot",
+    "stop_name": "Eliot",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-engav",
+    "stop_name": "Englewood Avenue",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-fbkst",
+    "stop_name": "Fairbanks Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-fenwy",
+    "stop_name": "Fenway",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-fenwd",
+    "stop_name": "Fenwood Road",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-gilmn",
+    "stop_name": "Gilman Square",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-gover",
+    "stop_name": "Government Center",
+    "routes": ["Blue", "Green"]
+  },
+  {
+    "stop_id": "place-grigg",
+    "stop_name": "Griggs Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-harvd",
+    "stop_name": "Harvard Avenue",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-hwsst",
+    "stop_name": "Hawes Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-hsmnl",
+    "stop_name": "Heath Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-hymnl",
+    "stop_name": "Hynes Convention Center",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-kencl",
+    "stop_name": "Kenmore",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-kntst",
+    "stop_name": "Kent Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-lech",
+    "stop_name": "Lechmere",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-longw",
+    "stop_name": "Longwood",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-lngmd",
+    "stop_name": "Longwood Medical Area",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-mgngl",
+    "stop_name": "Magoun Square",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-mdftf",
+    "stop_name": "Medford/Tufts",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-mispk",
+    "stop_name": "Mission Park",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-mfa",
+    "stop_name": "Museum of Fine Arts",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-newto",
+    "stop_name": "Newton Centre",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-newtn",
+    "stop_name": "Newton Highlands",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-nuniv",
+    "stop_name": "Northeastern University",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-brico",
+    "stop_name": "Packard's Corner",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-prmnl",
+    "stop_name": "Prudential",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-rsmnl",
+    "stop_name": "Reservoir",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-river",
+    "stop_name": "Riverside",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-rvrwy",
+    "stop_name": "Riverway",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-smary",
+    "stop_name": "Saint Mary's Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-stpul",
+    "stop_name": "Saint Paul Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-spmnl",
+    "stop_name": "Science Park/West End",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-sougr",
+    "stop_name": "South Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-sumav",
+    "stop_name": "Summit Avenue",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-sthld",
+    "stop_name": "Sutherland Road",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-symcl",
+    "stop_name": "Symphony",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-tapst",
+    "stop_name": "Tappan Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-unsqu",
+    "stop_name": "Union Square",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-waban",
+    "stop_name": "Waban",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-wrnst",
+    "stop_name": "Warren Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-bcnwa",
+    "stop_name": "Washington Square",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-wascm",
+    "stop_name": "Washington Street",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-woodl",
+    "stop_name": "Woodland",
+    "routes": ["Green"]
+  },
+  {
+    "stop_id": "place-aport",
+    "stop_name": "Airport",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-aqucl",
+    "stop_name": "Aquarium",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-bmmnl",
+    "stop_name": "Beachmont",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-bomnl",
+    "stop_name": "Bowdoin",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-mvbcl",
+    "stop_name": "Maverick",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-orhte",
+    "stop_name": "Orient Heights",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-rbmnl",
+    "stop_name": "Revere Beach",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-sdmnl",
+    "stop_name": "Suffolk Downs",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-wondl",
+    "stop_name": "Wonderland",
+    "routes": ["Blue"]
+  },
+  {
+    "stop_id": "place-wimnl",
+    "stop_name": "Wood Island",
+    "routes": ["Blue"]
+  }
+]

@@ -1,8 +1,7 @@
 from common import SignMode
-from providers.mbta import TrainStations
 
 DEFAULT_SIGN_MODE = SignMode.MTA
-DEFAULT_MBTA_STATION = TrainStations.HARVARD
+DEFAULT_MBTA_STATION = "place-harsq" # harvard square station
 DEFAULT_MTA_STATION = "121" # 86 St 1,2,3 station
 EMULATE_RGB_MATRIX = False
 SPOTIFY_CLIENT_ID = ""

@@ -1,4 +1,5 @@
 import json
+import os
 import time
 import config
 from datetime import datetime, timezone
@@ -15,6 +16,7 @@ MBTA_MAX_ERROR_COUNT = 3
 
 MBTA_PREDICTIONS_URL = "https://api-v3.mbta.com/predictions"
 
+CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 @dataclass
 class Prediction:
@@ -28,59 +30,43 @@ class PredictionStatus(Enum):
     ERROR_SHOW_CACHED = auto()
     ERROR_EMPTY = auto()
 
+@dataclass
+class Station:
+    stop_id: str
+    stop_name: str
+    routes: List[str]
 
-class TrainStations(Enum):
-    ALEWIFE = "place-alfcl"
-    DAVIS = "place-davis"
-    PORTER = "place-portr"
-    HARVARD = "place-harsq"
-    CENTRAL = "place-cntsq"
-    KENDALL = "place-knncl"
-    CHARLES_MGH = "place-chmnl"
-    PARK_STREET = "place-pktrm"
-    DOWNTOWN_CROSSING = "place-dwnxg"
-    SOUTH_STATION = "place-sstat"
-    BROADWAY = "place-brdwy"
-    ANDREW = "place-andrw"
-    JFK_UMASS = "place-jfk"
-    ASHMONT = "place-asmnl"
-    NORTH_QUINCY = "place-nqncy"
-    WOLLASTON = "place-wlsta"
-    QUINCY_CENTER = "place-qnctr"
-    QUINCY_ADAMS = "place-qamnl"
-    BRAINTREE = "place-brntn"
-    TEST = "test"
+station_data = json.load(
+    open(os.path.join(CURRENT_FOLDER, "stations.json")))
+stations: List[Station] = [Station(**s) for s in station_data]
 
 
-DEFAULT_MBTA_STATION = TrainStations.HARVARD
+DEFAULT_MBTA_STATION = "place-harsq" # harvard square station
 if hasattr(config, 'DEFAULT_MBTA_STATION'):
     DEFAULT_MBTA_STATION = config.DEFAULT_MBTA_STATION
 
 
-def train_station_to_str(station: TrainStations) -> str:
-    station_names = {
-        TrainStations.ALEWIFE: "Alewife",
-        TrainStations.DAVIS: "Davis",
-        TrainStations.PORTER: "Porter",
-        TrainStations.HARVARD: "Harvard",
-        TrainStations.CENTRAL: "Central",
-        TrainStations.KENDALL: "Kendall/MIT",
-        TrainStations.CHARLES_MGH: "Charles/MGH",
-        TrainStations.PARK_STREET: "Park Street",
-        TrainStations.DOWNTOWN_CROSSING: "Downtown Crossing",
-        TrainStations.SOUTH_STATION: "South Station",
-        TrainStations.BROADWAY: "Broadway",
-        TrainStations.ANDREW: "Andrew",
-        TrainStations.JFK_UMASS: "JFK/UMass",
-        TrainStations.ASHMONT: "Ashmont",
-        TrainStations.NORTH_QUINCY: "North Quincy",
-        TrainStations.WOLLASTON: "Wollaston",
-        TrainStations.QUINCY_CENTER: "Quincy Center",
-        TrainStations.QUINCY_ADAMS: "Quincy Adams",
-        TrainStations.BRAINTREE: "Braintree",
-        TrainStations.TEST: "Test station"
-    }
-    return station_names.get(station, "TRAIN_STATION_UNKNOWN")
+def stations_by_route() -> Dict[str, List[Station]]:
+    stations_by_route = {}
+    for station in stations:
+        for route in station.routes:
+            if route not in stations_by_route:
+                stations_by_route[route] = []
+            stations_by_route[route].append(station)
+    return stations_by_route
+
+
+def station_by_id(stop_id: str) -> Optional[Station]:
+    for station in stations:
+        if station.stop_id == stop_id:
+            return station
+    return None
+
+def train_station_to_str(station: str) -> str:
+    for s in stations:
+        if s.stop_id == station:
+            return s.stop_name
+    return ""
 
 
 class MBTA:
@@ -92,14 +78,14 @@ class MBTA:
         self.station_broadcaster.set_status(DEFAULT_MBTA_STATION)
 
     @property
-    def station(self) -> TrainStations:
+    def station(self):
         return self.station_broadcaster.get_status()
 
     def get_predictions(self, num_predictions: int, directions: List[int],
                         nth_positions: List[int]) -> tuple[PredictionStatus, List[Prediction]]:
         dst = [Prediction() for _ in range(num_predictions)]
 
-        if self.station == TrainStations.TEST:
+        if self.station == "test":
             dst = self._get_placeholder_predictions()
             dst[0].value = "5 min"
             dst[1].value = "12 min"
@@ -136,10 +122,11 @@ class MBTA:
 
     def _fetch_predictions(self) -> Optional[dict]:
         try:
+            routes = station_by_id(self.station).routes
             response = requests.get(MBTA_PREDICTIONS_URL, params={
                 "api_key": self.api_key,
-                "filter[stop]": self.station.value,
-                "filter[route]": "Red",
+                "filter[stop]": self.station,
+                "filter[route]": ','.join(routes),
                 "fields[prediction]": "arrival_time,departure_time,status,direction_id",
                 "include": "trip"
             })
@@ -274,6 +261,6 @@ class MBTA:
         placeholders[1].value = ""
         return placeholders
 
-    def set_station(self, station: TrainStations) -> None:
+    def set_station(self, station: str) -> None:
         self.station_broadcaster.set_status(station)
         self.latest_predictions = self._get_placeholder_predictions()

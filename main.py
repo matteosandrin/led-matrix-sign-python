@@ -86,7 +86,7 @@ def ui_task():
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 # Direct station change
                 new_station = message.get("station")
-                if new_station in mbta.TrainStations:
+                if mbta.station_by_id(new_station) is not None:
                     mbta_client.set_station(new_station)
                     print(f"Station changed to: {new_station}")
                     render_queue.put({
