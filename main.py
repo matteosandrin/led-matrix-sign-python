@@ -18,6 +18,7 @@ from pprint import pprint
 from providers.music import Spotify, SpotifyResponse
 from providers.widget import WidgetManager, ClockWidget, WeatherWidget
 from server import Server
+
 # Constants
 BUTTON_PIN = 18
 REFRESH_RATE = 0.1  # seconds
@@ -130,26 +131,7 @@ def render_task():
     while True:
         try:
             message = render_queue.get(timeout=REFRESH_RATE)
-            if message.get("type") == RenderMessageType.CLEAR:
-                display.clear()
-            if message.get("type") == RenderMessageType.FRAME:
-                display.render_frame_content(message["content"])
-            if message.get("type") == RenderMessageType.SWAP:
-                display.swap_canvas()
-            if message.get("type") == RenderMessageType.TEXT:
-                display.render_text_content(message["content"])
-            if message.get("type") == RenderMessageType.CLOCK:
-                display.render_clock_content(message["content"])
-            if message.get("type") == RenderMessageType.MBTA:
-                display.render_mbta_content(message["content"])
-            if message.get("type") == RenderMessageType.MBTA_BANNER:
-                display.render_mbta_banner_content(message["content"])
-            if message.get("type") == RenderMessageType.MTA:
-                display.render_mta_content(message["content"])
-            if message.get("type") == RenderMessageType.MTA_ALERT:
-                display.render_mta_alert_content(message["content"])
-            if message.get("type") == RenderMessageType.MUSIC:
-                display.render_music_content(message["content"])
+            display.render(message)
         except queue.Empty:
             continue
 

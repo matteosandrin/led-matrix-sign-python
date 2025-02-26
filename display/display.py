@@ -10,7 +10,7 @@ from .animation import AnimationManager
 from .render_mbta import render_mbta_content, render_mbta_banner_content
 from .render_mta import render_mta_content, render_mta_alert_content
 from .render_music import render_music_content
-from common import Fonts, Colors, Rect, ClockType
+from common import Fonts, Colors, Rect, ClockType, RenderMessageType
 from PIL import Image, ImageDraw, ImageFont
 from providers.music import Song, SpotifyResponse
 from queue import Queue
@@ -48,6 +48,28 @@ class Display:
         self.animation_manager.start()
         self.last_mbta_image = None
         self.last_mta_image = None
+
+    def render(self, message):
+        if message.get("type") == RenderMessageType.CLEAR:
+            self.clear()
+        if message.get("type") == RenderMessageType.FRAME:
+            self.render_frame_content(message["content"])
+        if message.get("type") == RenderMessageType.SWAP:
+            self.swap_canvas()
+        if message.get("type") == RenderMessageType.TEXT:
+            self.render_text_content(message["content"])
+        if message.get("type") == RenderMessageType.CLOCK:
+            self.render_clock_content(message["content"])
+        if message.get("type") == RenderMessageType.MBTA:
+            self.render_mbta_content(message["content"])
+        if message.get("type") == RenderMessageType.MBTA_BANNER:
+            self.render_mbta_banner_content(message["content"])
+        if message.get("type") == RenderMessageType.MTA:
+            self.render_mta_content(message["content"])
+        if message.get("type") == RenderMessageType.MTA_ALERT:
+            self.render_mta_alert_content(message["content"])
+        if message.get("type") == RenderMessageType.MUSIC:
+            self.render_music_content(message["content"])
 
     def clear(self):
         self.animation_manager.clear()
