@@ -2,6 +2,7 @@ import json
 import os
 import random
 import requests
+import config
 from common.broadcaster import StatusBroadcaster
 from dataclasses import dataclass
 from datetime import datetime
@@ -9,6 +10,9 @@ from pprint import pprint
 from typing import Dict, List, Optional, TypedDict
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_MTA_STATION = "121" # 86 St 1,2,3 station
+if hasattr(config, 'DEFAULT_MTA_STATION'):
+    DEFAULT_MTA_STATION = config.DEFAULT_MTA_STATION
 
 
 @dataclass
@@ -107,7 +111,7 @@ class MTA():
         self.domain = 'https://otp-mta-prod.camsys-apps.com/otp/routers/default'
         self.api_key = api_key
         self.station_broadcaster = StatusBroadcaster()
-        self.station_broadcaster.set_status("121")  # 116th st station
+        self.station_broadcaster.set_status(DEFAULT_MTA_STATION)
 
     def get_predictions(self, stop_id: str) -> Optional[List[TrainTime]]:
         try:
