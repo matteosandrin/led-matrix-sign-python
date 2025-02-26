@@ -1,5 +1,6 @@
 import json
 import time
+import config
 from datetime import datetime, timezone
 from enum import Enum, auto
 from dataclasses import dataclass
@@ -86,7 +87,10 @@ class MBTA:
         self.latest_predictions = [Prediction(), Prediction()]
         self.error_count = 0
         self.station_broadcaster = StatusBroadcaster()
-        self.station_broadcaster.set_status(DEFAULT_TRAIN_STATION)
+        if hasattr(config, 'DEFAULT_MBTA_STATION'):
+            self.station_broadcaster.set_status(config.DEFAULT_MBTA_STATION)
+        else:
+            self.station_broadcaster.set_status(DEFAULT_TRAIN_STATION)
 
     @property
     def station(self) -> TrainStations:
