@@ -39,6 +39,15 @@ class TrainStations(Enum):
     PARK_STREET = "place-pktrm"
     DOWNTOWN_CROSSING = "place-dwnxg"
     SOUTH_STATION = "place-sstat"
+    BROADWAY = "place-brdwy"
+    ANDREW = "place-andrw"
+    JFK_UMASS = "place-jfk"
+    ASHMONT = "place-asmnl"
+    NORTH_QUINCY = "place-nqncy"
+    WOLLASTON = "place-wlsta"
+    QUINCY_CENTER = "place-qnctr"
+    QUINCY_ADAMS = "place-qamnl"
+    BRAINTREE = "place-brntn"
     TEST = "test"
 
 
@@ -57,6 +66,15 @@ def train_station_to_str(station: TrainStations) -> str:
         TrainStations.PARK_STREET: "Park Street",
         TrainStations.DOWNTOWN_CROSSING: "Downtown Crossing",
         TrainStations.SOUTH_STATION: "South Station",
+        TrainStations.BROADWAY: "Broadway",
+        TrainStations.ANDREW: "Andrew",
+        TrainStations.JFK_UMASS: "JFK/UMass",
+        TrainStations.ASHMONT: "Ashmont",
+        TrainStations.NORTH_QUINCY: "North Quincy",
+        TrainStations.WOLLASTON: "Wollaston",
+        TrainStations.QUINCY_CENTER: "Quincy Center",
+        TrainStations.QUINCY_ADAMS: "Quincy Adams",
+        TrainStations.BRAINTREE: "Braintree",
         TrainStations.TEST: "Test station"
     }
     return station_names.get(station, "TRAIN_STATION_UNKNOWN")
