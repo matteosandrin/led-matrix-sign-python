@@ -52,7 +52,9 @@ class TrainStations(Enum):
     TEST = "test"
 
 
-DEFAULT_TRAIN_STATION = TrainStations.HARVARD
+DEFAULT_MBTA_STATION = TrainStations.HARVARD
+if hasattr(config, 'DEFAULT_MBTA_STATION'):
+    DEFAULT_MBTA_STATION = config.DEFAULT_MBTA_STATION
 
 
 def train_station_to_str(station: TrainStations) -> str:
@@ -87,10 +89,7 @@ class MBTA:
         self.latest_predictions = [Prediction(), Prediction()]
         self.error_count = 0
         self.station_broadcaster = StatusBroadcaster()
-        if hasattr(config, 'DEFAULT_MBTA_STATION'):
-            self.station_broadcaster.set_status(config.DEFAULT_MBTA_STATION)
-        else:
-            self.station_broadcaster.set_status(DEFAULT_TRAIN_STATION)
+        self.station_broadcaster.set_status(DEFAULT_MBTA_STATION)
 
     @property
     def station(self) -> TrainStations:
