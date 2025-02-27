@@ -1,7 +1,8 @@
-import RPi.GPIO as GPIO
+from config import config
+if not config.EMULATE_RGB_MATRIX:
+    import RPi.GPIO as GPIO
 import time
 import threading
-from config import config
 
 
 class Button:

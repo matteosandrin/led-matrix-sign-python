@@ -68,6 +68,9 @@
     </select>
     <input type="submit" value="Set sign mode">
   </form>
+  <form method="GET" action="/trigger/mode-shift" onsubmit="handleFormSubmit(event, this)">
+    <input type="submit" value="Shift to next mode">
+  </form>
   {% if current_mode == SignMode.MBTA %}
     {% with namespace='mbta',
            current_station_label=mbta_current_station_label,
