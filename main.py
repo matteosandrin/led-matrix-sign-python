@@ -271,7 +271,12 @@ def main():
 
     button_handler = None
     if not config.EMULATE_RGB_MATRIX:
-        button_handler = Button(BUTTON_PIN, ui_queue)
+        button_handler = Button(
+            BUTTON_PIN, short_press_callback=lambda: ui_queue.put(
+                {"type": UIMessageType.MODE_SHIFT}),
+            long_press_callback=lambda: ui_queue.put(
+                {"type": UIMessageType.SHUTDOWN}),
+            long_press_duration=3.0)
 
     threads = [
         threading.Thread(target=ui_task, daemon=True),
