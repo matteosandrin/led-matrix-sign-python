@@ -24,6 +24,26 @@ sudo nano /boot/firmware/config.txt # set "dtparam=audio=off"
 sudo nano /etc/modprobe.d/alsa-blacklist.conf # add "blacklist snd_bcm2835"
 ```
 
+### Button
+
+The side button is connected to GPIO pin 25. It has the following functionality:
+ * Short press: Cycle through the available modes.
+ * Long press (3 seconds): Power off the Raspberry Pi.
+
+In order to setup the shutdown functionality, the `daemon` user needs to be
+allowed to shutdown the system without root privileges. To accomplish this, open
+the following file:
+
+```bash
+sudo visudo -f /etc/sudoers.d/shutdown
+```
+
+And add the following line to the file:
+
+```
+daemon ALL=(ALL) NOPASSWD: /sbin/shutdown
+```
+
 ## Run
 
 Sudo is required in order to access hardware registers. Performance will be much
@@ -33,7 +53,7 @@ worse without it.
 sudo python3 main.py
 ```
 
-## Run at system startup
+### Run at system startup
 
 First, edit the `led-matrix-sign.service` file to set the correct path to the
 Python script. Then, run the following commands:
@@ -46,21 +66,4 @@ sudo systemctl enable led-matrix-sign.service
 sudo systemctl start led-matrix-sign.service
 # to check logs
 sudo journalctl -u led-matrix-sign.service
-```
-
-# Shutdown button
-
-Long press the shutdown button for 3 seconds to power off the Raspberry Pi. In
-order to setup this functionality, the `daemon` user needs to be allowed to
-shutdown the system without root privileges. To accomplish this, run the
-following command:
-
-```bash
-sudo visudo -f /etc/sudoers.d/shutdown
-```
-
-Add the following line to the file:
-
-```
-daemon ALL=(ALL) NOPASSWD: /sbin/shutdown
 ```
