@@ -15,6 +15,9 @@ class SignMode(Enum):
     MUSIC = 4
     WIDGET = 5
 
+# These modes will not be cycled through, but will be available to be selected
+# manually from the web interface
+DISABLED_MODES = [SignMode.TEST, SignMode.WIDGET]
 
 class UIMessageType(Enum):
     TEST = 0
@@ -86,3 +89,12 @@ class Images:
     ARROW_UP = Image.open(img_dir / 'arrow-up.png')
     ARROW_DOWN = Image.open(img_dir / 'arrow-down.png')
     DEG_SYMBOL = Image.open(img_dir / 'deg-symbol.png')
+
+def get_next_mode(current_mode: SignMode) -> SignMode:
+    modes = list(SignMode)
+    current_index = modes.index(current_mode)
+    next_index = (current_index + 1) % len(modes)
+    next_mode = modes[next_index]
+    if next_mode in DISABLED_MODES:
+        return get_next_mode(next_mode)
+    return next_mode

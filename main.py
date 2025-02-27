@@ -7,7 +7,7 @@ import queue
 import threading
 import time
 import os
-from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect
+from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect, get_next_mode
 from common.broadcaster import StatusBroadcaster
 from common.button import Button
 from datetime import datetime
@@ -48,22 +48,16 @@ def ui_task():
             message = ui_queue.get(timeout=REFRESH_RATE)
 
             if message["type"] == UIMessageType.MODE_SHIFT:
-                # Cycle through modes
-                modes = list(SignMode)
-                current_mode = mode_broadcaster.get_status()
-                current_index = modes.index(current_mode)
-                next_index = (current_index + 1) % len(modes)
-                # clear the display
+                next_mode = get_next_mode(mode_broadcaster.get_status())
                 render_queue.put({
                     "type": RenderMessageType.CLEAR,
                 })
-                mode_broadcaster.set_status(modes[next_index])
-                print(f"Mode changed to: {modes[next_index]}")
+                mode_broadcaster.set_status(next_mode)
+                print(f"Mode changed to: {next_mode}")
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
                 new_mode = message.get("mode")
                 if new_mode in SignMode:
-                    # clear the display
                     render_queue.put({
                         "type": RenderMessageType.CLEAR
                     })
