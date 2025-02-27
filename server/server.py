@@ -100,7 +100,7 @@ class Server:
         value = request.args.get('msg')
         if value is None:
             return 'Message not provided', 400
-        self.ui_queue.put({"type": UIMessageType.TEST, "content": message})
+        self.ui_queue.put({"type": UIMessageType.TEST, "content": value})
         return f'Message set to {value}', 200
 
     def trigger_mta_alert_route(self):
