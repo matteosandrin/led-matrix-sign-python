@@ -47,3 +47,20 @@ sudo systemctl start led-matrix-sign.service
 # to check logs
 sudo journalctl -u led-matrix-sign.service
 ```
+
+# Shutdown button
+
+Long press the shutdown button for 3 seconds to power off the Raspberry Pi. In
+order to setup this functionality, the `daemon` user needs to be allowed to
+shutdown the system without root privileges. To accomplish this, run the
+following command:
+
+```bash
+sudo visudo -f /etc/sudoers.d/shutdown
+```
+
+Add the following line to the file:
+
+```
+daemon ALL=(ALL) NOPASSWD: /sbin/shutdown
+```

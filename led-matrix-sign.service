@@ -12,6 +12,7 @@ RestartSec=5
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=led-matrix-sign
+AmbientCapabilities=CAP_SYS_BOOT
 
 [Install]
 WantedBy=multi-user.target
