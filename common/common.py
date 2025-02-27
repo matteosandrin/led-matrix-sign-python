@@ -24,7 +24,7 @@ class UIMessageType(Enum):
     MBTA_TEST_BANNER = 4
     MTA_CHANGE_STATION = 5
     MTA_ALERT = 6
-
+    SHUTDOWN = 7
 
 class RenderMessageType(Enum):
     CLEAR = 0

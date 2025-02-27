@@ -1,9 +1,5 @@
 import random
 import config
-if config.EMULATE_RGB_MATRIX:
-    from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
-else:
-    import RPi.GPIO as GPIO
 import argparse
 import providers.mbta as mbta
 import providers.mta as mta
@@ -42,18 +38,6 @@ def parse_args():
         '--mode', type=str, choices=[mode.name for mode in SignMode],
         help='Set the default sign mode')
     return parser.parse_args()
-
-
-def setup_gpio():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING,
-                          callback=button_callback,
-                          bouncetime=300)
-
-
-def button_callback(channel):
-    ui_queue.put({"type": UIMessageType.MODE_SHIFT})
 
 
 def ui_task():
@@ -120,6 +104,14 @@ def ui_task():
                     "type": RenderMessageType.MTA_ALERT,
                     "content": message.get("content")
                 })
+            elif message["type"] == UIMessageType.SHUTDOWN:
+                print("Shutting down")
+                render_queue.put({
+                    "type": RenderMessageType.TEXT,
+                    "content": "Shutting down..."
+                })
+                time.sleep(1)
+                os.system("sudo shutdown -h now")
 
         except queue.Empty:
             time.sleep(REFRESH_RATE)
@@ -275,8 +267,9 @@ def main():
     print(f"Initial mode: {initial_mode}")
     mode_broadcaster.set_status(initial_mode)
 
+    button_handler = None
     if not config.EMULATE_RGB_MATRIX:
-        setup_gpio()
+        button_handler = Button(BUTTON_PIN, ui_queue)
 
     threads = [
         threading.Thread(target=ui_task, daemon=True),
@@ -295,8 +288,8 @@ def main():
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        if not config.EMULATE_RGB_MATRIX:
-            GPIO.cleanup()
+        if button_handler is not None:
+            button_handler.cleanup()
 
 
 if __name__ == "__main__":
