@@ -101,13 +101,16 @@ def ui_task():
                     "content": message.get("content")
                 })
             elif message["type"] == UIMessageType.SHUTDOWN:
-                print("Shutting down")
-                render_queue.put({
-                    "type": RenderMessageType.TEXT,
-                    "content": "Shutting down..."
-                })
-                time.sleep(1)
-                os.system("sudo shutdown -h now")
+                if not config.EMULATE_RGB_MATRIX:
+                    print("Shutting down")
+                    render_queue.put({
+                        "type": RenderMessageType.TEXT,
+                        "content": "Shutting down..."
+                    })
+                    time.sleep(1)
+                    os.system("sudo shutdown -h now")
+                else:
+                    print("Not shutting down (emulated)")
 
         except queue.Empty:
             time.sleep(REFRESH_RATE)

@@ -26,6 +26,10 @@
       document.getElementById("emulator-link").href = emulator_domain;
       document.getElementById("emulator-image").src = emulator_domain + "/image";
     </script>
+  {% else %}
+    <form method="GET" action="/trigger/shutdown" onsubmit="handleFormSubmit(event, this)">
+      <input type="submit" value="Shutdown">
+    </form>
   {% endif %}
   <script>
     async function handleFormSubmit(event, form) {

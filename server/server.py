@@ -29,6 +29,7 @@ class Server:
         self.app.route('/trigger/mbta-alert')(self.trigger_mbta_alert_route)
         self.app.route('/trigger/mta-alert')(self.trigger_mta_alert_route)
         self.app.route('/trigger/mode-shift')(self.trigger_mode_shift_route)
+        self.app.route('/trigger/shutdown')(self.trigger_shutdown_route)
 
     def index(self):
         current_mode = self.mode_broadcaster.get_status()
@@ -112,6 +113,10 @@ class Server:
     def trigger_mode_shift_route(self):
         self.ui_queue.put({"type": UIMessageType.MODE_SHIFT})
         return 'Mode shift triggered', 200
+
+    def trigger_shutdown_route(self):
+        self.ui_queue.put({"type": UIMessageType.SHUTDOWN})
+        return 'Shutdown triggered', 200
 
     def web_server_task(self):
         self.app.run(host='0.0.0.0', port=5000,
