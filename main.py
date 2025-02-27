@@ -8,6 +8,7 @@ import threading
 import time
 from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect
 from common.broadcaster import StatusBroadcaster
+from common.button import Button
 from datetime import datetime
 from display import Display
 from pprint import pprint
