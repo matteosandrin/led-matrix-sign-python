@@ -20,7 +20,7 @@ from providers.widget import WidgetManager, ClockWidget, WeatherWidget
 from server import Server
 
 # Constants
-BUTTON_PIN = 18
+BUTTON_PIN = 25
 REFRESH_RATE = 0.1  # seconds
 DEFAULT_SIGN_MODE = SignMode.MBTA
 
