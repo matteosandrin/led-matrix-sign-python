@@ -6,6 +6,7 @@ import providers.mta as mta
 import queue
 import threading
 import time
+import os
 from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect
 from common.broadcaster import StatusBroadcaster
 from common.button import Button
