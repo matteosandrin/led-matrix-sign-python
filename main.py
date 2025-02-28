@@ -186,11 +186,14 @@ def mta_provider_task():
                     predictions = mta_client.get_predictions(station)
                 else:
                     predictions = mta_client.get_fake_predictions()
-                pprint(predictions[:2])
-                render_queue.put({
-                    "type": RenderMessageType.MTA,
-                    "content": predictions
-                })
+                if predictions is not None:
+                    pprint(predictions[:2])
+                    render_queue.put({
+                        "type": RenderMessageType.MTA,
+                        "content": predictions
+                    })
+                else:
+                    print("No predictions")
                 if time.time() - last_alert_time > 60 * 5:
                     last_alert_time = time.time()
                     render_queue.put({
