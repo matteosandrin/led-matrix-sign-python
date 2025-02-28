@@ -168,7 +168,8 @@ class MTABlinkAnimation(Animation):
                 yield (self.bbox, self.text_image)
             else:
                 yield (self.bbox, self.blank_image)
-                
+        # show the text image as the last frame to not leave the screen blank
+        yield (self.bbox, self.text_image)
 
 class AnimationGroup:
     def __init__(self, speed: float):
