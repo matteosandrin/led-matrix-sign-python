@@ -93,7 +93,7 @@ def ui_task():
                 new_message = message.get("content")
                 render_queue.put({
                     "type": RenderMessageType.TEXT,
-                    "content": new_message
+                    "content": new_message if new_message is not None else ""
                 })
             elif message["type"] == UIMessageType.MTA_ALERT:
                 render_queue.put({
