@@ -142,6 +142,33 @@ class MTAAlertAnimation(TextScrollAnimation):
             yield frame
         yield (self.bbox, self.last_frame)
 
+class MTABlinkAnimation(Animation):
+    def __init__(self, text: str, bbox: Rect):
+        super().__init__(bbox=bbox, speed=3, loop=False)
+        self.text_image = self.make_text_image(text)
+        self.blank_image = self.make_blank_image()
+
+    def make_text_image(self, text: str):
+        image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+        draw = ImageDraw.Draw(image)
+        draw.fontmode = "1"  # antialiasing off
+        draw.text((1, 2), text, font=Fonts.MTA, fill=Colors.MTA_RED_AMBER)
+        return image
+    
+    def make_blank_image(self):
+        image = Image.new('RGB', (self.bbox.w, self.bbox.h), Colors.BLACK)
+        return image
+
+    def frame_generator(self):
+        total_time = 15 # seconds
+        frame_number = int(total_time * self.speed)
+        for i in range(frame_number):
+            k = int(i % int(self.speed))
+            if (k < 0.66 * self.speed):
+                yield (self.bbox, self.text_image)
+            else:
+                yield (self.bbox, self.blank_image)
+                
 
 class AnimationGroup:
     def __init__(self, speed: float):

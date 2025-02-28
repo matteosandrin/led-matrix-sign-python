@@ -2,7 +2,7 @@ import providers.mta as mta
 from typing import List
 from PIL import Image, ImageFont
 from common import Colors, Fonts, Rect
-from .animation import MTAAlertAnimation
+from .animation import MTAAlertAnimation, MTABlinkAnimation
 from .utils import get_image_with_color
 
 
@@ -11,8 +11,16 @@ def render_mta_content(display, content: List[mta.TrainTime]):
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
         Colors.BLACK)
     draw = display._get_draw_context_antialiased(image)
+    should_run_blink_animation = False
+    is_alert_running = display.animation_manager.is_animation_running("mta_alert")
+    is_blink_running = display.animation_manager.is_animation_running("mta_blink")
     for i, train in enumerate(content):
         minutes = int(round(train.time / 60.0))
+        text_color = Colors.MTA_GREEN
+        if train.time <= 30 and i == 0:
+            text_color = Colors.MTA_RED_AMBER
+            if train.time > 20 and not is_blink_running:
+                should_run_blink_animation = True
         route_img_data = mta.get_route_image(
             train.route_id, train.is_express)
         x_cursor = 0
@@ -27,16 +35,28 @@ def render_mta_content(display, content: List[mta.TrainTime]):
         train_str = trim_train_name(
             display, train.long_name, Fonts.MTA, train_str_available_width)
         draw.text((x_cursor, 2 + 16 * i), train_str,
-                  font=Fonts.MTA, fill=Colors.MTA_GREEN)
+                  font=Fonts.MTA, fill=text_color)
         draw.text((display.SCREEN_WIDTH+1, 2 + 16 * i), minutes_str,
-                  font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="rt")
+                  font=Fonts.MTA, fill=text_color, anchor="rt")
     display.last_mta_image = image
-    if display.animation_manager.is_animation_running("mta_alert"):
+    half_screen_h = int(display.SCREEN_HEIGHT / 2)
+    x, y = 0, 0
+    if is_alert_running and is_blink_running:
+        return
+    if is_alert_running:
         # if there is an alert in progress, we only draw the top half of the
         # screen, so the alert can be displayed in the bottom half
-        half_screen_h = int(display.SCREEN_HEIGHT / 2)
-        image = image.copy().crop((0, 0, display.SCREEN_WIDTH, half_screen_h))
-    display._update_display(image)
+        crop_rect = Rect(0, 0, display.SCREEN_WIDTH, half_screen_h)
+        image = image.copy().crop(crop_rect.to_crop_tuple())
+    if is_blink_running:
+        # if the blink animation is running, we only draw the bottom half of the
+        # screen, so the blink animation can be displayed in the top half
+        crop_rect = Rect(0, half_screen_h, display.SCREEN_WIDTH, half_screen_h)
+        image = image.copy().crop(crop_rect.to_crop_tuple())
+        x, y = crop_rect.x, crop_rect.y
+    if should_run_blink_animation:
+        render_mta_blink(display, "0min")
+    display._update_display(image, x, y)
 
 
 def render_mta_alert_content(display, content: str):
@@ -46,6 +66,13 @@ def render_mta_alert_content(display, content: str):
     alert_animation = MTAAlertAnimation(text=content, bbox=bbox, last_frame=last_frame)
     display.animation_manager.add_animation("mta_alert", alert_animation)
 
+def render_mta_blink(display, text: str):
+    print(f"render_mta_blink: {text}")
+    text_length = int(display._get_text_length(text, Fonts.MTA))
+    x = int(display.SCREEN_WIDTH - text_length)
+    bbox = Rect(x, 0, text_length, 16)
+    blink_animation = MTABlinkAnimation(text=text, bbox=bbox)
+    display.animation_manager.add_animation("mta_blink", blink_animation)
 
 def trim_train_name(
         display, text: str, font: ImageFont, max_width: int) -> str:
