@@ -148,6 +148,7 @@ class AnimationGroup:
         self.speed = speed
         self.animation_keys = []
         self.last_update = 0
+        self.frames_per_update = round(1 / (ANIMATION_REFRESH_RATE * self.speed))
 
     def add_animation(self, key: str):
         self.animation_keys.append(key)
@@ -160,7 +161,7 @@ class AnimationGroup:
         return len(self.animation_keys) == 0
 
     def should_update(self, frame_count: int) -> bool:
-        return frame_count - self.last_update >= math.floor(1 / (ANIMATION_REFRESH_RATE * self.speed))
+        return frame_count - self.last_update >= self.frames_per_update
 
 
 class AnimationManager:
@@ -228,39 +229,40 @@ class AnimationManager:
 
     def _run_animations(self):
         frame_count = 0
+        next_frame_time = time.time()
         while self.is_running:
-            completed_keys = []
-            start_time = time.time()
+            current_time = time.time()
+            if current_time >= next_frame_time:
+                # Calculate how many frames we might have missed
+                frame_delta = int((current_time - next_frame_time) / ANIMATION_REFRESH_RATE) + 1
+                # Update the next frame time (snap to the target grid)
+                next_frame_time += frame_delta * ANIMATION_REFRESH_RATE
+                update_count = 0
+                completed_keys = []
+                for speed, group in list(self.animation_groups.items()):
+                    if group.should_update(frame_count):
+                        for key in group.animation_keys:
+                            animation = self.get_animation(key)
+                            if animation is None:  # Skip if animation was removed
+                                completed_keys.append(key)
+                                continue
+                            frame, is_complete = animation.get_next_frame()
+                            if frame is not None:
+                                self.render_queue.put({
+                                    "type": RenderMessageType.FRAME,
+                                    "content": frame
+                                })
+                                update_count += 1
+                            if is_complete:
+                                completed_keys.append(key)
+                        group.last_update = frame_count
+                if update_count > 0:
+                    self.render_queue.put({
+                        "type": RenderMessageType.SWAP
+                    })
 
-            update_count = 0
-            for speed, group in list(self.animation_groups.items()):
-                if group.should_update(frame_count):
-                    for key in group.animation_keys:
-                        animation = self.get_animation(key)
-                        if animation is None:  # Skip if animation was removed
-                            completed_keys.append(key)
-                            continue
-                        frame, is_complete = animation.get_next_frame()
-                        if frame is not None:
-                            self.render_queue.put({
-                                "type": RenderMessageType.FRAME,
-                                "content": frame
-                            })
-                            update_count += 1
-                        if is_complete:
-                            completed_keys.append(key)
-                    group.last_update = frame_count
-            if update_count > 0:
-                self.render_queue.put({
-                    "type": RenderMessageType.SWAP
-                })
-
-            for key in completed_keys:
-                self.remove_animation(key)
-
-            frame_count += 1
-            elapsed_time = time.time() - start_time
-            sleep_time = min(ANIMATION_REFRESH_RATE,
-                             ANIMATION_REFRESH_RATE - elapsed_time)
-            if sleep_time > 0:
-                time.sleep(sleep_time)
+                for key in completed_keys:
+                    self.remove_animation(key)
+                
+                frame_count += 1
+            time.sleep(0.001)
