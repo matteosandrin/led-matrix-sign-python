@@ -140,6 +140,8 @@ class MTA():
         self.api_key = api_key
         self.station_broadcaster = StatusBroadcaster()
         self.station_broadcaster.set_status(DEFAULT_MTA_STATION)
+        # The last train to be shown in the second slot on the board.
+        self.last_second_train = None
 
     def get_predictions(self, stop_id: str) -> Optional[List[TrainTime]]:
         try:
@@ -231,7 +233,11 @@ class MTA():
         return self.station_broadcaster.get_status()
 
     def set_current_station(self, station: str):
+        self.clear()
         self.station_broadcaster.set_status(station)
+
+    def clear(self):
+        self.last_second_train = None
 
 
 class AlertMessages:

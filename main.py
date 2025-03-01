@@ -64,11 +64,13 @@ def ui_task():
                     mode_broadcaster.set_status(new_mode)
                     print(f"Mode changed to: {new_mode}")
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
-                # Direct station change
                 new_station = message.get("station")
                 if mbta.station_by_id(new_station) is not None:
                     mbta_client.set_station(new_station)
                     print(f"Station changed to: {new_station}")
+                    render_queue.put({
+                        "type": RenderMessageType.CLEAR
+                    })
                     render_queue.put({
                         "type": RenderMessageType.TEXT,
                         "content": mbta.train_station_to_str(new_station)
@@ -85,6 +87,9 @@ def ui_task():
                 new_station = message.get("station")
                 mta_client.set_current_station(new_station)
                 print(f"Station changed to: {new_station}")
+                render_queue.put({
+                    "type": RenderMessageType.CLEAR
+                })
                 render_queue.put({
                     "type": RenderMessageType.TEXT,
                     "content": mta.train_station_to_str(new_station)
@@ -103,6 +108,9 @@ def ui_task():
             elif message["type"] == UIMessageType.SHUTDOWN:
                 if not config.EMULATE_RGB_MATRIX:
                     print("Shutting down")
+                    render_queue.put({
+                        "type": RenderMessageType.CLEAR
+                    })
                     render_queue.put({
                         "type": RenderMessageType.TEXT,
                         "content": "Shutting down..."
@@ -177,8 +185,6 @@ def mbta_provider_task():
 def mta_provider_task():
     last_alert_time = time.time()
     alert_messages = mta.AlertMessages()
-    # The last train to be shown in the second slot on the board.
-    last_second_train = None
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta_client.get_current_station()
@@ -197,14 +203,14 @@ def mta_provider_task():
                         })
                     else:
                         second_train = mta.get_second_train(
-                            predictions, last_second_train)
+                            predictions, mta_client.last_second_train)
                         if second_train is not None:
                             mta.print_predictions([predictions[0], second_train])
                             render_queue.put({
                                 "type": RenderMessageType.MTA,
                                 "content": [predictions[0], second_train]
                             })
-                            last_second_train = second_train
+                            mta_client.last_second_train = second_train
                 else:
                     print("No predictions")
                 if time.time() - last_alert_time > 60 * 5:

@@ -262,5 +262,5 @@ class MBTA:
         return placeholders
 
     def set_station(self, station: str) -> None:
-        self.station_broadcaster.set_status(station)
         self.latest_predictions = self._get_placeholder_predictions()
+        self.station_broadcaster.set_status(station)
