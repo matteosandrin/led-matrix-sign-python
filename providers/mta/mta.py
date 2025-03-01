@@ -112,12 +112,12 @@ def get_second_train(predictions: List[TrainTime], last_second_train: TrainTime)
     if last_second_train is None:
         return predictions[1]
     for i, train in enumerate(predictions):
-        if train.trip_id == last_second_train.trip_id:
+        if train.display_order == last_second_train.display_order:
             next_id = i + 1
             if next_id >= len(predictions):
                 next_id = 1
             return predictions[next_id]
-    return None
+    return predictions[1]
 
 
 def print_predictions(predictions: List[TrainTime]):
