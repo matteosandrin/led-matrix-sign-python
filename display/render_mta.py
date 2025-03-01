@@ -28,22 +28,28 @@ def _render_mta_content_task(display, content: List[mta.TrainTime]):
             text_color = Colors.MTA_RED_AMBER
             if train.time > 20 and not is_blink_running:
                 should_run_blink_animation = True
+        x_cursor = 0
+        y_cursor = 2 + 16 * i
+        number_str = f"{i+1}."
+        number_str_width = display._get_text_length(number_str, Fonts.MTA)
+        draw.text((x_cursor, y_cursor), number_str,
+                  font=Fonts.MTA, fill=text_color)
+        x_cursor += int(number_str_width)
         route_img_data = mta.get_route_image(
             train.route_id, train.is_express)
-        x_cursor = 0
         if route_img_data is not None:
             route_img, color = route_img_data
             route_img = get_image_with_color(route_img, color)
-            image.paste(route_img, (0, 16 * i))
-            x_cursor = 16 + 3
+            image.paste(route_img, (x_cursor, 16 * i))
+            x_cursor += 16 + 1
         minutes_str = f"{minutes}min"
         minutes_str_width = display._get_text_length(minutes_str, Fonts.MTA)
         train_str_available_width = display.SCREEN_WIDTH - x_cursor - minutes_str_width
         train_str = trim_train_name(
             display, train.long_name, Fonts.MTA, train_str_available_width)
-        draw.text((x_cursor, 2 + 16 * i), train_str,
+        draw.text((x_cursor, y_cursor), train_str,
                   font=Fonts.MTA, fill=text_color)
-        draw.text((display.SCREEN_WIDTH+1, 2 + 16 * i), minutes_str,
+        draw.text((display.SCREEN_WIDTH+1, y_cursor), minutes_str,
                   font=Fonts.MTA, fill=text_color, anchor="rt")
     display.last_mta_image = image
     half_screen_h = int(display.SCREEN_HEIGHT / 2)
@@ -74,7 +80,6 @@ def render_mta_alert_content(display, content: str):
     display.animation_manager.add_animation("mta_alert", alert_animation)
 
 def render_mta_blink(display, text: str):
-    print(f"render_mta_blink: {text}")
     text_length = int(display._get_text_length(text, Fonts.MTA))
     x = int(display.SCREEN_WIDTH - text_length)
     bbox = Rect(x, 0, text_length, 16)
