@@ -4,9 +4,16 @@ from PIL import Image, ImageFont
 from common import Colors, Fonts, Rect
 from .animation import MTAAlertAnimation, MTABlinkAnimation
 from .utils import get_image_with_color
-
+import threading
 
 def render_mta_content(display, content: List[mta.TrainTime]):
+    mta_render_thread = threading.Thread(
+        target=_render_mta_content_task,
+        args=(display, content)
+    )
+    mta_render_thread.start()
+
+def _render_mta_content_task(display, content: List[mta.TrainTime]):
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
         Colors.BLACK)

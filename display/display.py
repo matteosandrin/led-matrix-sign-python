@@ -15,6 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 from providers.music import Song, SpotifyResponse
 from queue import Queue
 from typing import List, Tuple, Any
+import threading
 
 PANEL_WIDTH = 32
 PANEL_HEIGHT = 32
@@ -47,6 +48,7 @@ class Display:
         self.animation_manager.start()
         self.last_mbta_image = None
         self.last_mta_image = None
+        self.matrix_lock = threading.Lock()
 
     def render(self, message):
         content = message.get("content")
@@ -77,7 +79,8 @@ class Display:
         self.swap_canvas()
 
     def swap_canvas(self):
-        self.matrix.SwapOnVSync(self.canvas)
+        with self.matrix_lock:
+            self.matrix.SwapOnVSync(self.canvas)
 
     def render_frame_content(self, content: Tuple[Rect, Any]):
         bbox, frame = content
