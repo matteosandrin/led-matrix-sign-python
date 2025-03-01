@@ -177,6 +177,8 @@ def mbta_provider_task():
 def mta_provider_task():
     last_alert_time = time.time()
     alert_messages = mta.AlertMessages()
+    # The last train to be shown in the second slot on the board.
+    last_second_train = None
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta_client.get_current_station()
@@ -187,11 +189,20 @@ def mta_provider_task():
                 else:
                     predictions = mta_client.get_fake_predictions()
                 if predictions is not None:
-                    pprint(predictions[:2])
-                    render_queue.put({
-                        "type": RenderMessageType.MTA,
-                        "content": predictions
-                    })
+                    if len(predictions) < 2:
+                        render_queue.put({
+                            "type": RenderMessageType.MTA,
+                            "content": predictions
+                        })
+                    else:
+                        second_train = mta_client.get_second_train(
+                            predictions, last_second_train)
+                        if second_train is not None:
+                            render_queue.put({
+                                "type": RenderMessageType.MTA,
+                                "content": [predictions[0], second_train]
+                            })
+                            last_second_train = second_train
                 else:
                     print("No predictions")
                 if time.time() - last_alert_time > 60 * 5:

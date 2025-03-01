@@ -30,7 +30,7 @@ def _render_mta_content_task(display, content: List[mta.TrainTime]):
                 should_run_blink_animation = True
         x_cursor = 0
         y_cursor = 2 + 16 * i
-        number_str = f"{i+1}."
+        number_str = f"{train.display_order+1}."
         number_str_width = display._get_text_length(number_str, Fonts.MTA)
         draw.text((x_cursor, y_cursor), number_str,
                   font=Fonts.MTA, fill=text_color)

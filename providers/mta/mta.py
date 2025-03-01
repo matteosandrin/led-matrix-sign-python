@@ -10,9 +10,10 @@ from pprint import pprint
 from typing import Dict, List, Optional, TypedDict
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_MTA_STATION = "121" # 86 St 1,2,3 station
+DEFAULT_MTA_STATION = "121"  # 86 St 1,2,3 station
 if hasattr(config, 'DEFAULT_MTA_STATION'):
     DEFAULT_MTA_STATION = config.DEFAULT_MTA_STATION
+MAX_NUM_PREDICTIONS = 6
 
 
 @dataclass
@@ -24,6 +25,7 @@ class TrainTime:
     time: int
     trip_id: Optional[str]
     is_express: bool
+    display_order: int
 
 
 @dataclass
@@ -145,8 +147,12 @@ class MTA():
                                         'MTASBWY:', ''),
                                     is_express='express'
                                     in route_entry['route']
-                                    ['longName'].lower()))
-            return sorted(train_times, key=lambda x: x.time)
+                                    ['longName'].lower(),
+                                    display_order=0))
+            train_times = sorted(train_times, key=lambda x: x.time)
+            for i, train in enumerate(train_times):
+                train.display_order = i
+            return train_times[:MAX_NUM_PREDICTIONS]
         except Exception as err:
             print('unable to fetch nearby api', err)
             return None
@@ -158,18 +164,40 @@ class MTA():
                 direction_id="1",
                 long_name="South Ferry",
                 stop_headsign="Downtown",
-                time=780,
+                time=80,
                 trip_id="893",
-                is_express=False
+                is_express=False,
+                display_order=0
             ),
             TrainTime(
                 route_id="2",
                 direction_id="0",
                 long_name="Van Cortlandt Park",
                 stop_headsign="Uptown & The Bronx",
-                time=240,
-                trip_id="893",
-                is_express=False
+                time=200,
+                trip_id="894",
+                is_express=False,
+                display_order=1
+            ),
+            TrainTime(
+                route_id="F",
+                direction_id="0",
+                long_name="Ozone Park",
+                stop_headsign="Uptown & The Bronx",
+                time=360,
+                trip_id="895",
+                is_express=False,
+                display_order=2
+            ),
+            TrainTime(
+                route_id="3",
+                direction_id="0",
+                long_name="Van Cortlandt Park",
+                stop_headsign="Uptown & The Bronx",
+                time=470,
+                trip_id="896",
+                is_express=False,
+                display_order=3
             )
         ]
 
@@ -178,6 +206,23 @@ class MTA():
 
     def set_current_station(self, station: str):
         self.station_broadcaster.set_status(station)
+
+    # The second train slot on the board rotates between the next couple of
+    # trains. This function returns the next train in the rotation. It always
+    # skips the first train in the rotation, since that is already shown in the
+    # first slot.
+    def get_second_train(self, predictions: List[TrainTime], last_second_train: TrainTime) -> TrainTime:
+        if (predictions is None) or (len(predictions) < 2):
+            return None
+        if last_second_train is None:
+            return predictions[1]
+        for i, train in enumerate(predictions):
+            if train.trip_id == last_second_train.trip_id:
+                next_id = i + 1
+                if next_id >= len(predictions):
+                    next_id = 1
+                return predictions[next_id]
+        return None
 
 
 class AlertMessages:
