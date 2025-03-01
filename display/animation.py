@@ -144,9 +144,11 @@ class MTAAlertAnimation(TextScrollAnimation):
 
 class MTABlinkAnimation(Animation):
     def __init__(self, text: str, bbox: Rect):
-        super().__init__(bbox=bbox, speed=3, loop=False)
+        super().__init__(bbox=bbox, speed=6, loop=False)
         self.text_image = self.make_text_image(text)
         self.blank_image = self.make_blank_image()
+        # show text 2/3 of the time
+        self.text_time_fraction = 2/3
 
     def make_text_image(self, text: str):
         image = Image.new('RGB', (self.bbox.w, self.bbox.h))
@@ -161,13 +163,13 @@ class MTABlinkAnimation(Animation):
 
     def frame_generator(self):
         total_time = 15 # seconds
-        frame_number = int(total_time * self.speed)
-        for i in range(frame_number):
-            k = int(i % int(self.speed))
-            if (k < 0.66 * self.speed):
-                yield (self.bbox, self.text_image)
-            else:
-                yield (self.bbox, self.blank_image)
+        text_frame_number = int(self.text_time_fraction * self.speed)
+        for i in range(total_time):
+            for k in range(int(self.speed)):
+                if (k < text_frame_number):
+                    yield (self.bbox, self.text_image)
+                else:
+                    yield (self.bbox, self.blank_image)
         # show the text image as the last frame to not leave the screen blank
         yield (self.bbox, self.text_image)
 
