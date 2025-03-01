@@ -190,14 +190,16 @@ def mta_provider_task():
                     predictions = mta_client.get_fake_predictions()
                 if predictions is not None:
                     if len(predictions) < 2:
+                        mta.print_predictions(predictions)
                         render_queue.put({
                             "type": RenderMessageType.MTA,
                             "content": predictions
                         })
                     else:
-                        second_train = mta_client.get_second_train(
+                        second_train = mta.get_second_train(
                             predictions, last_second_train)
                         if second_train is not None:
+                            mta.print_predictions([predictions[0], second_train])
                             render_queue.put({
                                 "type": RenderMessageType.MTA,
                                 "content": [predictions[0], second_train]

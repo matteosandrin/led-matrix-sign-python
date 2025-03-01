@@ -100,6 +100,32 @@ def train_station_to_str(station: str) -> str:
     return ""
 
 
+def get_second_train(predictions: List[TrainTime], last_second_train: TrainTime) -> TrainTime:
+    """
+    The second train slot on the board rotates between the next couple of
+    trains. This function returns the next train in the rotation. It always
+    skips the first train in the rotation, since that is already shown in the
+    first slot.
+    """
+    if (predictions is None) or (len(predictions) < 2):
+        return None
+    if last_second_train is None:
+        return predictions[1]
+    for i, train in enumerate(predictions):
+        if train.trip_id == last_second_train.trip_id:
+            next_id = i + 1
+            if next_id >= len(predictions):
+                next_id = 1
+            return predictions[next_id]
+    return None
+
+
+def print_predictions(predictions: List[TrainTime]):
+    for train in predictions:
+        print(f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}")
+    print()
+
+
 def combine_complex_ids(complex_ids: List[str]) -> str:
     return ','.join(f"MTASBWY:{stop_id}" for stop_id in complex_ids)
 
@@ -206,23 +232,6 @@ class MTA():
 
     def set_current_station(self, station: str):
         self.station_broadcaster.set_status(station)
-
-    # The second train slot on the board rotates between the next couple of
-    # trains. This function returns the next train in the rotation. It always
-    # skips the first train in the rotation, since that is already shown in the
-    # first slot.
-    def get_second_train(self, predictions: List[TrainTime], last_second_train: TrainTime) -> TrainTime:
-        if (predictions is None) or (len(predictions) < 2):
-            return None
-        if last_second_train is None:
-            return predictions[1]
-        for i, train in enumerate(predictions):
-            if train.trip_id == last_second_train.trip_id:
-                next_id = i + 1
-                if next_id >= len(predictions):
-                    next_id = 1
-                return predictions[next_id]
-        return None
 
 
 class AlertMessages:
