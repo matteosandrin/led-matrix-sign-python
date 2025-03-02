@@ -96,10 +96,10 @@ route_images: Dict[str, Dict] = {
     #     "img" : Image.open(image_dir / 'mta_N.png'),
     #     "color" : "#FCBB0A"
     # },
-    # "Q" : {
-    #     "img" : Image.open(image_dir / 'mta_Q.png'),
-    #     "color" : "#FCBB0A"
-    # },
+    "Q" : {
+        "img" : Image.open(image_dir / 'mta_Q.png'),
+        "color" : "#FCBB0A"
+    },
     # "R" : {
     #     "img" : Image.open(image_dir / 'mta_R.png'),
     #     "color" : "#FCBB0A"
