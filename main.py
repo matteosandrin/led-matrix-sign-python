@@ -282,7 +282,7 @@ def wait_for_network_connection():
     print("Waiting for network connection...")
     connected = False
     start_time = time.time()
-    timeout = 60
+    timeout = 30
     
     while not connected:
         if time.time() - start_time > timeout:
@@ -309,12 +309,13 @@ def setup_network():
             "content": "Network connection successful."
         })
         time.sleep(1)
+        return True
     else:
         render_queue.put({
             "type": RenderMessageType.TEXT,
             "content": "Network connection timed out."
         })
-
+        return False
 def main():
     args = parse_args()
     initial_mode = DEFAULT_SIGN_MODE
@@ -348,7 +349,9 @@ def main():
     ]
     for thread in system_threads:
         thread.start()
-    setup_network()
+    is_connected = setup_network()
+    if not is_connected:
+        mode_broadcaster.set_status(SignMode.CLOCK)
     for thread in user_threads:
         thread.start()
 
