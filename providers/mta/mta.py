@@ -8,6 +8,9 @@ from dataclasses import dataclass
 from datetime import datetime
 from pprint import pprint
 from typing import Dict, List, Optional, TypedDict
+import logging
+
+logger = logging.getLogger("led-matrix-sign")
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_MTA_STATION = "121"  # 86 St 1,2,3 station
@@ -122,8 +125,8 @@ def get_second_train(predictions: List[TrainTime], last_second_train: TrainTime)
 
 def print_predictions(predictions: List[TrainTime]):
     for train in predictions:
-        print(f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}")
-    print()
+        logger.info(f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}")
+    logger.info("")
 
 
 def combine_complex_ids(complex_ids: List[str]) -> str:
@@ -182,7 +185,7 @@ class MTA():
                 train.display_order = i
             return train_times[:MAX_NUM_PREDICTIONS]
         except Exception as err:
-            print('unable to fetch nearby api', err)
+            logger.error('unable to fetch nearby api', exc_info=err)
             return None
 
     def get_fake_predictions(self) -> List[TrainTime]:

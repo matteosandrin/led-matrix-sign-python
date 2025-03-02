@@ -8,6 +8,9 @@ from dataclasses import dataclass
 import requests
 from common.broadcaster import StatusBroadcaster
 from typing import List, Dict, Optional
+import logging
+
+logger = logging.getLogger("led-matrix-sign")
 
 # Constants
 DIRECTION_SOUTHBOUND = 0
@@ -133,7 +136,7 @@ class MBTA:
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"Error fetching predictions: {e}")
+            logger.error(f"Error fetching predictions: {e}")
             return None
 
     def _find_nth_prediction_for_direction(self, prediction_data: dict,

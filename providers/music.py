@@ -1,9 +1,12 @@
 import base64
 import json
 import time
+import logging
 from typing import Optional, Dict, Any
 import requests
 from dataclasses import dataclass, field
+
+logger = logging.getLogger("led-matrix-sign")
 
 SPOTIFY_REFRESH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 SPOTIFY_CURRENTLY_PLAYING_URL = "https://api.spotify.com/v1/me/player/currently-playing"
@@ -64,7 +67,7 @@ class Spotify:
     def refresh_token(self) -> str:
         status = self.fetch_refresh_token()
         if status != SpotifyResponse.OK:
-            print(f"Failed to refresh spotify token: {status}")
+            logger.error(f"Failed to refresh spotify token: {status}")
         self.last_refresh_time = int(time.time() * 1000)
         return status
 
@@ -86,7 +89,7 @@ class Spotify:
             self.access_token = data["access_token"]
             return SpotifyResponse.OK
         except Exception as e:
-            print(f"Error refreshing token: {e}")
+            logger.error(f"Error refreshing token: {e}")
             return SpotifyResponse.ERROR
 
     def get_currently_playing(self) -> tuple[str, Optional[Song]]:
@@ -145,7 +148,7 @@ class Spotify:
             self.current_data = response.json()
             return SpotifyResponse.OK
         except Exception as e:
-            print(f"Error fetching currently playing: {e}")
+            logger.error(f"Error fetching currently playing: {e}")
             return SpotifyResponse.ERROR
 
     def get_album_cover(self, currently_playing: Song) -> tuple[str,
@@ -158,13 +161,13 @@ class Spotify:
             response.raise_for_status()
             return SpotifyResponse.OK, response.content
         except Exception as e:
-            print(f"Error fetching album cover: {e}")
+            logger.error(f"Error fetching album cover: {e}")
             return SpotifyResponse.ERROR, None
 
     def check_refresh_token(self):
         current_time = int(time.time() * 1000)
         if current_time - self.last_refresh_time > SPOTIFY_TOKEN_REFRESH_RATE:
-            print("refreshing spotify token after 30min")
+            logger.info("refreshing spotify token after 30min")
             self.refresh_token()
 
     def update_current_song(self, src: Song):

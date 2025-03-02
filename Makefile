@@ -15,7 +15,7 @@ update:
 	make start
 
 logs:
-	journalctl -u $(SERVICE_NAME) -f
+	journalctl -u $(SERVICE_NAME) -f -b --output=cat -xe
 
 fonts-img:
 	python3 fonts-img.py

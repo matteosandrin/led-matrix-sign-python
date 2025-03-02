@@ -10,6 +10,9 @@ import requests
 from pprint import pprint
 from display import get_image_with_color
 import numpy as np
+import logging
+
+logger = logging.getLogger("led-matrix-sign")
 
 
 class Widget(ABC):
@@ -46,7 +49,7 @@ class Widget(ABC):
             try:
                 self.update()
             except Exception as e:
-                print(f"Error in widget {self.__class__.__name__}: {e}")
+                logger.error(f"Error in widget {self.__class__.__name__}: {e}")
             time.sleep(self.refresh_rate)
 
     def get_render_data(self) -> dict:
@@ -101,11 +104,11 @@ class WeatherWidget(Widget):
             description = response.json()["city"] + \
                 ", " + response.json()["region"] + \
                 ", " + response.json()["country_name"]
-            print(f"Weather location: ({lat}, {lon}) {description}")
-            print(f"Weather timezone: {tz}")
+            logger.info(f"Weather location: ({lat}, {lon}) {description}")
+            logger.info(f"Weather timezone: {tz}")
             return (lat, lon, tz)
         except Exception as err:
-            print(f'Error fetching location data: {err}')
+            logger.error(f'Error fetching location data: {err}')
             return None
 
     def get_weather(self):
@@ -114,7 +117,7 @@ class WeatherWidget(Widget):
         else:
             # New York City
             lat, lon, tz = 40.71427, -74.00597, "America/New_York"
-            print("WARNING: No location found, using default location (New York City)")
+            logger.warning("No location found, using default location (New York City)")
         params = {
             "latitude": lat,
             "longitude": lon,

@@ -8,6 +8,7 @@ import queue
 import threading
 import time
 import os
+import logging
 from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect, get_next_mode
 from common.broadcaster import StatusBroadcaster
 from common.button import Button
@@ -33,6 +34,28 @@ mode_broadcaster = StatusBroadcaster()
 mbta_client = mbta.MBTA(api_key=config.MBTA_API_KEY)
 mta_client = mta.MTA(config.MTA_API_KEY)
 
+def setup_logging():
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter(
+        '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
+        datefmt="%Y-%m-%dT%H:%M:%S%z")
+    
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    
+    if not config.EMULATE_RGB_MATRIX:
+        try:
+            from systemd import journal
+            journal_handler = journal.JournalHandler()
+            journal_handler.setFormatter(formatter)
+            logger.addHandler(journal_handler)
+        except ImportError:
+            logging.warning("Could not import systemd journal handler - logging to console only")
+
+setup_logging()
+logger = logging.getLogger("led-matrix-sign")
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -54,7 +77,7 @@ def ui_task():
                     "type": RenderMessageType.CLEAR,
                 })
                 mode_broadcaster.set_status(next_mode)
-                print(f"Mode changed to: {next_mode}")
+                logger.info(f"Mode changed to: {next_mode}")
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
                 new_mode = message.get("mode")
@@ -63,12 +86,12 @@ def ui_task():
                         "type": RenderMessageType.CLEAR
                     })
                     mode_broadcaster.set_status(new_mode)
-                    print(f"Mode changed to: {new_mode}")
+                    logger.info(f"Mode changed to: {new_mode}")
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 new_station = message.get("station")
                 if mbta.station_by_id(new_station) is not None:
                     mbta_client.set_station(new_station)
-                    print(f"Station changed to: {new_station}")
+                    logger.info(f"Station changed to: {new_station}")
                     render_queue.put({
                         "type": RenderMessageType.CLEAR
                     })
@@ -87,7 +110,7 @@ def ui_task():
             elif message["type"] == UIMessageType.MTA_CHANGE_STATION:
                 new_station = message.get("station")
                 mta_client.set_current_station(new_station)
-                print(f"Station changed to: {new_station}")
+                logger.info(f"Station changed to: {new_station}")
                 render_queue.put({
                     "type": RenderMessageType.CLEAR
                 })
@@ -108,7 +131,7 @@ def ui_task():
                 })
             elif message["type"] == UIMessageType.SHUTDOWN:
                 if not config.EMULATE_RGB_MATRIX:
-                    print("Shutting down")
+                    logger.info("Shutting down")
                     render_queue.put({
                         "type": RenderMessageType.CLEAR
                     })
@@ -119,7 +142,7 @@ def ui_task():
                     time.sleep(1)
                     os.system("sudo shutdown -h now")
                 else:
-                    print("Not shutting down (emulated)")
+                    logger.info("Not shutting down (emulated)")
 
         except queue.Empty:
             time.sleep(REFRESH_RATE)
@@ -164,13 +187,13 @@ def mbta_provider_task():
                 "type": RenderMessageType.MBTA,
                 "content": [status, predictions]
             })
-            print(status)
-            print(predictions)
+            logger.info(status)
+            logger.info(predictions)
             if status == mbta.PredictionStatus.OK:
                 arr_prediction = mbta_client.find_prediction_with_arriving_banner(
                     predictions)
                 if arr_prediction is not None:
-                    print("showing arriving banner")
+                    logger.info("showing arriving banner")
                     render_queue.put(
                         {"type": RenderMessageType.MBTA_BANNER,
                          "content": mbta_client.get_arriving_banner(
@@ -213,7 +236,7 @@ def mta_provider_task():
                             })
                             mta_client.last_second_train = second_train
                 else:
-                    print("No predictions")
+                    logger.info("No predictions")
                 if time.time() - last_alert_time > 60 * 5:
                     last_alert_time = time.time()
                     render_queue.put({
@@ -233,13 +256,13 @@ def music_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MUSIC:
             status, currently_playing = spotify.get_currently_playing()
-            print(status)
-            print(currently_playing)
+            logger.info(status)
+            logger.info(currently_playing)
             if status == SpotifyResponse.OK_NEW_SONG:
                 img_status, img = spotify.get_album_cover(currently_playing)
                 if img_status == SpotifyResponse.OK:
                     currently_playing.cover.data = img
-                    print(
+                    logger.info(
                         f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
                 spotify.update_current_song(currently_playing)
             elif status == SpotifyResponse.OK:
@@ -279,21 +302,21 @@ def widget_provider_task():
         time.sleep(REFRESH_RATE)
 
 def wait_for_network_connection():
-    print("Waiting for network connection...")
+    logger.info("Waiting for network connection...")
     connected = False
     start_time = time.time()
     timeout = 30
     
     while not connected:
         if time.time() - start_time > timeout:
-            print("Network connection timed out.")
+            logger.error("Network connection timed out.")
             return False
         try:
             socket.create_connection(("8.8.8.8", 53), timeout=5)
             connected = True
-            print("Network connection established.")
+            logger.info("Network connection established.")
         except (socket.timeout, socket.error):
-            print("Network not available yet, retrying in 5 seconds...")
+            logger.warning("Network not available yet, retrying in 5 seconds...")
             time.sleep(1)
     return True
 
@@ -323,7 +346,7 @@ def main():
         initial_mode = config.DEFAULT_SIGN_MODE
     if args.mode:
         initial_mode = SignMode[args.mode]
-    print(f"Initial mode: {initial_mode}")
+    logger.info(f"Initial mode: {initial_mode}")
     mode_broadcaster.set_status(initial_mode)
 
     button_handler = None
