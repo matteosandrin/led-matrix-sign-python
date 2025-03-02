@@ -31,6 +31,9 @@ render_queue = queue.Queue(maxsize=32)
 
 mode_broadcaster = StatusBroadcaster()
 
+system_threads = []
+user_threads = []
+
 mbta_client = mbta.MBTA(api_key=config.MBTA_API_KEY)
 mta_client = mta.MTA(config.MTA_API_KEY)
 
@@ -130,6 +133,8 @@ def ui_task():
                     "content": message.get("content")
                 })
             elif message["type"] == UIMessageType.SHUTDOWN:
+                for thread in user_threads:
+                    thread.join()
                 if not config.EMULATE_RGB_MATRIX:
                     logger.info("Shutting down")
                     render_queue.put({
