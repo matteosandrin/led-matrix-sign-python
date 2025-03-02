@@ -133,8 +133,7 @@ def ui_task():
                     "content": message.get("content")
                 })
             elif message["type"] == UIMessageType.SHUTDOWN:
-                for thread in user_threads:
-                    thread.join()
+                mode_broadcaster.set_status(SignMode.TEST)
                 if not config.EMULATE_RGB_MATRIX:
                     logger.info("Shutting down")
                     render_queue.put({
