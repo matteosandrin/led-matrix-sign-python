@@ -1,7 +1,6 @@
 [Unit]
 Description=LED Matrix Sign Service
-Wants=network-online.target
-After=network.target network-online.target time-sync.target
+After=network.target
 
 [Service]
 Type=simple
@@ -9,8 +8,8 @@ User=root
 ExecStart=/usr/bin/python3 /home/matteo/led-matrix-sign-python/main.py 
 Restart=on-failure
 RestartSec=5
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=led-matrix-sign
 AmbientCapabilities=CAP_SYS_BOOT
 

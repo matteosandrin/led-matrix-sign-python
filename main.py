@@ -1,4 +1,5 @@
 import random
+import socket
 import config
 import argparse
 import providers.mbta as mbta
@@ -277,6 +278,42 @@ def widget_provider_task():
                 widget_manager.stop()
         time.sleep(REFRESH_RATE)
 
+def wait_for_network_connection():
+    print("Waiting for network connection...")
+    connected = False
+    start_time = time.time()
+    timeout = 60
+    
+    while not connected:
+        if time.time() - start_time > timeout:
+            print("Network connection timed out.")
+            return False
+        try:
+            socket.create_connection(("8.8.8.8", 53), timeout=5)
+            connected = True
+            print("Network connection established.")
+        except (socket.timeout, socket.error):
+            print("Network not available yet, retrying in 5 seconds...")
+            time.sleep(1)
+    return True
+
+def setup_network():
+    render_queue.put({
+        "type": RenderMessageType.TEXT,
+        "content": "Waiting for network..."
+    })
+
+    if wait_for_network_connection():
+        render_queue.put({
+            "type": RenderMessageType.TEXT,
+            "content": "Network connection successful."
+        })
+        time.sleep(1)
+    else:
+        render_queue.put({
+            "type": RenderMessageType.TEXT,
+            "content": "Network connection timed out."
+        })
 
 def main():
     args = parse_args()
@@ -297,17 +334,22 @@ def main():
                 {"type": UIMessageType.SHUTDOWN}),
             long_press_duration=3.0)
 
-    threads = [
+    system_threads = [
         threading.Thread(target=ui_task, daemon=True),
         threading.Thread(target=render_task, daemon=True),
-        threading.Thread(target=web_server_task, daemon=True),
+        threading.Thread(target=web_server_task, daemon=True)
+    ]
+    user_threads = [
         threading.Thread(target=clock_provider_task, daemon=True),
         threading.Thread(target=mbta_provider_task, daemon=True),
         threading.Thread(target=music_provider_task, daemon=True),
         threading.Thread(target=widget_provider_task, daemon=True),
-        threading.Thread(target=mta_provider_task, daemon=True)
+        threading.Thread(target=mta_provider_task, daemon=True),
     ]
-    for thread in threads:
+    for thread in system_threads:
+        thread.start()
+    setup_network()
+    for thread in user_threads:
         thread.start()
 
     try:
