@@ -80,10 +80,10 @@ route_images: Dict[str, Dict] = {
     #     "img" : Image.open(image_dir / 'mta_L.png'),
     #     "color" : "#5c5b5b"
     # },
-    # "GS" : {
-    #     "img" : Image.open(image_dir / 'mta_GS.png'),
-    #     "color" : "#3c3e42"
-    # },
+    "GS" : {
+        "img" : Image.open(image_dir / 'mta_GS.png'),
+        "color" : "#3c3e42"
+    },
     # "H" : {
     #     "img" : Image.open(image_dir / 'mta_H.png'),
     #     "color" : "#3c3e42"
@@ -108,10 +108,10 @@ route_images: Dict[str, Dict] = {
         "img" : Image.open(image_dir / 'mta_W.png'),
         "color" : "#FCBB0A"
     },
-    # "SI" : {
-    #     "img" : Image.open(image_dir / 'mta_SI.png'),
-    #     "color" : "#0039A6"
-    # },
+    "SI" : {
+        "img" : Image.open(image_dir / 'mta_SI.png'),
+        "color" : "#0039A6"
+    },
 }
 
 
