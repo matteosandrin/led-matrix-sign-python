@@ -327,11 +327,6 @@ def setup_network():
     })
 
     if wait_for_network_connection():
-        render_queue.put({
-            "type": RenderMessageType.TEXT,
-            "content": "Network connection successful."
-        })
-        time.sleep(1)
         return True
     else:
         render_queue.put({
@@ -339,6 +334,7 @@ def setup_network():
             "content": "Network connection timed out."
         })
         return False
+
 def main():
     args = parse_args()
     initial_mode = DEFAULT_SIGN_MODE
@@ -372,8 +368,7 @@ def main():
     ]
     for thread in system_threads:
         thread.start()
-    is_connected = setup_network()
-    if not is_connected:
+    if not setup_network():
         mode_broadcaster.set_status(SignMode.CLOCK)
     for thread in user_threads:
         thread.start()
