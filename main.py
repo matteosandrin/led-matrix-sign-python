@@ -9,7 +9,7 @@ import threading
 import time
 import os
 import logging
-from common import SignMode, UIMessageType, RenderMessageType, ClockType, Rect, get_next_mode
+from common import SignMode, UIMessageType, ClockType, get_next_mode
 from common.broadcaster import StatusBroadcaster
 from common.button import Button
 from datetime import datetime
@@ -19,6 +19,7 @@ from providers.music import Spotify
 from providers.music.types import SpotifyResponse
 from providers.widget import WidgetManager, ClockWidget, WeatherWidget
 from server import Server
+from display.types import RenderMessage, Rect
 
 # Constants
 BUTTON_PIN = 25
@@ -77,18 +78,14 @@ def ui_task():
 
             if message["type"] == UIMessageType.MODE_SHIFT:
                 next_mode = get_next_mode(mode_broadcaster.get_status())
-                render_queue.put({
-                    "type": RenderMessageType.CLEAR,
-                })
+                render_queue.put(RenderMessage.Clear())
                 mode_broadcaster.set_status(next_mode)
                 logger.info(f"Mode changed to: {next_mode}")
             elif message["type"] == UIMessageType.MODE_CHANGE:
                 # Direct mode change
                 new_mode = message.get("mode")
                 if new_mode in SignMode:
-                    render_queue.put({
-                        "type": RenderMessageType.CLEAR
-                    })
+                    render_queue.put(RenderMessage.Clear())
                     mode_broadcaster.set_status(new_mode)
                     logger.info(f"Mode changed to: {new_mode}")
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
@@ -96,54 +93,28 @@ def ui_task():
                 if mbta.station_by_id(new_station) is not None:
                     mbta_client.set_station(new_station)
                     logger.info(f"Station changed to: {new_station}")
-                    render_queue.put({
-                        "type": RenderMessageType.CLEAR
-                    })
-                    render_queue.put({
-                        "type": RenderMessageType.TEXT,
-                        "content": mbta.train_station_to_str(new_station)
-                    })
+                    render_queue.put(RenderMessage.Clear())
+                    render_queue.put(RenderMessage.Text(text=mbta.train_station_to_str(new_station)))
             elif message["type"] == UIMessageType.MBTA_TEST_BANNER:
-                render_queue.put({
-                    "type": RenderMessageType.CLEAR
-                })
-                render_queue.put({
-                    "type": RenderMessageType.MBTA_BANNER,
-                    "content": ["Alewife train", "is now arriving."]
-                })
+                render_queue.put(RenderMessage.Clear())
+                render_queue.put(RenderMessage.MBTABanner(lines=["Alewife train", "is now arriving."]))
             elif message["type"] == UIMessageType.MTA_CHANGE_STATION:
                 new_station = message.get("station")
                 mta_client.set_current_station(new_station)
                 logger.info(f"Station changed to: {new_station}")
-                render_queue.put({
-                    "type": RenderMessageType.CLEAR
-                })
-                render_queue.put({
-                    "type": RenderMessageType.TEXT,
-                    "content": mta.train_station_to_str(new_station)
-                })
+                render_queue.put(RenderMessage.Clear())
+                render_queue.put(RenderMessage.Text(text=mta.train_station_to_str(new_station)))
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
-                render_queue.put({
-                    "type": RenderMessageType.TEXT,
-                    "content": new_message if new_message is not None else ""
-                })
+                render_queue.put(RenderMessage.Text(text=new_message if new_message is not None else ""))
             elif message["type"] == UIMessageType.MTA_ALERT:
-                render_queue.put({
-                    "type": RenderMessageType.MTA_ALERT,
-                    "content": message.get("content")
-                })
+                render_queue.put(RenderMessage.MTAAlert(text=message.get("content")))
             elif message["type"] == UIMessageType.SHUTDOWN:
                 mode_broadcaster.set_status(SignMode.TEST)
                 if not config.EMULATE_RGB_MATRIX:
                     logger.info("Shutting down")
-                    render_queue.put({
-                        "type": RenderMessageType.CLEAR
-                    })
-                    render_queue.put({
-                        "type": RenderMessageType.TEXT,
-                        "content": "Shutting down..."
-                    })
+                    render_queue.put(RenderMessage.Clear())
+                    render_queue.put(RenderMessage.Text(text="Shutting down..."))
                     time.sleep(1)
                     os.system("sudo shutdown -h now")
                 else:
@@ -174,13 +145,10 @@ def clock_provider_task():
     while True:
         current_mode = mode_broadcaster.get_status()
         if current_mode == SignMode.CLOCK:
-            render_queue.put({
-                "type": RenderMessageType.CLOCK,
-                "content": {
-                    "type": ClockType.MTA,
-                    "time": datetime.now()
-                }
-            })
+            render_queue.put(RenderMessage.Clock(
+                clock_type=ClockType.MTA,
+                time=datetime.now()
+            ))
         time.sleep(REFRESH_RATE)
 
 
@@ -188,21 +156,19 @@ def mbta_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MBTA:
             status, predictions = mbta_client.get_predictions_both_directions()
-            render_queue.put({
-                "type": RenderMessageType.MBTA,
-                "content": [status, predictions]
-            })
+            render_queue.put(RenderMessage.MBTA(
+                status=status,
+                predictions=predictions
+            ))
             logger.info(status)
             logger.info(predictions)
             if status == mbta.PredictionStatus.OK:
-                arr_prediction = mbta_client.find_prediction_with_arriving_banner(
-                    predictions)
+                arr_prediction = mbta_client.find_prediction_with_arriving_banner(predictions)
                 if arr_prediction is not None:
                     logger.info("showing arriving banner")
-                    render_queue.put(
-                        {"type": RenderMessageType.MBTA_BANNER,
-                         "content": mbta_client.get_arriving_banner(
-                             arr_prediction)})
+                    render_queue.put(RenderMessage.MBTABanner(
+                        lines=mbta_client.get_arriving_banner(arr_prediction)
+                    ))
                     # in total this banner is displayed for 3+5 seconds
                     time.sleep(3)
                 mbta_client.update_latest_predictions(predictions, [0, 1])
@@ -226,28 +192,21 @@ def mta_provider_task():
                 if predictions is not None:
                     if len(predictions) < 2:
                         mta.print_predictions(predictions)
-                        render_queue.put({
-                            "type": RenderMessageType.MTA,
-                            "content": predictions
-                        })
+                        render_queue.put(RenderMessage.MTA(predictions=predictions))
                     else:
                         second_train = mta.get_second_train(
                             predictions, mta_client.last_second_train)
                         if second_train is not None:
                             mta.print_predictions([predictions[0], second_train])
-                            render_queue.put({
-                                "type": RenderMessageType.MTA,
-                                "content": [predictions[0], second_train]
-                            })
+                            render_queue.put(RenderMessage.MTA(
+                                predictions=[predictions[0], second_train]
+                            ))
                             mta_client.last_second_train = second_train
                 else:
                     logger.info("No predictions")
                 if time.time() - last_alert_time > 60 * 5:
                     last_alert_time = time.time()
-                    render_queue.put({
-                        "type": RenderMessageType.MTA_ALERT,
-                        "content": alert_messages.next()
-                    })
+                    render_queue.put(RenderMessage.MTAAlert(text=alert_messages.next()))
             time.sleep(5)
         else:
             last_alert_time = time.time()
@@ -276,10 +235,10 @@ def music_provider_task():
                 currently_playing = spotify.get_current_song()
             else:
                 spotify.clear_current_song()
-            render_queue.put({
-                "type": RenderMessageType.MUSIC,
-                "content": (status, currently_playing)
-            })
+            render_queue.put(RenderMessage.Music(
+                status=status,
+                song=currently_playing
+            ))
             time.sleep(1)
         else:
             if spotify.get_current_song() is not None:
@@ -326,18 +285,12 @@ def wait_for_network_connection():
     return True
 
 def setup_network():
-    render_queue.put({
-        "type": RenderMessageType.TEXT,
-        "content": "Waiting for network..."
-    })
+    render_queue.put(RenderMessage.Text(text="Waiting for network..."))
 
     if wait_for_network_connection():
         return True
     else:
-        render_queue.put({
-            "type": RenderMessageType.TEXT,
-            "content": "Network connection timed out."
-        })
+        render_queue.put(RenderMessage.Text(text="Network connection timed out."))
         return False
 
 def main():

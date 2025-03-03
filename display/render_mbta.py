@@ -1,17 +1,17 @@
 import providers.mbta as mbta
 from typing import Tuple, List
 from PIL import Image
-from common import Colors, Fonts, Rect
+from common import Colors, Fonts
 from .animation import MBTABannerAnimation, MoveAnimation
+from .types import RenderMessage, Rect
 
 
-def render_mbta_content(
-        display, content: Tuple[mbta.PredictionStatus, List[mbta.Prediction]]):
+def render_mbta_content(display, message: RenderMessage.MBTA):
     # Create new image with black background
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT), Colors.BLACK)
     draw = display._get_draw_context_antialiased(image)
-    status, predictions = content
+    status, predictions = message.status, message.predictions
 
     if status in [mbta.PredictionStatus.OK,
                   mbta.PredictionStatus.ERROR_SHOW_CACHED,
@@ -36,8 +36,8 @@ def render_mbta_content(
     display._update_display(image)
 
 
-def render_mbta_banner_content(display, lines: [str]):
-    lines = lines[:2]
+def render_mbta_banner_content(display, message: RenderMessage.MBTABanner):
+    lines = message.lines[:2]
     animations = {
         "mbta_banner": MBTABannerAnimation(
             Rect(0, 32, display.SCREEN_WIDTH, display.SCREEN_HEIGHT),

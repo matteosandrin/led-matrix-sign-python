@@ -4,11 +4,12 @@ import time
 import queue
 from typing import Any, Optional
 from datetime import datetime
-from common import RenderMessageType, Rect, Fonts, Colors, Images
+from common import Fonts, Colors, Images
 from PIL import Image, ImageDraw
 import requests
 from pprint import pprint
 from display import get_image_with_color
+from display.types import RenderMessage, Rect
 import numpy as np
 import logging
 
@@ -55,10 +56,10 @@ class Widget(ABC):
     def get_render_data(self) -> dict:
         """Get the widget's current render data."""
         with self._image_lock:
-            return {
-                "type": RenderMessageType.FRAME,
-                "content": (self.bbox, self._image.copy())
-            }
+            return RenderMessage.Frame(
+                bbox=self.bbox,
+                frame=self._image.copy()
+            )
 
 
 class ClockWidget(Widget):
@@ -226,7 +227,5 @@ class WidgetManager:
         while self.active:
             for widget in self.widgets:
                 self.render_queue.put(widget.get_render_data())
-            self.render_queue.put({
-                "type": RenderMessageType.SWAP
-            })
+            self.render_queue.put(RenderMessage.Swap())
             time.sleep(0.1)  # Throttle updates

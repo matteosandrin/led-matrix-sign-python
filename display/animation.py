@@ -2,10 +2,11 @@ import math
 import threading
 import time
 from abc import ABC, abstractmethod
-from common import RenderMessageType, Fonts, Colors, Rect
+from common import Fonts, Colors
 from PIL import Image, ImageDraw, ImageFont
 from queue import Queue
 from typing import Dict, Tuple
+from .types import Rect, RenderMessage
 
 ANIMATION_REFRESH_RATE = 1 / 60.0  # 60 fps
 
@@ -278,18 +279,14 @@ class AnimationManager:
                                 continue
                             frame, is_complete = animation.get_next_frame()
                             if frame is not None:
-                                self.render_queue.put({
-                                    "type": RenderMessageType.FRAME,
-                                    "content": frame
-                                })
+                                bbox, image = frame
+                                self.render_queue.put(RenderMessage.Frame(bbox=bbox, frame=image))
                                 update_count += 1
                             if is_complete:
                                 completed_keys.append(key)
                         group.last_update = frame_count
                 if update_count > 0:
-                    self.render_queue.put({
-                        "type": RenderMessageType.SWAP
-                    })
+                    self.render_queue.put(RenderMessage.Swap())
 
                 for key in completed_keys:
                     self.remove_animation(key)

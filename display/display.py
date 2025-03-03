@@ -10,7 +10,8 @@ from .animation import AnimationManager
 from .render_mbta import render_mbta_content, render_mbta_banner_content
 from .render_mta import render_mta_content, render_mta_alert_content
 from .render_music import render_music_content
-from common import Fonts, Colors, Rect, ClockType, RenderMessageType
+from .types import RenderMessage, BaseRenderMessage, Rect
+from common import Fonts, Colors, ClockType
 from PIL import Image, ImageDraw, ImageFont
 from providers.music.types import Song, SpotifyResponse
 from queue import Queue
@@ -50,28 +51,27 @@ class Display:
         self.last_mta_image = None
         self.matrix_lock = threading.Lock()
 
-    def render(self, message):
-        content = message.get("content")
-        if message.get("type") == RenderMessageType.CLEAR:
+    def render(self, message: BaseRenderMessage):
+        if isinstance(message, RenderMessage.Clear):
             self.clear()
-        if message.get("type") == RenderMessageType.FRAME:
-            self.render_frame_content(content)
-        if message.get("type") == RenderMessageType.SWAP:
+        elif isinstance(message, RenderMessage.Frame):
+            self.render_frame_content(message)
+        elif isinstance(message, RenderMessage.Swap):
             self.swap_canvas()
-        if message.get("type") == RenderMessageType.TEXT:
-            self.render_text_content(content)
-        if message.get("type") == RenderMessageType.CLOCK:
-            self.render_clock_content(content)
-        if message.get("type") == RenderMessageType.MBTA:
-            render_mbta_content(self, content)
-        if message.get("type") == RenderMessageType.MBTA_BANNER:
-            render_mbta_banner_content(self, content)
-        if message.get("type") == RenderMessageType.MTA:
-            render_mta_content(self, content)
-        if message.get("type") == RenderMessageType.MTA_ALERT:
-            render_mta_alert_content(self, content)
-        if message.get("type") == RenderMessageType.MUSIC:
-            render_music_content(self, content)
+        elif isinstance(message, RenderMessage.Text):
+            self.render_text_content(message)
+        elif isinstance(message, RenderMessage.Clock):
+            self.render_clock_content(message)
+        elif isinstance(message, RenderMessage.MBTA):
+            render_mbta_content(self, message)
+        elif isinstance(message, RenderMessage.MBTABanner):
+            render_mbta_banner_content(self, message)
+        elif isinstance(message, RenderMessage.MTA):
+            render_mta_content(self, message)
+        elif isinstance(message, RenderMessage.MTAAlert):
+            render_mta_alert_content(self, message)
+        elif isinstance(message, RenderMessage.Music):
+            render_music_content(self, message)
 
     def clear(self):
         self.animation_manager.clear()
@@ -82,25 +82,22 @@ class Display:
         with self.matrix_lock:
             self.matrix.SwapOnVSync(self.canvas)
 
-    def render_frame_content(self, content: Tuple[Rect, Any]):
-        bbox, frame = content
-        self.canvas.SetImage(frame, int(bbox.x), int(bbox.y))
+    def render_frame_content(self, message: RenderMessage.Frame):
+        self.canvas.SetImage(message.frame, int(message.bbox.x), int(message.bbox.y))
 
-    def render_text_content(self, text: str):
+    def render_text_content(self, message: RenderMessage.Text):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
         draw = self._get_draw_context_antialiased(image)
-        draw.text((0, 0), text, font=self.default_font, fill=Colors.WHITE)
+        draw.text((0, 0), message.text, font=self.default_font, fill=Colors.WHITE)
         self._update_display(image)
 
-    def render_clock_content(self, content):
-        clock_type = content["type"]
-        clock_time = content["time"]
+    def render_clock_content(self, message: RenderMessage.Clock):
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
-        if clock_type == ClockType.MTA:
+        if message.clock_type == ClockType.MTA:
             lines = [
-                clock_time.strftime("%a, %b %-d, %Y"),
-                clock_time.strftime("%-I:%M:%S %p")
+                message.time.strftime("%a, %b %-d, %Y"),
+                message.time.strftime("%-I:%M:%S %p")
             ]
             for i, line in enumerate(lines):
                 draw.text((SCREEN_WIDTH / 2, 2 + 16 * i), line,

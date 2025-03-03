@@ -2,12 +2,13 @@ from typing import Tuple
 from PIL import Image
 from providers.music.types import SpotifyResponse, Song
 from io import BytesIO
-from common import Colors, Fonts, Rect
+from common import Colors, Fonts
 from .animation import TextScrollAnimation
+from .types import RenderMessage, Rect
 
 
-def render_music_content(display, content: Tuple[SpotifyResponse, Song]):
-    status, song = content
+def render_music_content(display, message: RenderMessage.Music):
+    status, song = message.status, message.song
 
     if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED,
                   SpotifyResponse.OK_NEW_SONG]:

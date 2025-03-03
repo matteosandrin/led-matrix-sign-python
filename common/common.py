@@ -29,37 +29,11 @@ class UIMessageType(Enum):
     MTA_ALERT = 6
     SHUTDOWN = 7
 
-class RenderMessageType(Enum):
-    CLEAR = 0
-    FRAME = 1
-    SWAP = 2
-    TEXT = 3
-    CLOCK = 4
-    MBTA = 5
-    MBTA_BANNER = 6
-    MTA = 7
-    MTA_ALERT = 8
-    MUSIC = 9
-
 
 class ClockType(Enum):
     DEFAULT = 0
     MBTA = 1
     MTA = 2
-
-
-class Rect:
-    def __init__(self, x: int, y: int, w: int, h: int):
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
-
-    def to_tuple(self):
-        return (self.x, self.y, self.w, self.h)
-
-    def to_crop_tuple(self):
-        return (self.x, self.y, self.x + self.w, self.y + self.h)
 
 
 class Fonts:

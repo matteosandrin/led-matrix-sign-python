@@ -2,22 +2,23 @@ import providers.mta as mta
 import threading
 from .animation import MTAAlertAnimation, MTABlinkAnimation
 from .utils import get_image_with_color
-from common import Colors, Fonts, Rect
+from common import Colors, Fonts
 from datetime import datetime
 from PIL import Image, ImageFont
 from typing import List
+from .types import RenderMessage, Rect
 
 
-def render_mta_content(display, content: List[mta.TrainTime]):
+def render_mta_content(display, message: RenderMessage.MTA):
     mta_render_thread = threading.Thread(
         target=_render_mta_content_task,
-        args=(display, content)
+        args=(display, message)
     )
     mta_render_thread.start()
 
 
-def _render_mta_content_task(display, content: List[mta.TrainTime]):
-    if content is None or len(content) == 0:
+def _render_mta_content_task(display, message: RenderMessage.MTA):
+    if message.predictions is None or len(message.predictions) == 0:
         render_mta_empty(display)
         return
     image = Image.new(
@@ -29,7 +30,7 @@ def _render_mta_content_task(display, content: List[mta.TrainTime]):
         "mta_alert")
     is_blink_running = display.animation_manager.is_animation_running(
         "mta_blink")
-    for i, train in enumerate(content):
+    for i, train in enumerate(message.predictions):
         minutes = int(round(train.time / 60.0))
         text_color = Colors.MTA_GREEN
         if train.time <= 30 and i == 0:
@@ -80,12 +81,12 @@ def _render_mta_content_task(display, content: List[mta.TrainTime]):
     display._update_display(image, x, y)
 
 
-def render_mta_alert_content(display, content: str):
+def render_mta_alert_content(display, message: RenderMessage.MTAAlert):
     half_screen_h = int(display.SCREEN_HEIGHT / 2)
     bbox = Rect(0, half_screen_h, display.SCREEN_WIDTH, half_screen_h)
     last_frame = display.last_mta_image.copy().crop(bbox.to_crop_tuple())
     alert_animation = MTAAlertAnimation(
-        text=content, bbox=bbox, last_frame=last_frame)
+        text=message.text, bbox=bbox, last_frame=last_frame)
     display.animation_manager.add_animation("mta_alert", alert_animation)
 
 
