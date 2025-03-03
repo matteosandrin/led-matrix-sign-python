@@ -12,7 +12,7 @@ from .render_mta import render_mta_content, render_mta_alert_content
 from .render_music import render_music_content
 from common import Fonts, Colors, Rect, ClockType, RenderMessageType
 from PIL import Image, ImageDraw, ImageFont
-from providers.music import Song, SpotifyResponse
+from providers.music.types import Song, SpotifyResponse
 from queue import Queue
 from typing import List, Tuple, Any
 import threading

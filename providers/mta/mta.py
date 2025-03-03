@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pprint import pprint
 from typing import Dict, List, Optional, TypedDict
+from .types import TrainTime, Station
 import logging
 
 logger = logging.getLogger("led-matrix-sign")
@@ -17,29 +18,6 @@ DEFAULT_MTA_STATION = "121"  # 86 St 1,2,3 station
 if hasattr(config, 'DEFAULT_MTA_STATION'):
     DEFAULT_MTA_STATION = config.DEFAULT_MTA_STATION
 MAX_NUM_PREDICTIONS = 6
-
-
-@dataclass
-class TrainTime:
-    route_id: str
-    direction_id: str
-    long_name: str
-    stop_headsign: str
-    time: int
-    trip_id: Optional[str]
-    is_express: bool
-    display_order: int
-
-
-@dataclass
-class Station:
-    stop_id: str
-    stop_name: str
-    latitude: float
-    longitude: float
-    north_direction_label: str
-    south_direction_label: str
-    routes: List[str]
 
 
 station_data = json.load(

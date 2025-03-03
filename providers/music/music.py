@@ -4,39 +4,13 @@ import time
 import logging
 from typing import Optional, Dict, Any
 import requests
-from dataclasses import dataclass, field
+from .types import AlbumCover, Song, SpotifyResponse
 
 logger = logging.getLogger("led-matrix-sign")
 
 SPOTIFY_REFRESH_TOKEN_URL = "https://accounts.spotify.com/api/token"
 SPOTIFY_CURRENTLY_PLAYING_URL = "https://api.spotify.com/v1/me/player/currently-playing"
 SPOTIFY_TOKEN_REFRESH_RATE = 30 * 60 * 1000  # 30 minutes in milliseconds
-
-
-@dataclass
-class AlbumCover:
-    url: str = ""
-    width: int = 0
-    height: int = 0
-    data: Optional[bytes] = None
-
-
-@dataclass
-class Song:
-    artist: str = ""
-    title: str = ""
-    duration_ms: int = 0
-    progress_ms: int = 0
-    timestamp_ms: int = 0
-    cover: AlbumCover = field(default_factory=AlbumCover)
-
-
-class SpotifyResponse:
-    OK = "ok"
-    ERROR = "error"
-    EMPTY = "empty"
-    OK_SHOW_CACHED = "ok_show_cached"
-    OK_NEW_SONG = "ok_new_song"
 
 
 class Spotify:

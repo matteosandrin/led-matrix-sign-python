@@ -15,7 +15,8 @@ from common.button import Button
 from datetime import datetime
 from display import Display
 from pprint import pprint
-from providers.music import Spotify, SpotifyResponse
+from providers.music import Spotify
+from providers.music.types import SpotifyResponse
 from providers.widget import WidgetManager, ClockWidget, WeatherWidget
 from server import Server
 

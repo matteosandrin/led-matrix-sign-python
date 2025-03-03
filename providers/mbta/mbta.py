@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import requests
 from common.broadcaster import StatusBroadcaster
 from typing import List, Dict, Optional
+from .types import Prediction, PredictionStatus, Station
 import logging
 
 logger = logging.getLogger("led-matrix-sign")
@@ -20,24 +21,6 @@ MBTA_MAX_ERROR_COUNT = 3
 MBTA_PREDICTIONS_URL = "https://api-v3.mbta.com/predictions"
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
-
-@dataclass
-class Prediction:
-    label: str = ""
-    value: str = ""
-
-
-class PredictionStatus(Enum):
-    OK = auto()
-    ERROR = auto()
-    ERROR_SHOW_CACHED = auto()
-    ERROR_EMPTY = auto()
-
-@dataclass
-class Station:
-    stop_id: str
-    stop_name: str
-    routes: List[str]
 
 station_data = json.load(
     open(os.path.join(CURRENT_FOLDER, "stations.json")))

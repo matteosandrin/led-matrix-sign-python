@@ -1,6 +1,6 @@
 from typing import Tuple
 from PIL import Image
-from providers.music import SpotifyResponse, Song
+from providers.music.types import SpotifyResponse, Song
 from io import BytesIO
 from common import Colors, Fonts, Rect
 from .animation import TextScrollAnimation
