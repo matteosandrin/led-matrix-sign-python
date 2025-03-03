@@ -164,7 +164,7 @@ class MTA():
                     route_id = route_entry['route']['id'].replace(
                         'MTASBWY:', '')
                     for train in route_entry['times']:
-                        wait_time = train['realtimeArrival'] - \
+                        wait_time = train['realtimeDeparture'] - \
                             (train['timestamp'] - train['serviceDay'])
                         if wait_time >= 0:
                             train_times.append(
