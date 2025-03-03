@@ -7,12 +7,14 @@ from datetime import datetime
 from PIL import Image, ImageFont
 from typing import List
 
+
 def render_mta_content(display, content: List[mta.TrainTime]):
     mta_render_thread = threading.Thread(
         target=_render_mta_content_task,
         args=(display, content)
     )
     mta_render_thread.start()
+
 
 def _render_mta_content_task(display, content: List[mta.TrainTime]):
     if content is None or len(content) == 0:
@@ -23,8 +25,10 @@ def _render_mta_content_task(display, content: List[mta.TrainTime]):
         Colors.BLACK)
     draw = display._get_draw_context_antialiased(image)
     should_run_blink_animation = False
-    is_alert_running = display.animation_manager.is_animation_running("mta_alert")
-    is_blink_running = display.animation_manager.is_animation_running("mta_blink")
+    is_alert_running = display.animation_manager.is_animation_running(
+        "mta_alert")
+    is_blink_running = display.animation_manager.is_animation_running(
+        "mta_blink")
     for i, train in enumerate(content):
         minutes = int(round(train.time / 60.0))
         text_color = Colors.MTA_GREEN
@@ -80,8 +84,10 @@ def render_mta_alert_content(display, content: str):
     half_screen_h = int(display.SCREEN_HEIGHT / 2)
     bbox = Rect(0, half_screen_h, display.SCREEN_WIDTH, half_screen_h)
     last_frame = display.last_mta_image.copy().crop(bbox.to_crop_tuple())
-    alert_animation = MTAAlertAnimation(text=content, bbox=bbox, last_frame=last_frame)
+    alert_animation = MTAAlertAnimation(
+        text=content, bbox=bbox, last_frame=last_frame)
     display.animation_manager.add_animation("mta_alert", alert_animation)
+
 
 def render_mta_blink(display, text: str):
     text_length = int(display._get_text_length(text, Fonts.MTA))
@@ -90,15 +96,21 @@ def render_mta_blink(display, text: str):
     blink_animation = MTABlinkAnimation(text=text, bbox=bbox)
     display.animation_manager.add_animation("mta_blink", blink_animation)
 
+
 def render_mta_empty(display):
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
         Colors.BLACK)
     draw = display._get_draw_context_antialiased(image)
     now = datetime.now()
-    draw.text((0, 2 + 16 * 0), "Schedule is not available.", font=Fonts.MTA, fill=Colors.MTA_GREEN)
-    draw.text((0, 2 + 16 * 1), now.strftime("%m/%d/%y %-I:%M %p"), font=Fonts.MTA, fill=Colors.MTA_GREEN)
+    draw.text((0, 2 + 16 * 0), "Schedule is not available.",
+              font=Fonts.MTA, fill=Colors.MTA_GREEN)
+    draw.text(
+        (0, 2 + 16 * 1),
+        now.strftime("%m/%d/%y %-I:%M %p"),
+        font=Fonts.MTA, fill=Colors.MTA_GREEN)
     display._update_display(image)
+
 
 def trim_train_name(
         display, text: str, font: ImageFont, max_width: int) -> str:
