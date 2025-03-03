@@ -1,10 +1,11 @@
 import providers.mta as mta
-from typing import List
-from PIL import Image, ImageFont
-from common import Colors, Fonts, Rect
+import threading
 from .animation import MTAAlertAnimation, MTABlinkAnimation
 from .utils import get_image_with_color
-import threading
+from common import Colors, Fonts, Rect
+from datetime import datetime
+from PIL import Image, ImageFont
+from typing import List
 
 def render_mta_content(display, content: List[mta.TrainTime]):
     mta_render_thread = threading.Thread(
@@ -14,6 +15,9 @@ def render_mta_content(display, content: List[mta.TrainTime]):
     mta_render_thread.start()
 
 def _render_mta_content_task(display, content: List[mta.TrainTime]):
+    if content is None or len(content) == 0:
+        render_mta_empty(display)
+        return
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
         Colors.BLACK)
@@ -85,6 +89,16 @@ def render_mta_blink(display, text: str):
     bbox = Rect(x, 0, text_length, 16)
     blink_animation = MTABlinkAnimation(text=text, bbox=bbox)
     display.animation_manager.add_animation("mta_blink", blink_animation)
+
+def render_mta_empty(display):
+    image = Image.new(
+        'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
+        Colors.BLACK)
+    draw = display._get_draw_context_antialiased(image)
+    now = datetime.now()
+    draw.text((0, 2 + 16 * 0), "Schedule is not available.", font=Fonts.MTA, fill=Colors.MTA_GREEN)
+    draw.text((0, 2 + 16 * 1), now.strftime("%m/%d/%y %-I:%M %p"), font=Fonts.MTA, fill=Colors.MTA_GREEN)
+    display._update_display(image)
 
 def trim_train_name(
         display, text: str, font: ImageFont, max_width: int) -> str:
