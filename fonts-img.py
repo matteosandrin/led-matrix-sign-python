@@ -25,4 +25,5 @@ for font in fonts:
         y = (i // w_cells) * h_cell_size
         draw.text((x, y), text[i], font=font, fill=Colors.WHITE)
     font_name = font.getname()[0].replace(' ', '_')
+    image = image.resize((image.width * 4, image.height * 4), Image.Resampling.NEAREST)
     image.save(f'{CURRENT_DIR}/fonts/img/{font_name}.png')
