@@ -133,10 +133,9 @@ class WeatherWidget(Widget):
             response = requests.get(
                 "https://api.open-meteo.com/v1/forecast", params=params)
             response.raise_for_status()
-            pprint(response.json())
             return response.json()
         except Exception as err:
-            print(f'Error fetching weather data: {err}')
+            logger.error(f'Error fetching weather data: {err}')
             return None
 
     def get_temp_color(self, temp: float) -> tuple[int, int, int]:
