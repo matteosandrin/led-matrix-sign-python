@@ -8,9 +8,9 @@
     "browser": {
         "_comment": "Browser adapter config",
         "port": 8888,
-        "target_fps": 24,
+        "target_fps": 60,
         "fps_display": false,
-        "quality": 70,
+        "quality": 100,
         "image_border": true,
         "debug_text": true,
         "image_format": "JPEG"
