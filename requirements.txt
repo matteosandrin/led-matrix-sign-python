@@ -1,7 +1,6 @@
-Pillow==9.4.0
-pytz==2022.7.1
-requests==2.28.1
-rgbmatrix==0.0.1
-RPi.GPIO==0.7.1
-Flask==2.2.2
-systemd-python>=234
+pillow
+pytz
+requests
+flask
+RGBMatrixEmulator
+systemd-python # only for Linux
