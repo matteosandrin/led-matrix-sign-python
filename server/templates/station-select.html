@@ -4,47 +4,48 @@
   - current_station_label: The label of the current station.
   - stations_by_route: The stations by route for the given namespace.
 -->
-
+{% macro station_select(namespace, current_station_label, stations_by_route) %}
 <form method="GET" action="/set/{{ namespace }}-station" onsubmit="handleFormSubmit(event, this)">
-    <h2>Set {{ namespace | upper }} station</h2>
-    <p>Current station is <span style="font-weight: bold;">{{ current_station_label }}</span></p>
-    <select name="{{ namespace }}-route">
-      {% for route in stations_by_route.keys() | sort %}
-        <option value="{{ route }}">{{ route }}</option>
-      {% endfor %}
-    </select>
-    <select name="id" id="{{ namespace }}-station">
-      <option value="">Select a station</option>
-    </select>
-    <input type="submit" value="Set station">
-  </form>
-  <form method="GET" action="/trigger/{{ namespace }}-alert" onsubmit="handleFormSubmit(event, this)">
-    <h2>Trigger {{ namespace | upper }} alert</h2>
-    <input type="submit" value="Trigger alert">
-  </form>
-  <script>
-    function {{ namespace }}stationSelector() {
-      const routeSelect = document.querySelector('select[name="{{ namespace }}-route"]');
-      const stationSelect = document.getElementById('{{ namespace }}-station');
-      const stationsByRoute = JSON.parse('{{ stations_by_route | tojson }}');
+  <h2>Set {{ namespace | upper }} station</h2>
+  <p>Current station is <span style="font-weight: bold;">{{ current_station_label }}</span></p>
+  <select name="{{ namespace }}-route">
+    {% for route in stations_by_route.keys() | sort %}
+      <option value="{{ route }}">{{ route }}</option>
+    {% endfor %}
+  </select>
+  <select name="id" id="{{ namespace }}-station">
+    <option value="">Select a station</option>
+  </select>
+  <input type="submit" value="Set station">
+</form>
+<form method="GET" action="/trigger/{{ namespace }}-alert" onsubmit="handleFormSubmit(event, this)">
+  <h2>Trigger {{ namespace | upper }} alert</h2>
+  <input type="submit" value="Trigger alert">
+</form>
+<script>
+  function {{ namespace }}stationSelector() {
+    const routeSelect = document.querySelector('select[name="{{ namespace }}-route"]');
+    const stationSelect = document.getElementById('{{ namespace }}-station');
+    const stationsByRoute = JSON.parse('{{ stations_by_route | tojson }}');
 
-      routeSelect.addEventListener('change', (event) => {
-        const selectedRoute = event.target.value;
-        setStationSelector(selectedRoute);
+    routeSelect.addEventListener('change', (event) => {
+      const selectedRoute = event.target.value;
+      setStationSelector(selectedRoute);
+    });
+
+    setStationSelector(routeSelect.value);
+
+    function setStationSelector(route) {
+      const stations = stationsByRoute[route];
+      stationSelect.innerHTML = '';
+      stations.forEach(station => {
+        const option = document.createElement('option');
+        option.value = station.stop_id;
+        option.textContent = station.stop_name;
+        stationSelect.appendChild(option);
       });
-
-      setStationSelector(routeSelect.value);
-
-      function setStationSelector(route) {
-        const stations = stationsByRoute[route];
-        stationSelect.innerHTML = '';
-        stations.forEach(station => {
-          const option = document.createElement('option');
-          option.value = station.stop_id;
-          option.textContent = station.stop_name;
-          stationSelect.appendChild(option);
-        });
-      }
     }
-    {{ namespace }}stationSelector();
-  </script>
+  }
+  {{ namespace }}stationSelector();
+</script>
+{% endmacro %}

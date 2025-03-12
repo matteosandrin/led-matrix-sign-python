@@ -1,3 +1,5 @@
+{% from 'station-select.html' import station_select %}
+
 <!DOCTYPE html/>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -76,18 +78,10 @@
     <input type="submit" value="Shift to next mode">
   </form>
   {% if current_mode == SignMode.MBTA %}
-    {% with namespace='mbta',
-           current_station_label=mbta_current_station_label,
-           stations_by_route=mbta_stations_by_route %}
-      {% include 'station-select.html' %}
-    {% endwith %}
+    {{ station_select("mbta", mbta_current_station_label, mbta_stations_by_route) }}
   {% endif %}
   {% if current_mode == SignMode.MTA %}
-    {% with namespace='mta',
-           current_station_label=mta_current_station_label,
-           stations_by_route=mta_stations_by_route %}
-      {% include 'station-select.html' %}
-    {% endwith %}
+    {{ station_select("mta", mta_current_station_label, mta_stations_by_route) }}
   {% endif %}
   {% if current_mode == SignMode.TEST %}
     <form method="GET" action="/set/test" onsubmit="handleFormSubmit(event, this)">
