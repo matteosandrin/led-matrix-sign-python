@@ -34,6 +34,6 @@ class HistoricalTrainTime:
     route_id: str
     direction_id: str
     long_name: str
-    departure_time: str
+    departure_time: int
     trip_id: str
     day_type: DayType

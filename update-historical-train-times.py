@@ -57,12 +57,13 @@ def convert_historical_train_times():
                 day_type = DayType.SATURDAY
             elif trip["service_id"] == "Sunday":
                 day_type = DayType.SUNDAY
-
+            h, m, s = stop_time["departure_time"].split(":")
+            departure_seconds = int(h) * 3600 + int(m) * 60 + int(s)
             train_time = HistoricalTrainTime(
                 route_id=trip["route_id"],
                 direction_id=trip["direction_id"],
                 long_name=trip["trip_headsign"],
-                departure_time=stop_time["departure_time"],
+                departure_time=departure_seconds,
                 trip_id=stop_time["trip_id"],
                 day_type=day_type,
             )
