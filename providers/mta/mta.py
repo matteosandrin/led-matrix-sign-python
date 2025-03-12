@@ -4,6 +4,7 @@ import random
 import requests
 import config
 import pickle
+import pytz
 from common.broadcaster import StatusBroadcaster
 from dataclasses import dataclass
 from datetime import datetime
@@ -155,14 +156,17 @@ class MTA():
             return None
 
     def _seconds_since_midnight(self) -> int:
-        now = datetime.now()
+        # this function will always be in EST timezone, since the historical
+        # data is in EST timezone
+        now = datetime.now(pytz.timezone('America/New_York'))
         midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
         return (now - midnight).total_seconds()
 
     def _filter_historical_train_times(
             self, train_times: List[HistoricalTrainTime]) -> List[
             HistoricalTrainTime]:
-        now = datetime.now()
+        # The historical data is in EST timezone
+        now = datetime.now(pytz.timezone('America/New_York'))
         day_type = DayType.WEEKDAY
         if now.weekday() == 5:
             day_type = DayType.SATURDAY
