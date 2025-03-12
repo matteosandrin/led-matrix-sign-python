@@ -39,6 +39,8 @@ user_threads = []
 mbta_client = mbta.MBTA(api_key=config.MBTA_API_KEY)
 mta_client = mta.MTA(config.MTA_API_KEY)
 
+logger = logging.getLogger("led-matrix-sign")
+
 def setup_logging():
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -59,8 +61,6 @@ def setup_logging():
         except ImportError:
             logging.warning("Could not import systemd journal handler - logging to console only")
 
-setup_logging()
-logger = logging.getLogger("led-matrix-sign")
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -294,6 +294,7 @@ def setup_network():
         return False
 
 def main():
+    setup_logging()
     args = parse_args()
     initial_mode = DEFAULT_SIGN_MODE
     if hasattr(config, 'DEFAULT_SIGN_MODE'):
