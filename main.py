@@ -28,7 +28,6 @@ DEFAULT_SIGN_MODE = SignMode.MBTA
 
 # Global queues
 ui_queue = queue.Queue(maxsize=16)
-provider_queue = queue.Queue(maxsize=32)
 render_queue = queue.Queue(maxsize=32)
 
 mode_broadcaster = StatusBroadcaster()
