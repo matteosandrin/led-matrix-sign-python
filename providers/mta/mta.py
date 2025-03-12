@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pprint import pprint
 from typing import Dict, List, Optional, TypedDict
-from .types import TrainTime, Station, DayType
+from .types import TrainTime, Station, DayType, HistoricalTrainTime
 import logging
 
 logger = logging.getLogger("led-matrix-sign")
@@ -153,6 +153,29 @@ class MTA():
             logger.error('unable to fetch nearby api', exc_info=err)
             return None
 
+    def _seconds_since_midnight(self) -> int:
+        now = datetime.now()
+        midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        return (now - midnight).total_seconds()
+
+    def _filter_historical_train_times(
+            self, train_times: List[HistoricalTrainTime]) -> List[
+            HistoricalTrainTime]:
+        now = datetime.now()
+        day_type = DayType.WEEKDAY
+        if now.weekday() == 5:
+            day_type = DayType.SATURDAY
+        elif now.weekday() == 6:
+            day_type = DayType.SUNDAY
+        seconds_since_midnight = self._seconds_since_midnight()
+        train_times = [
+            t for t in train_times
+            if t.day_type == day_type
+            and t.departure_time > seconds_since_midnight]
+        train_times.sort(
+            key=lambda x: x.departure_time - seconds_since_midnight)
+        return train_times
+
     def get_fake_predictions(self, stop_id: str) -> List[TrainTime]:
         if stop_id not in self.historical_data:
             return []
@@ -165,20 +188,9 @@ class MTA():
         for stop_id in stop_ids:
             if stop_id in self.historical_data:
                 historical_train_times.extend(self.historical_data[stop_id])
-        now = datetime.now()
-        day_type = DayType.WEEKDAY
-        if now.weekday() == 5:
-            day_type = DayType.SATURDAY
-        elif now.weekday() == 6:
-            day_type = DayType.SUNDAY
-        midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        seconds_since_midnight = (now - midnight).total_seconds()
-        historical_train_times = [
-            t for t in historical_train_times
-            if t.day_type == day_type
-            and t.departure_time > seconds_since_midnight]
-        historical_train_times.sort(
-            key=lambda x: x.departure_time - seconds_since_midnight)
+        historical_train_times = self._filter_historical_train_times(
+            historical_train_times)
+        seconds_since_midnight = self._seconds_since_midnight()
         return [TrainTime(
             route_id=t.route_id,
             direction_id=t.direction_id,
