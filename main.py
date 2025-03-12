@@ -68,6 +68,9 @@ def parse_args():
     parser.add_argument(
         '--mode', type=str, choices=[mode.name for mode in SignMode],
         help='Set the default sign mode')
+    parser.add_argument(
+        '--mta-fake-data', action='store_true',
+        help='Use fake MTA data')
     return parser.parse_args()
 
 
@@ -304,6 +307,8 @@ def main():
         initial_mode = config.DEFAULT_SIGN_MODE
     if args.mode:
         initial_mode = SignMode[args.mode]
+    if args.mta_fake_data:
+        config.MTA_FAKE_DATA = True
     logger.info(f"Initial mode: {initial_mode}")
     mode_broadcaster.set_status(initial_mode)
 
