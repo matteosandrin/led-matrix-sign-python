@@ -264,10 +264,7 @@ class AnimationManager:
         while self.is_running:
             current_time = time.time()
             if current_time >= next_frame_time:
-                # Calculate how many frames we might have missed
-                frame_delta = int((current_time - next_frame_time) / ANIMATION_REFRESH_RATE) + 1
-                # Update the next frame time (snap to the target grid)
-                next_frame_time += frame_delta * ANIMATION_REFRESH_RATE
+                next_frame_time = current_time + ANIMATION_REFRESH_RATE
                 update_count = 0
                 completed_keys = []
                 for speed, group in list(self.animation_groups.items()):
