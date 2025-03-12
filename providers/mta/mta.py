@@ -30,7 +30,8 @@ alert_messages: List[str] = [
     "Backpacks and other large containers are subject to random search by the police. Thank you for your cooperation.",
     "Please be careful. Do not put your hand or your bag in a train door that is closing.",
     "The next train to arrive on the uptown local track is not in service. Please stand away from the platform edge.",
-    "Please help us keep trains moving. Let customers leave the train before you enter the train; please do not hold train doors open."]
+    "Please help us keep trains moving. Let customers leave the train before you enter the train; please do not hold train doors open.",
+    "Hey New York, Subway surfing is dangerous and can be fatal. Do not lose your life. Ride inside and stay alive!"]
 
 
 def stations_by_route() -> Dict[str, List[Station]]:
