@@ -264,32 +264,34 @@ class AnimationManager:
         while self.is_running:
             current_time = time.time()
             if current_time >= next_frame_time:
-                # Calculate how many frames we might have missed
-                frame_delta = int((current_time - next_frame_time) / ANIMATION_REFRESH_RATE) + 1
-                # Update the next frame time (snap to the target grid)
-                next_frame_time += frame_delta * ANIMATION_REFRESH_RATE
+                frame_delta = max(1, int((current_time - next_frame_time) / ANIMATION_REFRESH_RATE))
+                if frame_delta > 1:
+                    logger.warning(f"Dropped {frame_delta-1} frames")
+                # Update next frame time without accumulating error
+                next_frame_time = current_time + ANIMATION_REFRESH_RATE
                 update_count = 0
                 completed_keys = []
-                for speed, group in list(self.animation_groups.items()):
-                    if group.should_update(frame_count):
-                        for key in group.animation_keys:
-                            animation = self.get_animation(key)
-                            if animation is None:  # Skip if animation was removed
-                                completed_keys.append(key)
-                                continue
-                            frame, is_complete = animation.get_next_frame()
-                            if frame is not None:
-                                bbox, image = frame
-                                self.render_queue.put(RenderMessage.Frame(bbox=bbox, frame=image))
-                                update_count += 1
-                            if is_complete:
-                                completed_keys.append(key)
-                        group.last_update = frame_count
+                with self.lock:
+                    for speed, group in list(self.animation_groups.items()):
+                        if group.should_update(frame_count):
+                            for key in group.animation_keys:
+                                animation = self.animations.get(key)
+                                if animation is None:
+                                    completed_keys.append(key)
+                                    continue
+                                frame, is_complete = animation.get_next_frame()
+                                if frame is not None:
+                                    bbox, image = frame
+                                    self.render_queue.put(RenderMessage.Frame(bbox=bbox, frame=image))
+                                    update_count += 1
+                                if is_complete:
+                                    completed_keys.append(key)
+                            group.last_update = frame_count
+                    for key in completed_keys:
+                        self.remove_animation(key)    
                 if update_count > 0:
-                    self.render_queue.put(RenderMessage.Swap())
-
-                for key in completed_keys:
-                    self.remove_animation(key)
-                
+                    self.render_queue.put(RenderMessage.Swap())    
                 frame_count += 1
-            time.sleep(0.001)
+            else:
+                sleep_time = max(0.001, next_frame_time - current_time)
+                time.sleep(sleep_time)
