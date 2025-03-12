@@ -25,31 +25,6 @@ station_data = json.load(
     open(os.path.join(CURRENT_FOLDER, "stations.json")))
 stations: List[Station] = [Station(**s) for s in station_data]
 
-# Complex stations mapping
-complex_stations: Dict[str, List[str]] = {
-    # Times Sq-42 St ! check for all lines
-    "127": ["127", "R16", "902", "725"],
-    "222": ["222", "415"],  # 149 St - Grand Concourse
-    "232": ["232", "423"],  # Borough Hall
-    "235": ["235", "D24"],  # Atlantic Av - Barclays Ctr (2,3,4,5,Q,B)
-    "631": ["631", "723", "901"],  # Grand Central - 42 St
-    "719": ["719", "G22"],  # Court Sq
-    "A12": ["A12", "D13"],  # 145 St
-    "A24": ["A24", "125"],  # 59 St - Columbus Circle
-    "A32": ["A32", "D20"],  # W 4 St
-    "A38": ["A38", "M22"],  # Fulton St
-    "A41": ["A41", "R29"],  # Jay St - MetroTech
-    "D11": ["D11", "414"],  # 161 St - Yankee Stadium
-    "J27": ["J27", "L22", "A51"],  # Broadway Jct
-    "L17": ["L17", "M08"],  # Myrtle - Wyckoff Avs
-    "M18": ["M18", "F15"],  # Delancey St
-    "Q01": ["M20", "639"],  # Canal St - (4,5,6,J,Z)
-    "R23": ["Q01", "R23", "M20", "639"],  # Canal St - (R,W,N,Q)
-    "R09": ["R09", "718"],  # Queensboro Plaza
-    "R17": ["R17", "D17"],  # 34 St Herald Sq
-    "R20": ["R20", "L03", "635"],  # Union Sq - 14 St
-}
-
 alert_messages: List[str] = [
     "This is an important message from the New York City Police Department. Keep your belongings in your sight at all times. Protect yourself.",
     "Backpacks and other large containers are subject to random search by the police. Thank you for your cooperation.",
@@ -111,12 +86,15 @@ def print_predictions(predictions: List[TrainTime]):
     logger.info("")
 
 
-def combine_complex_ids(complex_ids: List[str]) -> str:
-    return ','.join(f"MTASBWY:{stop_id}" for stop_id in complex_ids)
+def combine_stop_ids(stop_ids: List[str]) -> str:
+    return ','.join(f"MTASBWY:{stop_id}" for stop_id in stop_ids)
 
 
-def check_for_complex_stop_ids(stop_id: str) -> str:
-    return combine_complex_ids(complex_stations[stop_id]) if stop_id in complex_stations else f"MTASBWY:{stop_id}"
+def get_stop_ids(stop: Station) -> List[str]:
+    stop_ids = [stop.stop_id]
+    if stop.children:
+        stop_ids += stop.children
+    return stop_ids
 
 
 class MTA():
@@ -130,8 +108,13 @@ class MTA():
 
     def get_predictions(self, stop_id: str) -> Optional[List[TrainTime]]:
         try:
+            stop = station_by_id(stop_id)
+            if stop is None:
+                logger.error(f"Stop {stop_id} not found")
+                return []
+            stop_ids = get_stop_ids(stop)
             response = requests.get(f"{self.domain}/nearby", params={
-                'stops': check_for_complex_stop_ids(stop_id),
+                'stops': combine_stop_ids(stop_ids),
                 'apikey': self.api_key,
                 'groupByParent': 'true',
                 'routes': '',
@@ -171,10 +154,17 @@ class MTA():
             return None
 
     def get_fake_predictions(self, stop_id: str) -> List[TrainTime]:
-        # TODO: Handle complex stations
         if stop_id not in self.historical_data:
             return []
-        historical_train_times = self.historical_data[stop_id]
+        stop = station_by_id(stop_id)
+        if stop is None:
+            logger.error(f"Stop {stop_id} not found")
+            return []
+        stop_ids = get_stop_ids(stop)
+        historical_train_times = []
+        for stop_id in stop_ids:
+            if stop_id in self.historical_data:
+                historical_train_times.extend(self.historical_data[stop_id])
         now = datetime.now()
         day_type = DayType.WEEKDAY
         if now.weekday() == 5:

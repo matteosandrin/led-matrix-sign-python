@@ -23,6 +23,7 @@ class Station:
     north_direction_label: str
     south_direction_label: str
     routes: List[str]
+    children: Optional[List[str]] = None
 
 class DayType(Enum):
     WEEKDAY = "weekday"

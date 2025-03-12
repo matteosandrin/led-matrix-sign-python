@@ -6,6 +6,7 @@ import os
 import requests
 from main import setup_logging
 from providers.mta.types import Station, HistoricalTrainTime, DayType
+from providers.mta.mta import get_stop_ids, stations
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +26,6 @@ def downolad_gfts_train_times():
 
 def convert_historical_train_times():
     logger.info("Converting historical train times")
-    station_data = json.load(open(f"{CURRENT_DIR}/providers/mta/stations.json"))
-    stations = [Station(**station) for station in station_data]
 
     stop_times = csv.DictReader(
         open(f"{CURRENT_DIR}/providers/mta/gtfs/stop_times.txt"))
@@ -47,27 +46,29 @@ def convert_historical_train_times():
 
     for i, station in enumerate(stations):
         logger.info(f" * {i+1} {station.stop_id} {station.stop_name}")
-        result[station.stop_id] = []
-        if station.stop_id not in stop_times_by_id:
-            continue
-        for stop_time in stop_times_by_id[station.stop_id]:
-            trip = trips_by_id[stop_time["trip_id"]]
-            day_type = DayType.WEEKDAY
-            if trip["service_id"] == "Saturday":
-                day_type = DayType.SATURDAY
-            elif trip["service_id"] == "Sunday":
-                day_type = DayType.SUNDAY
-            h, m, s = stop_time["departure_time"].split(":")
-            departure_seconds = int(h) * 3600 + int(m) * 60 + int(s)
-            train_time = HistoricalTrainTime(
-                route_id=trip["route_id"],
-                direction_id=trip["direction_id"],
-                long_name=trip["trip_headsign"],
-                departure_time=departure_seconds,
-                trip_id=stop_time["trip_id"],
-                day_type=day_type,
-            )
-            result[station.stop_id].append(train_time)
+        stop_ids = get_stop_ids(station)
+        for stop_id in stop_ids:
+            result[stop_id] = []
+            if stop_id not in stop_times_by_id:
+                continue
+            for stop_time in stop_times_by_id[stop_id]:
+                trip = trips_by_id[stop_time["trip_id"]]
+                day_type = DayType.WEEKDAY
+                if trip["service_id"] == "Saturday":
+                    day_type = DayType.SATURDAY
+                elif trip["service_id"] == "Sunday":
+                    day_type = DayType.SUNDAY
+                h, m, s = stop_time["departure_time"].split(":")
+                departure_seconds = int(h) * 3600 + int(m) * 60 + int(s)
+                train_time = HistoricalTrainTime(
+                    route_id=trip["route_id"],
+                    direction_id=trip["direction_id"],
+                    long_name=trip["trip_headsign"],
+                    departure_time=departure_seconds,
+                    trip_id=stop_time["trip_id"],
+                    day_type=day_type,
+                )
+                result[stop_id].append(train_time)
     return result
 
 
