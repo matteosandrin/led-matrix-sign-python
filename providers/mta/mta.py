@@ -3,12 +3,13 @@ import os
 import random
 import requests
 import config
+import pickle
 from common.broadcaster import StatusBroadcaster
 from dataclasses import dataclass
 from datetime import datetime
 from pprint import pprint
 from typing import Dict, List, Optional, TypedDict
-from .types import TrainTime, Station
+from .types import TrainTime, Station, DayType
 import logging
 
 logger = logging.getLogger("led-matrix-sign")
@@ -81,7 +82,9 @@ def train_station_to_str(station: str) -> str:
     return ""
 
 
-def get_second_train(predictions: List[TrainTime], last_second_train: TrainTime) -> TrainTime:
+def get_second_train(
+        predictions: List[TrainTime],
+        last_second_train: TrainTime) -> TrainTime:
     """
     The second train slot on the board rotates between the next couple of
     trains. This function returns the next train in the rotation. It always
@@ -103,7 +106,8 @@ def get_second_train(predictions: List[TrainTime], last_second_train: TrainTime)
 
 def print_predictions(predictions: List[TrainTime]):
     for train in predictions:
-        logger.info(f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}")
+        logger.info(
+            f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}")
     logger.info("")
 
 
@@ -166,49 +170,35 @@ class MTA():
             logger.error('unable to fetch nearby api', exc_info=err)
             return None
 
-    def get_fake_predictions(self) -> List[TrainTime]:
-        return [
-            TrainTime(
-                route_id="1",
-                direction_id="1",
-                long_name="South Ferry",
-                stop_headsign="Downtown",
-                time=80,
-                trip_id="893",
-                is_express=False,
-                display_order=0
-            ),
-            TrainTime(
-                route_id="2",
-                direction_id="0",
-                long_name="Van Cortlandt Park",
-                stop_headsign="Uptown & The Bronx",
-                time=200,
-                trip_id="894",
-                is_express=False,
-                display_order=1
-            ),
-            TrainTime(
-                route_id="F",
-                direction_id="0",
-                long_name="Ozone Park",
-                stop_headsign="Uptown & The Bronx",
-                time=360,
-                trip_id="895",
-                is_express=False,
-                display_order=2
-            ),
-            TrainTime(
-                route_id="3",
-                direction_id="0",
-                long_name="Van Cortlandt Park",
-                stop_headsign="Uptown & The Bronx",
-                time=470,
-                trip_id="896",
-                is_express=False,
-                display_order=3
-            )
-        ]
+    def get_fake_predictions(self, stop_id: str) -> List[TrainTime]:
+        # TODO: Handle complex stations
+        if stop_id not in self.historical_data:
+            return []
+        historical_train_times = self.historical_data[stop_id]
+        now = datetime.now()
+        day_type = DayType.WEEKDAY
+        if now.weekday() == 5:
+            day_type = DayType.SATURDAY
+        elif now.weekday() == 6:
+            day_type = DayType.SUNDAY
+        midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        seconds_since_midnight = (now - midnight).total_seconds()
+        historical_train_times = [
+            t for t in historical_train_times
+            if t.day_type == day_type
+            and t.departure_time > seconds_since_midnight]
+        historical_train_times.sort(
+            key=lambda x: x.departure_time - seconds_since_midnight)
+        return [TrainTime(
+            route_id=t.route_id,
+            direction_id=t.direction_id,
+            long_name=t.long_name,
+            time=int(t.departure_time - seconds_since_midnight),
+            trip_id=t.trip_id,
+            display_order=i,
+            stop_headsign=None,
+            is_express=None
+        ) for i, t in enumerate(historical_train_times[:MAX_NUM_PREDICTIONS])]
 
     def get_current_station(self) -> Optional[str]:
         return self.station_broadcaster.get_status()
@@ -219,6 +209,17 @@ class MTA():
 
     def clear(self):
         self.last_second_train = None
+
+    def load_historical_data(self):
+        if not os.path.exists(f'{CURRENT_FOLDER}/historical_train_times.pickle'):
+            logger.error(
+                f"Historical train times file not found at {CURRENT_FOLDER}/historical_train_times.pickle")
+            logger.error(
+                "Run update-historical-train-times.py to generate this file")
+            self.historical_data = {}
+            return
+        with open(f'{CURRENT_FOLDER}/historical_train_times.pickle', 'rb') as f:
+            self.historical_data = pickle.load(f)
 
 
 class AlertMessages:

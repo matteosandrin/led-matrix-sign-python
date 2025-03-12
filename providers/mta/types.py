@@ -7,11 +7,11 @@ class TrainTime:
     route_id: str
     direction_id: str
     long_name: str
-    stop_headsign: str
     time: int
-    trip_id: Optional[str]
-    is_express: bool
     display_order: int
+    stop_headsign: Optional[str]
+    trip_id: Optional[str]
+    is_express: Optional[bool]
 
 
 @dataclass

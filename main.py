@@ -180,6 +180,9 @@ def mbta_provider_task():
 def mta_provider_task():
     last_alert_time = time.time()
     alert_messages = mta.AlertMessages()
+    if config.MTA_FAKE_DATA:
+        logger.info("Using MTA historical data")
+        mta_client.load_historical_data()
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta_client.get_current_station()
@@ -188,7 +191,7 @@ def mta_provider_task():
                 if not config.MTA_FAKE_DATA:
                     predictions = mta_client.get_predictions(station)
                 else:
-                    predictions = mta_client.get_fake_predictions()
+                    predictions = mta_client.get_fake_predictions(station)
                 if predictions is not None:
                     if len(predictions) < 2:
                         mta.print_predictions(predictions)
