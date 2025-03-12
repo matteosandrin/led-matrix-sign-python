@@ -119,5 +119,5 @@ class Server:
         return 'Shutdown triggered', 200
 
     def web_server_task(self):
-        self.app.run(host='0.0.0.0', port=5000,
+        self.app.run(host='0.0.0.0', port=5050,
                      debug=False, use_reloader=False)
