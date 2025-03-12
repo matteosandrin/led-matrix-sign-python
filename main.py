@@ -36,7 +36,7 @@ mode_broadcaster = StatusBroadcaster()
 system_threads = []
 user_threads = []
 
-mbta_client = mbta.MBTA(api_key=config.MBTA_API_KEY)
+mbta_client = mbta.MBTA(config.MBTA_API_KEY)
 mta_client = mta.MTA(config.MTA_API_KEY)
 
 logger = logging.getLogger("led-matrix-sign")
