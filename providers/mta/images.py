@@ -52,14 +52,14 @@ route_images: Dict[str, Dict] = {
         "img" : Image.open(image_dir / 'mta_E.png'),
         "color" : "#0039A6"
     },
-    # "G" : {
-    #     "img" : Image.open(image_dir / 'mta_G.png'),
-    #     "color" : "#6CBE45"
-    # },
-    # "B" : {
-    #     "img" : Image.open(image_dir / 'mta_B.png'),
-    #     "color" : "#FF6800"
-    # },
+    "G" : {
+        "img" : Image.open(image_dir / 'mta_G.png'),
+        "color" : "#6CBE45"
+    },
+    "B" : {
+        "img" : Image.open(image_dir / 'mta_B.png'),
+        "color" : "#FF6800"
+    },
     "D" : {
         "img" : Image.open(image_dir / 'mta_D.png'),
         "color" : "#FF6800"
@@ -72,18 +72,18 @@ route_images: Dict[str, Dict] = {
         "img": Image.open(image_dir / 'mta_M.png'),
         "color": "#FF6800"
     },
-    # "J" : {
-    #     "img" : Image.open(image_dir / 'mta_J.png'),
-    #     "color" : "#824100"
-    # },
-    # "Z" : {
-    #     "img" : Image.open(image_dir / 'mta_Z.png'),
-    #     "color" : "#824100"
-    # },
-    # "L" : {
-    #     "img" : Image.open(image_dir / 'mta_L.png'),
-    #     "color" : "#5c5b5b"
-    # },
+    "J" : {
+        "img" : Image.open(image_dir / 'mta_J.png'),
+        "color" : "#824100"
+    },
+    "Z" : {
+        "img" : Image.open(image_dir / 'mta_Z.png'),
+        "color" : "#824100"
+    },
+    "L" : {
+        "img" : Image.open(image_dir / 'mta_L.png'),
+        "color" : "#5c5b5b"
+    },
     "GS" : {
         "img" : Image.open(image_dir / 'mta_GS.png'),
         "color" : "#3c3e42"
