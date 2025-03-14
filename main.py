@@ -108,7 +108,10 @@ def ui_task():
                 render_queue.put(RenderMessage.Text(text=mta.train_station_to_str(new_station)))
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
-                render_queue.put(RenderMessage.Text(text=new_message if new_message is not None else ""))
+                if new_message == "mta_all_images":
+                    render_queue.put(RenderMessage.MTATestImages())
+                else:
+                    render_queue.put(RenderMessage.Text(text=new_message if new_message is not None else ""))
             elif message["type"] == UIMessageType.MTA_ALERT:
                 render_queue.put(RenderMessage.MTAAlert(text=message.get("content")))
             elif message["type"] == UIMessageType.SHUTDOWN:

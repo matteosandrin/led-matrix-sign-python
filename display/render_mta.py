@@ -118,6 +118,28 @@ def render_mta_empty(display):
     display._update_display(image)
 
 
+def render_mta_all_images(display):
+    image = Image.new(
+        'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
+        Colors.BLACK)
+    draw = display._get_draw_context_antialiased(image)
+    route_images = [mta.get_route_image(route_id, False) for route_id in [
+        # first row
+        "1", "4", "7", "A", "B", "G", "J", "L", "GS", "N",
+        # second row
+        "2", "5", "7", "C", "D", "G", "Z", "L", "GS", "Q",
+    ]]
+    x, y = 0, 0
+    for route_img, color in route_images:
+        color_img = get_image_with_color(route_img, color)
+        image.paste(color_img, (x, y))
+        x += color_img.width
+        if x + color_img.width > display.SCREEN_WIDTH:
+            x = 0
+            y += color_img.height
+    display._update_display(image)
+
+
 def _trim_train_name(
         display, text: str, font: ImageFont, max_width: int) -> str:
     draw = display._get_draw_context_antialiased(Image.new('RGB', (0, 0)))

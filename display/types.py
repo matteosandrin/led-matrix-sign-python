@@ -74,6 +74,10 @@ class RenderMessage:
     class MTAAlert(BaseRenderMessage):
         text: str
         z_index: int = 0
+    
+    @dataclass
+    class MTATestImages(BaseRenderMessage):
+        pass
 
     @dataclass
     class Music(BaseRenderMessage):
