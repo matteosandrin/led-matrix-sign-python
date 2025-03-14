@@ -8,6 +8,11 @@ from PIL import Image, ImageFont
 from typing import List
 from .types import RenderMessage, Rect
 
+abbreviations = {
+    "center": "ctr",
+    "junction": "jct",
+}
+
 
 def render_mta_content(display, message: RenderMessage.MTA):
     mta_render_thread = threading.Thread(
@@ -54,7 +59,7 @@ def _render_mta_content_task(display, message: RenderMessage.MTA):
         minutes_str = f"{minutes}min"
         minutes_str_width = display._get_text_length(minutes_str, Fonts.MTA)
         train_str_available_width = display.SCREEN_WIDTH - x_cursor - minutes_str_width
-        train_str = trim_train_name(
+        train_str = _trim_train_name(
             display, train.long_name, Fonts.MTA, train_str_available_width)
         draw.text((x_cursor, y_cursor), train_str,
                   font=Fonts.MTA, fill=text_color)
@@ -113,7 +118,7 @@ def render_mta_empty(display):
     display._update_display(image)
 
 
-def trim_train_name(
+def _trim_train_name(
         display, text: str, font: ImageFont, max_width: int) -> str:
     draw = display._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
     if draw.textlength(text, font=font) <= max_width:
@@ -121,9 +126,24 @@ def trim_train_name(
     if "-" in text:
         parts = text.split("-")
         parts = parts[:-1]
-        return trim_train_name(display, "-".join(parts), font, max_width)
+        return _trim_train_name(display, "-".join(parts), font, max_width)
+    if any(word.lower() in text.lower() for word in abbreviations):
+        text = _substitute_abbreviations(text)
+        return _trim_train_name(display, text, font, max_width)
     if " " in text:
         parts = text.split(" ")
         parts = parts[:-1]
-        return trim_train_name(display, " ".join(parts), font, max_width)
+        return _trim_train_name(display, " ".join(parts), font, max_width)
     return display._trim_text_to_fit(text, font, max_width)
+
+
+def _substitute_abbreviations(text: str) -> str:
+    for word, abbreviation in abbreviations.items():
+        if word.lower() in text.lower():
+            start = text.lower().find(word.lower())
+            original_word = text[start:start+len(word)]
+            if original_word[0].isupper():
+                text = text.replace(original_word, abbreviation.capitalize())
+            else:
+                text = text.replace(original_word, abbreviation.lower())
+    return text
