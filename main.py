@@ -301,6 +301,15 @@ def setup_network():
         render_queue.put(RenderMessage.Text(text="Network connection timed out."))
         return False
 
+
+def startup_animation():
+    # render the startup animation and wait for it to finish
+    render_queue.put(RenderMessage.Clear())
+    render_queue.put(RenderMessage.MTAStartup())
+    time.sleep(4)
+    render_queue.put(RenderMessage.Clear())
+
+
 def main():
     setup_logging()
     args = parse_args()
@@ -339,10 +348,7 @@ def main():
         thread.start()
     if not setup_network():
         mode_broadcaster.set_status(SignMode.CLOCK)
-    # render the startup animation and wait for it to finish
-    render_queue.put(RenderMessage.MTAStartup())
-    time.sleep(2)
-    render_queue.put(RenderMessage.Clear())
+    startup_animation()
     for thread in user_threads:
         thread.start()
 
