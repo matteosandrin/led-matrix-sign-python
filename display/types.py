@@ -80,6 +80,10 @@ class RenderMessage:
         pass
 
     @dataclass
+    class MTAStartup(BaseRenderMessage):
+        pass
+
+    @dataclass
     class Music(BaseRenderMessage):
         status: music.SpotifyResponse
         song: music.Song

@@ -126,3 +126,6 @@ def get_route_image(route_id, is_express: bool = False):
             return item["express_img"], hex_to_rgb(item["color"])
         return item["img"], hex_to_rgb(item["color"])
     return None
+
+def get_all_route_images():
+    return route_images

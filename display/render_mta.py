@@ -1,6 +1,6 @@
 import providers.mta as mta
 import threading
-from .animation import MTAAlertAnimation, MTABlinkAnimation
+from .animation import MTAAlertAnimation, MTABlinkAnimation, MTAStartupAnimation
 from .utils import get_image_with_color
 from common import Colors, Fonts
 from datetime import datetime
@@ -138,6 +138,12 @@ def render_mta_all_images(display):
             x = 0
             y += color_img.height
     display._update_display(image)
+
+
+def render_mta_startup(display):
+    startup_animation = MTAStartupAnimation(
+        Rect(0, 0, display.SCREEN_WIDTH, display.SCREEN_HEIGHT))
+    display.animation_manager.add_animation("mta_startup", startup_animation)
 
 
 def _trim_train_name(

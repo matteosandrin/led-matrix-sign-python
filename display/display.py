@@ -8,7 +8,7 @@ import providers.mbta as mbta
 import providers.mta as mta
 from .animation import AnimationManager
 from .render_mbta import render_mbta_content, render_mbta_banner_content
-from .render_mta import render_mta_content, render_mta_alert_content, render_mta_all_images
+from .render_mta import render_mta_content, render_mta_alert_content, render_mta_all_images, render_mta_startup
 from .render_music import render_music_content
 from .types import RenderMessage, BaseRenderMessage, Rect
 from common import Fonts, Colors, ClockType
@@ -72,6 +72,8 @@ class Display:
             render_mta_alert_content(self, message)
         elif isinstance(message, RenderMessage.MTATestImages):
             render_mta_all_images(self)
+        elif isinstance(message, RenderMessage.MTAStartup):
+            render_mta_startup(self)
         elif isinstance(message, RenderMessage.Music):
             render_music_content(self, message)
 

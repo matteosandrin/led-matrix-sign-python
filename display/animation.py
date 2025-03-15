@@ -1,4 +1,5 @@
 import math
+import random
 import threading
 import time
 from abc import ABC, abstractmethod
@@ -6,6 +7,9 @@ from common import Fonts, Colors
 from PIL import Image, ImageDraw, ImageFont
 from queue import Queue
 from typing import Dict, Tuple
+from common import hex_to_rgb
+from display.utils import get_image_with_color
+from providers import mta
 from .types import Rect, RenderMessage
 
 ANIMATION_REFRESH_RATE = 1 / 60.0  # 60 fps
@@ -173,6 +177,23 @@ class MTABlinkAnimation(Animation):
                     yield (self.bbox, self.blank_image)
         # show the text image as the last frame to not leave the screen blank
         yield (self.bbox, self.text_image)
+
+class MTAStartupAnimation(Animation):
+    def __init__(self, bbox: Rect):
+        super().__init__(bbox=bbox, speed=16, loop=False)
+        self.route_images = [
+            get_image_with_color(item["img"], hex_to_rgb(item["color"]))
+            for _ , item in mta.get_all_route_images().items()]        
+
+    def frame_generator(self):
+        random.shuffle(self.route_images)
+        frame = Image.new('RGB', (self.bbox.w, self.bbox.h), Colors.BLACK)
+        black_square = Image.new('RGB', (16, 16), Colors.BLACK)
+        for y in range(0, self.bbox.h, 16):
+            for x in range(0, self.bbox.w, 16):
+                index = int((x / 16) + (y / 16) * 10) % len(self.route_images)
+                frame.paste(self.route_images[index], (x, y))
+                yield (self.bbox, frame)
 
 class AnimationGroup:
     def __init__(self, speed: float):

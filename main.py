@@ -339,6 +339,10 @@ def main():
         thread.start()
     if not setup_network():
         mode_broadcaster.set_status(SignMode.CLOCK)
+    # render the startup animation and wait for it to finish
+    render_queue.put(RenderMessage.MTAStartup())
+    time.sleep(2)
+    render_queue.put(RenderMessage.Clear())
     for thread in user_threads:
         thread.start()
 
