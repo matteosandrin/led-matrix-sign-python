@@ -21,16 +21,16 @@ route_images: Dict[str, Dict] = {
     "4": {
         "img": Image.open(image_dir / 'mta_4.png'),
         "express_img": Image.open(image_dir / 'mta_4_express.png'),
-        "color": "#057500"
+        "color": "#3CBE3C"
     },
     "5": {
         "img": Image.open(image_dir / 'mta_5.png'),
-        "color": "#057500"
+        "color": "#3CBE3C"
     },
     "6": {
         "img": Image.open(image_dir / 'mta_6.png'),
         "express_img": Image.open(image_dir / 'mta_6_express.png'),
-        "color": "#057500"
+        "color": "#3CBE3C"
     },
     "7": {
         "img": Image.open(image_dir / 'mta_7.png'),
@@ -42,19 +42,19 @@ route_images: Dict[str, Dict] = {
     },
     "A" : {
         "img" : Image.open(image_dir / 'mta_A.png'),
-        "color" : "#0039A6"
+        "color" : "#33BBFF"
     },
     "C" : {
         "img" : Image.open(image_dir / 'mta_C.png'),
-        "color" : "#0039A6"
+        "color" : "#33BBFF"
     },
     "E" : {
         "img" : Image.open(image_dir / 'mta_E.png'),
-        "color" : "#0039A6"
+        "color" : "#33BBFF"
     },
     "G" : {
         "img" : Image.open(image_dir / 'mta_G.png'),
-        "color" : "#6CBE45"
+        "color" : "#AED92B"
     },
     "B" : {
         "img" : Image.open(image_dir / 'mta_B.png'),
@@ -74,19 +74,19 @@ route_images: Dict[str, Dict] = {
     },
     "J" : {
         "img" : Image.open(image_dir / 'mta_J.png'),
-        "color" : "#824100"
+        "color" : "#B37F2D"
     },
     "Z" : {
         "img" : Image.open(image_dir / 'mta_Z.png'),
-        "color" : "#824100"
+        "color" : "#B37F2D"
     },
     "L" : {
         "img" : Image.open(image_dir / 'mta_L.png'),
-        "color" : "#5c5b5b"
+        "color" : "#898888"
     },
     "GS" : {
         "img" : Image.open(image_dir / 'mta_GS.png'),
-        "color" : "#3c3e42"
+        "color" : "#545661"
     },
     # "H" : {
     #     "img" : Image.open(image_dir / 'mta_H.png'),
@@ -114,7 +114,7 @@ route_images: Dict[str, Dict] = {
     },
     "SI" : {
         "img" : Image.open(image_dir / 'mta_SI.png'),
-        "color" : "#0039A6"
+        "color" : "#33BBFF"
     },
 }
 
