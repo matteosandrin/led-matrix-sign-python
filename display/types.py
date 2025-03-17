@@ -84,6 +84,11 @@ class RenderMessage:
         pass
 
     @dataclass
+    class MTAStationBanner(BaseRenderMessage):
+        station_name: str
+        routes: List[str]
+
+    @dataclass
     class Music(BaseRenderMessage):
         status: music.SpotifyResponse
         song: music.Song

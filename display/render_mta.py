@@ -146,6 +146,22 @@ def render_mta_startup(display):
     display.animation_manager.add_animation("mta_startup", startup_animation)
 
 
+def render_mta_station_banner_content(display, message: RenderMessage.MTAStationBanner):
+    image = Image.new(
+        'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
+        Colors.BLACK)
+    draw = display._get_draw_context_antialiased(image)
+    station_name = _trim_train_name(display, message.station_name, Fonts.MTA, display.SCREEN_WIDTH)
+    draw.text((1, 2), station_name, font=Fonts.MTA, fill=Colors.MTA_GREEN)
+    for i, route in enumerate(message.routes):
+        route_img_data = mta.get_route_image(route, False)
+        if route_img_data is not None:
+            route_img, color = route_img_data
+            route_img = get_image_with_color(route_img, color)
+            image.paste(route_img, (16 * i, 16))
+    display._update_display(image)
+
+
 def _trim_train_name(
         display, text: str, font: ImageFont, max_width: int) -> str:
     draw = display._get_draw_context_antialiased(Image.new('RGB', (0, 0)))

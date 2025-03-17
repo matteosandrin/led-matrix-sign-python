@@ -105,7 +105,10 @@ def ui_task():
                 mta_client.set_current_station(new_station)
                 logger.info(f"Station changed to: {new_station}")
                 render_queue.put(RenderMessage.Clear())
-                render_queue.put(RenderMessage.Text(text=mta.train_station_to_str(new_station)))
+                render_queue.put(
+                    RenderMessage.MTAStationBanner(
+                        station_name=mta.train_station_to_str(new_station),
+                        routes=mta.station_by_id(new_station).routes))
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
                 if new_message == "mta_all_images":
@@ -188,6 +191,12 @@ def mta_provider_task():
     if config.MTA_FAKE_DATA:
         logger.info("Using MTA historical data")
         mta_client.load_historical_data()
+    # show the station banner for 2 seconds initially
+    ui_queue.put({
+        "type": UIMessageType.MTA_CHANGE_STATION,
+        "station": mta_client.get_current_station()
+    })
+    time.sleep(2)
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta_client.get_current_station()
@@ -306,7 +315,7 @@ def startup_animation():
     # render the startup animation and wait for it to finish
     render_queue.put(RenderMessage.Clear())
     render_queue.put(RenderMessage.MTAStartup())
-    time.sleep(4)
+    time.sleep(4.5)
     render_queue.put(RenderMessage.Clear())
 
 
