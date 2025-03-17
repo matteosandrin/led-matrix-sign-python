@@ -108,7 +108,8 @@ def ui_task():
                 render_queue.put(
                     RenderMessage.MTAStationBanner(
                         station_name=mta.train_station_to_str(new_station),
-                        routes=mta.station_by_id(new_station).routes))
+                        routes=mta.sort_routes(
+                            mta.station_by_id(new_station).routes)))
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
                 if new_message == "mta_all_images":

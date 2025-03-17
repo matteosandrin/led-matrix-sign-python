@@ -59,6 +59,14 @@ def train_station_to_str(station: str) -> str:
     return ""
 
 
+def sort_routes(routes: List[str]) -> List[str]:
+    ideal_sort = [
+        "1", "2", "3", "4", "5", "6", "A", "C", "E", "SI", "G", "7", "7X", "B",
+        "D", "F", "M", "J", "Z", "N", "Q", "R", "W", "L", "GS", "FS", "H"]
+    return sorted(routes, key=lambda x: ideal_sort.index(x)
+                  if x in ideal_sort else len(ideal_sort))
+
+
 def get_second_train(
         predictions: List[TrainTime],
         last_second_train: TrainTime) -> TrainTime:
