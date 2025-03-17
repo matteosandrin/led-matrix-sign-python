@@ -147,6 +147,7 @@ class MTAAlertAnimation(TextScrollAnimation):
             yield frame
         yield (self.bbox, self.last_frame)
 
+
 class MTABlinkAnimation(Animation):
     def __init__(self, text: str, bbox: Rect):
         super().__init__(bbox=bbox, speed=6, loop=False)
@@ -161,13 +162,13 @@ class MTABlinkAnimation(Animation):
         draw.fontmode = "1"  # antialiasing off
         draw.text((1, 2), text, font=Fonts.MTA, fill=Colors.MTA_RED_AMBER)
         return image
-    
+
     def make_blank_image(self):
         image = Image.new('RGB', (self.bbox.w, self.bbox.h), Colors.BLACK)
         return image
 
     def frame_generator(self):
-        total_time = 15 # seconds
+        total_time = 15  # seconds
         text_frame_number = int(self.text_time_fraction * self.speed)
         for i in range(total_time):
             for k in range(int(self.speed)):
@@ -178,12 +179,13 @@ class MTABlinkAnimation(Animation):
         # show the text image as the last frame to not leave the screen blank
         yield (self.bbox, self.text_image)
 
+
 class MTAStartupAnimation(Animation):
     def __init__(self, bbox: Rect):
         super().__init__(bbox=bbox, speed=10, loop=False)
         self.route_images = [
             get_image_with_color(item["img"], hex_to_rgb(item["color"]))
-            for _ , item in mta.get_all_route_images().items()]        
+            for _, item in mta.get_all_route_images().items()]
 
     def frame_generator(self):
         random.shuffle(self.route_images)
@@ -199,12 +201,14 @@ class MTAStartupAnimation(Animation):
                         frame.paste(black_square, (x, y))
                     yield (self.bbox, frame)
 
+
 class AnimationGroup:
     def __init__(self, speed: float):
         self.speed = speed
         self.animation_keys = []
         self.last_update = 0
-        self.frames_per_update = round(1 / (ANIMATION_REFRESH_RATE * self.speed))
+        self.frames_per_update = round(
+            1 / (ANIMATION_REFRESH_RATE * self.speed))
 
     def add_animation(self, key: str):
         self.animation_keys.append(key)
@@ -302,7 +306,9 @@ class AnimationManager:
                             frame, is_complete = animation.get_next_frame()
                             if frame is not None:
                                 bbox, image = frame
-                                self.render_queue.put(RenderMessage.Frame(bbox=bbox, frame=image))
+                                self.render_queue.put(
+                                    RenderMessage.Frame(
+                                        bbox=bbox, frame=image))
                                 update_count += 1
                             if is_complete:
                                 completed_keys.append(key)
@@ -312,6 +318,6 @@ class AnimationManager:
 
                 for key in completed_keys:
                     self.remove_animation(key)
-                
+
                 frame_count += 1
             time.sleep(0.001)
