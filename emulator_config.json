@@ -13,7 +13,7 @@
         "quality": 100,
         "image_border": true,
         "debug_text": true,
-        "image_format": "JPEG"
+        "image_format": "PNG"
     },
     "log_level": "warning"
 }
