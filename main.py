@@ -18,7 +18,7 @@ from pprint import pprint
 from providers.music import Spotify
 from providers.music.types import SpotifyResponse
 from providers.widget import WidgetManager, ClockWidget, WeatherWidget
-from providers.game_of_life import GameOfLife, GameOfLifePatterns
+from providers.game_of_life import GameOfLife
 from server import Server
 from display.types import RenderMessage, Rect
 
@@ -290,40 +290,18 @@ def game_of_life_provider_task():
     grid_height = 32
     
     game = GameOfLife(grid_width, grid_height, density=0.3)
-    last_pattern_time = time.time()
-    pattern_interval = 60
     
     while True:
         if mode_broadcaster.get_status() == SignMode.GAME_OF_LIFE:
-            changed = game.step()
+            game.step()
             render_queue.put(RenderMessage.GameOfLife(
                 grid=game.get_grid(),
                 generation=game.get_generation()
             ))
-            
-            # Reset if game becomes stable or empty
-            if game.is_stable_or_empty():
+            if game.is_stable_or_empty() or game.get_generation() >= 300:
                 logger.info(f"Game of Life: Resetting after {game.get_generation()} generations")
                 game.reset()
-                # Occasionally add interesting patterns instead of random
-                if time.time() - last_pattern_time > pattern_interval:
-                    patterns = [
-                        GameOfLifePatterns.glider(),
-                        GameOfLifePatterns.r_pentomino(),
-                        GameOfLifePatterns.toad(),
-                        GameOfLifePatterns.beacon()
-                    ]
-                    pattern = random.choice(patterns)
-                    # Add pattern at random location
-                    x_offset = random.randint(0, grid_width - 10)
-                    y_offset = random.randint(0, grid_height - 10)
-                    game.add_pattern(pattern, x_offset, y_offset)
-                    last_pattern_time = time.time()
-                    logger.info(f"Game of Life: Added pattern at ({x_offset}, {y_offset})")
-            
-            time.sleep(0.3)
-        else:
-            time.sleep(REFRESH_RATE)
+        time.sleep(REFRESH_RATE)
 
 def wait_for_network_connection():
     logger.info("Waiting for network connection...")

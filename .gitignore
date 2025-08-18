@@ -3,3 +3,4 @@ config/config.py
 *.pyc
 __pycache__/
 .DS_Store
+CLAUDE.md
