@@ -5,9 +5,6 @@ from typing import Tuple
 
 
 def render_game_of_life_content(message: RenderMessage.GameOfLife, screen_width: int, screen_height: int) -> Image.Image:
-    """Render Conway's Game of Life grid to an image."""
-    
-    # Create image
     img = Image.new('RGB', (screen_width, screen_height), Colors.BLACK)
     draw = ImageDraw.Draw(img)
     

@@ -286,23 +286,16 @@ def widget_provider_task():
 
 
 def game_of_life_provider_task():
-    # Initialize Game of Life with screen dimensions
-    # Use smaller grid for better visibility on LED matrix
-    grid_width = 160  # Slightly smaller than screen width for better cell visibility
-    grid_height = 32  # Smaller grid height
+    grid_width = 160
+    grid_height = 32
     
     game = GameOfLife(grid_width, grid_height, density=0.3)
-    
-    # Add some interesting patterns occasionally
     last_pattern_time = time.time()
-    pattern_interval = 60  # Add new pattern every 60 seconds
+    pattern_interval = 60
     
     while True:
         if mode_broadcaster.get_status() == SignMode.GAME_OF_LIFE:
-            # Step the game forward
             changed = game.step()
-            
-            # Send current state to display
             render_queue.put(RenderMessage.GameOfLife(
                 grid=game.get_grid(),
                 generation=game.get_generation()
@@ -328,7 +321,7 @@ def game_of_life_provider_task():
                     last_pattern_time = time.time()
                     logger.info(f"Game of Life: Added pattern at ({x_offset}, {y_offset})")
             
-            time.sleep(0.3)  # Update rate for Game of Life (about 3 FPS)
+            time.sleep(0.3)
         else:
             time.sleep(REFRESH_RATE)
 
