@@ -6,6 +6,7 @@ from datetime import datetime
 import providers.mbta.types as mbta
 import providers.mta.types as mta
 import providers.music.types as music
+import numpy as np
 
 
 class Rect:
@@ -92,4 +93,10 @@ class RenderMessage:
     class Music(BaseRenderMessage):
         status: music.SpotifyResponse
         song: music.Song
+        z_index: int = 0
+
+    @dataclass
+    class GameOfLife(BaseRenderMessage):
+        grid: np.ndarray
+        generation: int
         z_index: int = 0

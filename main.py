@@ -18,6 +18,7 @@ from pprint import pprint
 from providers.music import Spotify
 from providers.music.types import SpotifyResponse
 from providers.widget import WidgetManager, ClockWidget, WeatherWidget
+from providers.game_of_life import GameOfLife, GameOfLifePatterns
 from server import Server
 from display.types import RenderMessage, Rect
 
@@ -283,6 +284,54 @@ def widget_provider_task():
                 widget_manager.stop()
         time.sleep(REFRESH_RATE)
 
+
+def game_of_life_provider_task():
+    # Initialize Game of Life with screen dimensions
+    # Use smaller grid for better visibility on LED matrix
+    grid_width = 160  # Slightly smaller than screen width for better cell visibility
+    grid_height = 32  # Smaller grid height
+    
+    game = GameOfLife(grid_width, grid_height, density=0.3)
+    
+    # Add some interesting patterns occasionally
+    last_pattern_time = time.time()
+    pattern_interval = 60  # Add new pattern every 60 seconds
+    
+    while True:
+        if mode_broadcaster.get_status() == SignMode.GAME_OF_LIFE:
+            # Step the game forward
+            changed = game.step()
+            
+            # Send current state to display
+            render_queue.put(RenderMessage.GameOfLife(
+                grid=game.get_grid(),
+                generation=game.get_generation()
+            ))
+            
+            # Reset if game becomes stable or empty
+            if game.is_stable_or_empty():
+                logger.info(f"Game of Life: Resetting after {game.get_generation()} generations")
+                game.reset()
+                # Occasionally add interesting patterns instead of random
+                if time.time() - last_pattern_time > pattern_interval:
+                    patterns = [
+                        GameOfLifePatterns.glider(),
+                        GameOfLifePatterns.r_pentomino(),
+                        GameOfLifePatterns.toad(),
+                        GameOfLifePatterns.beacon()
+                    ]
+                    pattern = random.choice(patterns)
+                    # Add pattern at random location
+                    x_offset = random.randint(0, grid_width - 10)
+                    y_offset = random.randint(0, grid_height - 10)
+                    game.add_pattern(pattern, x_offset, y_offset)
+                    last_pattern_time = time.time()
+                    logger.info(f"Game of Life: Added pattern at ({x_offset}, {y_offset})")
+            
+            time.sleep(0.3)  # Update rate for Game of Life (about 3 FPS)
+        else:
+            time.sleep(REFRESH_RATE)
+
 def wait_for_network_connection():
     logger.info("Waiting for network connection...")
     connected = False
@@ -353,6 +402,7 @@ def main():
         threading.Thread(target=music_provider_task, daemon=True),
         threading.Thread(target=widget_provider_task, daemon=True),
         threading.Thread(target=mta_provider_task, daemon=True),
+        threading.Thread(target=game_of_life_provider_task, daemon=True),
     ]
     for thread in system_threads:
         thread.start()

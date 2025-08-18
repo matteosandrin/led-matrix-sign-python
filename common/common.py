@@ -14,6 +14,7 @@ class SignMode(Enum):
     MTA = 3
     MUSIC = 4
     WIDGET = 5
+    GAME_OF_LIFE = 6
 
 # These modes will not be cycled through, but will be available to be selected
 # manually from the web interface
