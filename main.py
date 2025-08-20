@@ -18,6 +18,7 @@ from pprint import pprint
 from providers.music import Spotify
 from providers.music.types import SpotifyResponse
 from providers.widget import WidgetManager, ClockWidget, WeatherWidget
+from providers.game_of_life import GameOfLife
 from server import Server
 from display.types import RenderMessage, Rect
 
@@ -283,6 +284,25 @@ def widget_provider_task():
                 widget_manager.stop()
         time.sleep(REFRESH_RATE)
 
+
+def game_of_life_provider_task():
+    grid_width = 160
+    grid_height = 32
+    
+    game = GameOfLife(grid_width, grid_height, density=0.3)
+    
+    while True:
+        if mode_broadcaster.get_status() == SignMode.GAME_OF_LIFE:
+            game.step()
+            render_queue.put(RenderMessage.GameOfLife(
+                grid=game.get_grid(),
+                generation=game.get_generation()
+            ))
+            if game.is_stable_or_empty() or game.get_generation() >= 300:
+                logger.info(f"Game of Life: Resetting after {game.get_generation()} generations")
+                game.reset()
+        time.sleep(REFRESH_RATE)
+
 def wait_for_network_connection():
     logger.info("Waiting for network connection...")
     connected = False
@@ -353,6 +373,7 @@ def main():
         threading.Thread(target=music_provider_task, daemon=True),
         threading.Thread(target=widget_provider_task, daemon=True),
         threading.Thread(target=mta_provider_task, daemon=True),
+        threading.Thread(target=game_of_life_provider_task, daemon=True),
     ]
     for thread in system_threads:
         thread.start()

@@ -10,6 +10,7 @@ from .animation import AnimationManager
 from .render_mbta import render_mbta_content, render_mbta_banner_content
 from .render_mta import *
 from .render_music import render_music_content
+from .render_game_of_life import render_game_of_life_content
 from .types import RenderMessage, BaseRenderMessage, Rect
 from common import Fonts, Colors, ClockType
 from PIL import Image, ImageDraw, ImageFont
@@ -78,6 +79,8 @@ class Display:
             render_mta_station_banner_content(self, message)
         elif isinstance(message, RenderMessage.Music):
             render_music_content(self, message)
+        elif isinstance(message, RenderMessage.GameOfLife):
+            self.render_game_of_life_content(message)
 
     def clear(self):
         self.animation_manager.clear()
@@ -129,3 +132,8 @@ class Display:
         while draw.textlength(text, font=font) > max_width:
             text = text[:-1]
         return text
+
+    def render_game_of_life_content(self, message: RenderMessage.GameOfLife):
+        """Render Conway's Game of Life to the display."""
+        image = render_game_of_life_content(message, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+        self._update_display(image)
