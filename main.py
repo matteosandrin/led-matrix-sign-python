@@ -331,10 +331,20 @@ def setup_network():
     render_queue.put(RenderMessage.Text(text="Waiting for network..."))
 
     if wait_for_network_connection():
+        ip_address = get_ip_address().replace(".", " . ")
+        render_queue.put(RenderMessage.Text(text=f"Connected\nip : {ip_address}"))
+        time.sleep(2)
         return True
     else:
         render_queue.put(RenderMessage.Text(text="Network connection timed out."))
         return False
+    
+def get_ip_address() -> str:
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip_address = s.getsockname()[0]
+    s.close()
+    return ip_address
 
 
 def startup_animation():
