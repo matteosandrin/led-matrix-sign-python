@@ -25,6 +25,7 @@ class Server:
         self.app.route('/set/mode')(self.set_mode_route)
         self.app.route('/set/mbta-station')(self.set_mbta_station_route)
         self.app.route('/set/mta-station')(self.set_mta_station_route)
+        self.app.route('/set/mta-direction')(self.set_mta_direction_route)
         self.app.route('/set/test')(self.set_test_message_route)
         self.app.route('/trigger/mbta-alert')(self.trigger_mbta_alert_route)
         self.app.route('/trigger/mta-alert')(self.trigger_mta_alert_route)
@@ -35,6 +36,7 @@ class Server:
         current_mode = self.mode_broadcaster.get_status()
         params = {
             "SignMode": SignMode,
+            "MTADirection" : mta.Direction,
             "current_mode": current_mode,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
         }
@@ -46,10 +48,13 @@ class Server:
                 current_station)
         if current_mode == SignMode.MTA:
             stations_by_route = mta.stations_by_route()
-            current_station = self.mta_station_broadcaster.get_status()
+            current_status : mta.types.Status = self.mta_station_broadcaster.get_status()
+            params["mta_current_status"] = current_status
             params["mta_stations_by_route"] = stations_by_route
             params["mta_current_station_label"] = mta.train_station_to_str(
-                current_station)
+                current_status.station)
+            params["mta_current_direction_label"] = mta.direction_to_str(
+                current_status.direction)
         return render_template('index.html', **params)
 
     def set_mode_route(self):
@@ -88,6 +93,17 @@ class Server:
             return f'Station set to {value}', 200
         except Exception as e:
             return f'Invalid station: {value}', 400
+        
+    def set_mta_direction_route(self):
+        value = request.args.get('id')
+        if value is None:
+            return render_template('result.html', message='Direction not provided')
+        try:
+            direction = list(mta.Direction)[int(value)]
+            self.ui_queue.put({"type": UIMessageType.MTA_CHANGE_DIRECTION, "direction": direction})
+            return f'Direction set to {direction.name}', 200
+        except Exception as e:
+            return f'Invalid direction: {value}', 400
 
     def trigger_mbta_alert_route(self):
         self.ui_queue.put({

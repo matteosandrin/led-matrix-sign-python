@@ -111,6 +111,10 @@ def ui_task():
                         station_name=mta.train_station_to_str(new_station),
                         routes=mta.sort_routes(
                             mta.station_by_id(new_station).routes)))
+            elif message["type"] == UIMessageType.MTA_CHANGE_DIRECTION:
+                new_direction = message.get("direction")
+                mta_client.set_current_direction(new_direction)
+                logger.info(f"Direction changed to: {new_direction}")
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
                 if new_message == "mta_all_images":
@@ -147,7 +151,7 @@ def render_task():
 
 def web_server_task():
     server = Server(ui_queue, mode_broadcaster,
-                    mbta_client.station_broadcaster, mta_client.station_broadcaster)
+                    mbta_client.station_broadcaster, mta_client.status_broadcaster)
     server.web_server_task()
 
 
@@ -202,10 +206,11 @@ def mta_provider_task():
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
             station = mta_client.get_current_station()
+            direction = mta_client.get_current_direction()
             if station is not None:
                 predictions = []
                 if not config.MTA_FAKE_DATA:
-                    predictions = mta_client.get_predictions(station)
+                    predictions = mta_client.get_predictions(station, direction)
                 else:
                     predictions = mta_client.get_fake_predictions(station)
                 if predictions is not None:

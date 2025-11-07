@@ -5,6 +5,10 @@
   - stations_by_route: The stations by route for the given namespace.
 -->
 {% macro station_select(namespace, current_station_label, stations_by_route) %}
+<form method="GET" action="/trigger/{{ namespace }}-alert" onsubmit="handleFormSubmit(event, this)">
+  <h2>Trigger {{ namespace | upper }} alert</h2>
+  <input type="submit" value="Trigger alert">
+</form>
 <form method="GET" action="/set/{{ namespace }}-station" onsubmit="handleFormSubmit(event, this)">
   <h2>Set {{ namespace | upper }} station</h2>
   <p>Current station is <span style="font-weight: bold;">{{ current_station_label }}</span></p>
@@ -17,10 +21,6 @@
     <option value="">Select a station</option>
   </select>
   <input type="submit" value="Set station">
-</form>
-<form method="GET" action="/trigger/{{ namespace }}-alert" onsubmit="handleFormSubmit(event, this)">
-  <h2>Trigger {{ namespace | upper }} alert</h2>
-  <input type="submit" value="Trigger alert">
 </form>
 <script>
   function {{ namespace }}stationSelector() {

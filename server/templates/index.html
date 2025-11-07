@@ -82,6 +82,16 @@
   {% endif %}
   {% if current_mode == SignMode.MTA %}
     {{ station_select("mta", mta_current_station_label, mta_stations_by_route) }}
+    <form method="GET" action="/set/mta-direction" onsubmit="handleFormSubmit(event, this)">
+      <h2>Set direction</h2>
+      <p>Current direction is <span style="font-weight: bold;">{{ mta_current_direction_label }}</span></p>
+      <select name="id">
+        {% for direction in MTADirection %}
+          <option value="{{ direction.value }}" {% if mta_current_status.direction == direction %}selected{% endif %}>{{ direction.name }}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Set direction">
+    </form>
   {% endif %}
   {% if current_mode == SignMode.TEST %}
     <form method="GET" action="/set/test" onsubmit="handleFormSubmit(event, this)">

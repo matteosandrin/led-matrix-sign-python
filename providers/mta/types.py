@@ -38,3 +38,13 @@ class HistoricalTrainTime:
     departure_time: int
     trip_id: str
     day_type: DayType
+
+class Direction(Enum):
+    DIRECTION_UPTOWN = 0
+    DIRECTION_DOWNTOWN = 1
+    DIRECTION_NONE = 2
+
+@dataclass
+class Status:
+    station: str
+    direction: Direction = Direction.DIRECTION_NONE

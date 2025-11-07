@@ -27,8 +27,9 @@ class UIMessageType(Enum):
     MBTA_CHANGE_STATION = 3
     MBTA_TEST_BANNER = 4
     MTA_CHANGE_STATION = 5
-    MTA_ALERT = 6
-    SHUTDOWN = 7
+    MTA_CHANGE_DIRECTION = 6
+    MTA_ALERT = 7
+    SHUTDOWN = 8
 
 
 class ClockType(Enum):

@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 import os
 import random
@@ -10,7 +11,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pprint import pprint
 from typing import Dict, List, Optional, TypedDict
-from .types import TrainTime, Station, DayType, HistoricalTrainTime
+from .types import TrainTime, Station, DayType, HistoricalTrainTime, Status, Direction
 import logging
 
 logger = logging.getLogger("led-matrix-sign")
@@ -56,6 +57,15 @@ def train_station_to_str(station: str) -> str:
     for s in stations:
         if s.stop_id == station:
             return s.stop_name
+    return ""
+
+def direction_to_str(direction: Direction) -> str:
+    if direction == Direction.DIRECTION_NONE:
+        return "None"
+    if direction == Direction.DIRECTION_UPTOWN:
+        return "Uptown"
+    if direction == Direction.DIRECTION_DOWNTOWN:
+        return "Downtown"
     return ""
 
 
@@ -111,25 +121,28 @@ class MTA():
     def __init__(self, api_key: str):
         self.domain = 'https://otp-mta-prod.camsys-apps.com/otp/routers/default'
         self.api_key = api_key
-        self.station_broadcaster = StatusBroadcaster()
-        self.station_broadcaster.set_status(DEFAULT_MTA_STATION)
+        self.status_broadcaster = StatusBroadcaster()
+        self.status_broadcaster.set_status(Status(station=DEFAULT_MTA_STATION))
         # The last train to be shown in the second slot on the board.
         self.last_second_train = None
 
-    def get_predictions(self, stop_id: str) -> Optional[List[TrainTime]]:
+    def get_predictions(self, stop_id: str, direction: Direction = Direction.DIRECTION_NONE) -> Optional[List[TrainTime]]:
         try:
             stop = station_by_id(stop_id)
             if stop is None:
                 logger.error(f"Stop {stop_id} not found")
                 return []
             stop_ids = get_stop_ids(stop)
-            response = requests.get(f"{self.domain}/nearby", params={
+            params = {
                 'stops': combine_stop_ids(stop_ids),
                 'apikey': self.api_key,
                 'groupByParent': 'true',
                 'routes': '',
                 'timeRange': 60 * 60
-            })
+            }
+            if direction != Direction.DIRECTION_NONE:
+                params["direction"] = str(direction.value)
+            response = requests.get(f"{self.domain}/nearby", params)
             status_per_station = response.json()
             train_times: List[TrainTime] = []
             for station in status_per_station:
@@ -216,11 +229,24 @@ class MTA():
         ) for i, t in enumerate(historical_train_times[:MAX_NUM_PREDICTIONS])]
 
     def get_current_station(self) -> Optional[str]:
-        return self.station_broadcaster.get_status()
+        status : Status = self.status_broadcaster.get_status()
+        return status.station
 
     def set_current_station(self, station: str):
         self.clear()
-        self.station_broadcaster.set_status(station)
+        status : Status = self.status_broadcaster.get_status()
+        status.station = station
+        self.status_broadcaster.set_status(status)
+
+    def get_current_direction(self) -> Direction:
+        status : Status = self.status_broadcaster.get_status()
+        return status.direction
+
+    def set_current_direction(self, direction: Direction):
+        self.clear()
+        status : Status = self.status_broadcaster.get_status()
+        status.direction = direction
+        self.status_broadcaster.set_status(status)
 
     def clear(self):
         self.last_second_train = None
