@@ -2,7 +2,7 @@ import providers.mbta as mbta
 from typing import Tuple, List
 from PIL import Image
 from common import Colors, Fonts
-from .animation import MBTABannerAnimation, MoveAnimation
+from .animation import Animation, MBTABannerAnimation, MoveAnimation
 from .types import RenderMessage, Rect
 
 
@@ -38,7 +38,7 @@ def render_mbta_content(display, message: RenderMessage.MBTA):
 
 def render_mbta_banner_content(display, message: RenderMessage.MBTABanner):
     lines = message.lines[:2]
-    animations = {
+    animations : dict[str, Animation] = {
         "mbta_banner": MBTABannerAnimation(
             Rect(0, 32, display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
             Rect(0, 0, display.SCREEN_WIDTH, display.SCREEN_HEIGHT),

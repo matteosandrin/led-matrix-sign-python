@@ -69,7 +69,7 @@ def sort_routes(routes: List[str]) -> List[str]:
 
 def get_second_train(
         predictions: List[TrainTime],
-        last_second_train: TrainTime) -> TrainTime:
+        last_second_train: TrainTime) -> Optional[TrainTime]:
     """
     The second train slot on the board rotates between the next couple of
     trains. This function returns the next train in the rotation. It always
@@ -168,7 +168,7 @@ class MTA():
         # data is in EST timezone
         now = datetime.now(pytz.timezone('America/New_York'))
         midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        return (now - midnight).total_seconds()
+        return int((now - midnight).total_seconds())
 
     def _filter_historical_train_times(
             self, train_times: List[HistoricalTrainTime]) -> List[
