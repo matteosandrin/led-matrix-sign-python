@@ -38,14 +38,14 @@ class Spotify:
     def get_api_bearer_token(self) -> str:
         return f"Bearer {self.access_token}"
 
-    def refresh_token(self) -> str:
+    def refresh_token(self) -> SpotifyResponse:
         status = self.fetch_refresh_token()
         if status != SpotifyResponse.OK:
             logger.error(f"Failed to refresh spotify token: {status}")
         self.last_refresh_time = int(time.time() * 1000)
         return status
 
-    def fetch_refresh_token(self) -> str:
+    def fetch_refresh_token(self) -> SpotifyResponse:
         headers = {
             "Authorization": self.get_refresh_bearer_token(),
             "content-type": "application/x-www-form-urlencoded"
@@ -66,7 +66,7 @@ class Spotify:
             logger.error(f"Error refreshing token: {e}")
             return SpotifyResponse.ERROR
 
-    def get_currently_playing(self) -> tuple[str, Optional[Song]]:
+    def get_currently_playing(self) -> tuple[SpotifyResponse, Optional[Song]]:
         result = Song()
         result.timestamp_ms = int(time.time() * 1000)
 
@@ -107,7 +107,7 @@ class Spotify:
         cover.height = smallest_img["height"]
         return cover
 
-    def fetch_currently_playing(self) -> str:
+    def fetch_currently_playing(self) -> SpotifyResponse:
         self.check_refresh_token()
 
         headers = {"Authorization": self.get_api_bearer_token()}
@@ -125,11 +125,11 @@ class Spotify:
             logger.error(f"Error fetching currently playing: {e}")
             return SpotifyResponse.ERROR
 
-    def get_album_cover(self, currently_playing: Song) -> tuple[str,
+    def get_album_cover(self, currently_playing: Song) -> tuple[SpotifyResponse,
                                                                 Optional[bytes]]:
         return self.fetch_album_cover(currently_playing.cover.url)
 
-    def fetch_album_cover(self, url: str) -> tuple[str, Optional[bytes]]:
+    def fetch_album_cover(self, url: str) -> tuple[SpotifyResponse, Optional[bytes]]:
         try:
             response = self.session.get(url)
             response.raise_for_status()

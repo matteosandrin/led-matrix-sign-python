@@ -92,7 +92,7 @@ class RenderMessage:
 
     @dataclass
     class Music(BaseRenderMessage):
-        status: str
+        status: music.SpotifyResponse
         song: Optional[music.Song]
         z_index: int = 0
 

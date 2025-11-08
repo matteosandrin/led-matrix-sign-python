@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
+from enum import Enum
 from typing import Optional
 
-class SpotifyResponse:
+class SpotifyResponse(Enum):
     OK = "ok"
     ERROR = "error"
     EMPTY = "empty"
