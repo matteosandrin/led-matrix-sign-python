@@ -53,7 +53,7 @@ def setup_logging() -> None:
 
     if not config.EMULATE_RGB_MATRIX:
         try:
-            from systemd import journal
+            from systemd import journal # type: ignore (only imported for linux)
             journal_handler = journal.JournalHandler()
             journal_handler.setFormatter(formatter)
             logger.addHandler(journal_handler)
