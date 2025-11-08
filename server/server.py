@@ -1,13 +1,11 @@
 from queue import Queue
+from typing import Any
 from flask import Flask, render_template, request
 from common import SignMode, UIMessageType
 from common.broadcaster import StatusBroadcaster
 import config
-import subprocess
-import os.path
 import providers.mta as mta
 import providers.mbta as mbta
-import random
 
 
 class Server:
@@ -32,35 +30,35 @@ class Server:
         self.app.route('/trigger/mode-shift')(self.trigger_mode_shift_route)
         self.app.route('/trigger/shutdown')(self.trigger_shutdown_route)
 
-    def index(self):
+    def index(self) -> str:
         current_mode = self.mode_broadcaster.get_status()
-        params = {
+        params: dict[str, Any] = {
             "SignMode": SignMode,
             "MTADirection" : mta.Direction,
             "current_mode": current_mode,
             "EMULATE_RGB_MATRIX": config.EMULATE_RGB_MATRIX,
         }
         if current_mode == SignMode.MBTA:
-            stations_by_route = mbta.stations_by_route()
+            mbta_stations_by_route = mbta.stations_by_route()
             current_station = self.station_broadcaster.get_status()
-            params["mbta_stations_by_route"] = stations_by_route
+            params["mbta_stations_by_route"] = mbta_stations_by_route
             params["mbta_current_station_label"] = mbta.train_station_to_str(
                 current_station)
         if current_mode == SignMode.MTA:
-            stations_by_route = mta.stations_by_route()
+            mta_stations_by_route = mta.stations_by_route()
             current_status : mta.types.Status = self.mta_station_broadcaster.get_status()
             params["mta_current_status"] = current_status
-            params["mta_stations_by_route"] = stations_by_route
+            params["mta_stations_by_route"] = mta_stations_by_route
             params["mta_current_station_label"] = mta.train_station_to_str(
                 current_status.station)
             params["mta_current_direction_label"] = mta.direction_to_str(
                 current_status.direction)
         return render_template('index.html', **params)
 
-    def set_mode_route(self):
+    def set_mode_route(self) -> tuple[str, int]:
         value = request.args.get('id')
         if value is None:
-            return render_template('result.html', message='Mode not provided')
+            return render_template('result.html', message='Mode not provided'), 400
         try:
             mode = list(SignMode)[int(value)]
             self.ui_queue.put({"type": UIMessageType.MODE_CHANGE, "mode": mode})
@@ -68,7 +66,7 @@ class Server:
         except Exception as e:
             return f'Invalid mode: {value}', 400
 
-    def set_mbta_station_route(self):
+    def set_mbta_station_route(self) -> tuple[str, int]:
         value = request.args.get('id')
         if value is None:
             return f'Station not provided', 400
@@ -83,7 +81,7 @@ class Server:
         except Exception as e:
             return f'Invalid station: {value}', 400
 
-    def set_mta_station_route(self):
+    def set_mta_station_route(self) -> tuple[str, int]:
         value = request.args.get('id')
         if value is None:
             return f'Station not provided', 400
@@ -93,11 +91,11 @@ class Server:
             return f'Station set to {value}', 200
         except Exception as e:
             return f'Invalid station: {value}', 400
-        
-    def set_mta_direction_route(self):
+
+    def set_mta_direction_route(self) -> tuple[str, int]:
         value = request.args.get('id')
         if value is None:
-            return render_template('result.html', message='Direction not provided')
+            return render_template('result.html', message='Direction not provided'), 400
         try:
             direction = list(mta.Direction)[int(value)]
             self.ui_queue.put({"type": UIMessageType.MTA_CHANGE_DIRECTION, "direction": direction})
@@ -105,35 +103,35 @@ class Server:
         except Exception as e:
             return f'Invalid direction: {value}', 400
 
-    def trigger_mbta_alert_route(self):
+    def trigger_mbta_alert_route(self) -> tuple[str, int]:
         self.ui_queue.put({
             "type": UIMessageType.MBTA_TEST_BANNER,
             "content": ["Alewife train", "is now arriving."]
         })
         return 'Banner triggered', 200
 
-    def set_test_message_route(self):
+    def set_test_message_route(self) -> tuple[str, int]:
         value = request.args.get('msg')
         if value is None:
             return 'Message not provided', 400
         self.ui_queue.put({"type": UIMessageType.TEST, "content": value})
         return f'Message set to {value}', 200
 
-    def trigger_mta_alert_route(self):
+    def trigger_mta_alert_route(self) -> tuple[str, int]:
         self.ui_queue.put({
             "type": UIMessageType.MTA_ALERT,
             "content": mta.AlertMessages.random()
         })
         return 'MTA alert triggered', 200
 
-    def trigger_mode_shift_route(self):
+    def trigger_mode_shift_route(self) -> tuple[str, int]:
         self.ui_queue.put({"type": UIMessageType.MODE_SHIFT})
         return 'Mode shift triggered', 200
 
-    def trigger_shutdown_route(self):
+    def trigger_shutdown_route(self) -> tuple[str, int]:
         self.ui_queue.put({"type": UIMessageType.SHUTDOWN})
         return 'Shutdown triggered', 200
 
-    def web_server_task(self):
+    def web_server_task(self) -> None:
         self.app.run(host='0.0.0.0', port=5050,
                      debug=False, use_reloader=False)

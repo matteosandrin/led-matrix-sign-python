@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Any
 from PIL import Image
 from providers.music.types import SpotifyResponse, Song
 from io import BytesIO
@@ -7,11 +7,11 @@ from .animation import TextScrollAnimation
 from .types import RenderMessage, Rect
 
 
-def render_music_content(display, message: RenderMessage.Music):
+def render_music_content(display: Any, message: RenderMessage.Music) -> None:
     status, song = message.status, message.song
 
     if status in [SpotifyResponse.OK, SpotifyResponse.OK_SHOW_CACHED,
-                  SpotifyResponse.OK_NEW_SONG]:
+                  SpotifyResponse.OK_NEW_SONG] and song is not None:
 
         progress_bar_image = _get_progress_bar_image(display, song)
         display.canvas.SetImage(progress_bar_image, 32,
@@ -35,10 +35,10 @@ def render_music_content(display, message: RenderMessage.Music):
                     True, True, song.artist, Fonts.SILKSCREEN, Colors.WHITE)
             display.animation_manager.add_animations(animations)
         if song.cover.data is not None:
-            album_art_image = Image.open(
+            opened_image = Image.open(
                 BytesIO(song.cover.data),
                 formats=['JPEG'])
-            album_art_image = album_art_image.resize((32, 32))
+            album_art_image = opened_image.resize((32, 32))
             display.canvas.SetImage(album_art_image, 0, 0)
         display.swap_canvas()
 
@@ -58,7 +58,7 @@ def render_music_content(display, message: RenderMessage.Music):
         display._update_display(image)
 
 
-def _get_progress_bar_image(display, song: Song):
+def _get_progress_bar_image(display: Any, song: Song) -> Image.Image:
     image = Image.new('RGB', (display.SCREEN_WIDTH - 32, 8), Colors.BLACK)
     draw = display._get_draw_context_antialiased(image)
     # Draw progress bar
@@ -96,7 +96,7 @@ def _get_progress_bar_image(display, song: Song):
     return image
 
 
-def _get_title_and_artist_image(display, song: Song):
+def _get_title_and_artist_image(display: Any, song: Song) -> Image.Image:
     image = Image.new('RGB', (display.SCREEN_WIDTH - 32, 24), Colors.BLACK)
     draw = display._get_draw_context_antialiased(image)
     draw.text((0, 0), song.title,

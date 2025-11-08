@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from PIL import Image
 from common import ClockType
-from typing import List
+from typing import List, Optional, Tuple
 from datetime import datetime
 import providers.mbta.types as mbta
 import providers.mta.types as mta
@@ -16,12 +16,13 @@ class Rect:
         self.w = w
         self.h = h
 
-    def to_tuple(self):
+    def to_tuple(self) -> tuple[int, int, int, int]:
         return (self.x, self.y, self.w, self.h)
 
-    def to_crop_tuple(self):
+    def to_crop_tuple(self) -> tuple[int, int, int, int]:
         return (self.x, self.y, self.x + self.w, self.y + self.h)
 
+AnimationFrame = Tuple[Rect, Image.Image]
 
 @dataclass
 class BaseRenderMessage:
@@ -91,8 +92,8 @@ class RenderMessage:
 
     @dataclass
     class Music(BaseRenderMessage):
-        status: music.SpotifyResponse
-        song: music.Song
+        status: str
+        song: Optional[music.Song]
         z_index: int = 0
 
     @dataclass

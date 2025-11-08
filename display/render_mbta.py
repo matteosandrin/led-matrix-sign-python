@@ -1,12 +1,12 @@
 import providers.mbta as mbta
-from typing import Tuple, List
+from typing import Any
 from PIL import Image
 from common import Colors, Fonts
 from .animation import Animation, MBTABannerAnimation, MoveAnimation
 from .types import RenderMessage, Rect
 
 
-def render_mbta_content(display, message: RenderMessage.MBTA):
+def render_mbta_content(display: Any, message: RenderMessage.MBTA) -> None:
     # Create new image with black background
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT), Colors.BLACK)
@@ -36,7 +36,7 @@ def render_mbta_content(display, message: RenderMessage.MBTA):
     display._update_display(image)
 
 
-def render_mbta_banner_content(display, message: RenderMessage.MBTABanner):
+def render_mbta_banner_content(display: Any, message: RenderMessage.MBTABanner) -> None:
     lines = message.lines[:2]
     animations : dict[str, Animation] = {
         "mbta_banner": MBTABannerAnimation(

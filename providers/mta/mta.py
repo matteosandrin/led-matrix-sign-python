@@ -37,7 +37,7 @@ alert_messages: List[str] = [
 
 
 def stations_by_route() -> Dict[str, List[Station]]:
-    stations_by_route = {}
+    stations_by_route: Dict[str, List[Station]] = {}
     for station in stations:
         for route in station.routes:
             if route not in stations_by_route:
@@ -79,7 +79,7 @@ def sort_routes(routes: List[str]) -> List[str]:
 
 def get_second_train(
         predictions: List[TrainTime],
-        last_second_train: TrainTime) -> Optional[TrainTime]:
+        last_second_train: Optional[TrainTime]) -> Optional[TrainTime]:
     """
     The second train slot on the board rotates between the next couple of
     trains. This function returns the next train in the rotation. It always
@@ -99,7 +99,7 @@ def get_second_train(
     return predictions[1]
 
 
-def print_predictions(predictions: List[TrainTime]):
+def print_predictions(predictions: List[TrainTime]) -> None:
     for train in predictions:
         logger.info(
             f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}")
@@ -118,13 +118,13 @@ def get_stop_ids(stop: Station) -> List[str]:
 
 
 class MTA():
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str) -> None:
         self.domain = 'https://otp-mta-prod.camsys-apps.com/otp/routers/default'
         self.api_key = api_key
         self.status_broadcaster = StatusBroadcaster()
         self.status_broadcaster.set_status(Status(station=DEFAULT_MTA_STATION))
         # The last train to be shown in the second slot on the board.
-        self.last_second_train = None
+        self.last_second_train: Optional[TrainTime] = None
 
     def get_predictions(self, stop_id: str, direction: Direction = Direction.DIRECTION_NONE) -> Optional[List[TrainTime]]:
         try:
@@ -133,7 +133,7 @@ class MTA():
                 logger.error(f"Stop {stop_id} not found")
                 return []
             stop_ids = get_stop_ids(stop)
-            params = {
+            params : Dict[str, str | int] = {
                 'stops': combine_stop_ids(stop_ids),
                 'apikey': self.api_key,
                 'groupByParent': 'true',
@@ -232,7 +232,7 @@ class MTA():
         status : Status = self.status_broadcaster.get_status()
         return status.station
 
-    def set_current_station(self, station: str):
+    def set_current_station(self, station: str) -> None:
         self.clear()
         status : Status = self.status_broadcaster.get_status()
         status.station = station
@@ -242,16 +242,16 @@ class MTA():
         status : Status = self.status_broadcaster.get_status()
         return status.direction
 
-    def set_current_direction(self, direction: Direction):
+    def set_current_direction(self, direction: Direction) -> None:
         self.clear()
         status : Status = self.status_broadcaster.get_status()
         status.direction = direction
         self.status_broadcaster.set_status(status)
 
-    def clear(self):
+    def clear(self) -> None:
         self.last_second_train = None
 
-    def load_historical_data(self):
+    def load_historical_data(self) -> None:
         if not os.path.exists(f'{CURRENT_FOLDER}/historical_train_times.pickle'):
             logger.error(
                 f"Historical train times file not found at {CURRENT_FOLDER}/historical_train_times.pickle")
@@ -264,10 +264,10 @@ class MTA():
 
 
 class AlertMessages:
-    def __init__(self):
+    def __init__(self) -> None:
         self.available_messages = alert_messages.copy()
-        self.used_messages = []
-        self.last_message = None
+        self.used_messages: List[str] = []
+        self.last_message: Optional[str] = None
 
     def next(self) -> str:
         # Every message is shown once per cycle. The same message is never shown

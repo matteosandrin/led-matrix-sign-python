@@ -33,7 +33,7 @@ if hasattr(config, 'DEFAULT_MBTA_STATION'):
 
 
 def stations_by_route() -> Dict[str, List[Station]]:
-    stations_by_route = {}
+    stations_by_route: Dict[str, List[Station]] = {}
     for station in stations:
         for route in station.routes:
             if route not in stations_by_route:
@@ -56,7 +56,7 @@ def train_station_to_str(station: str) -> str:
 
 
 class MBTA:
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str) -> None:
         self.api_key = api_key
         self.latest_predictions = [Prediction(), Prediction()]
         self.error_count = 0
@@ -64,7 +64,7 @@ class MBTA:
         self.station_broadcaster.set_status(DEFAULT_MBTA_STATION)
 
     @property
-    def station(self):
+    def station(self) -> str:
         return self.station_broadcaster.get_status()
 
     def get_predictions(self, num_predictions: int, directions: List[int],
@@ -108,7 +108,10 @@ class MBTA:
 
     def _fetch_predictions(self) -> Optional[dict]:
         try:
-            routes = station_by_id(self.station).routes
+            station = station_by_id(self.station)
+            if station is None:
+                return None
+            routes = station.routes
             response = requests.get(MBTA_PREDICTIONS_URL, params={
                 "api_key": self.api_key,
                 "filter[stop]": self.station,
@@ -218,7 +221,7 @@ class MBTA:
             self.latest_predictions[directions[1]] = latest[1]
 
     def find_prediction_with_arriving_banner(
-            self, predictions: [Prediction]) -> Optional[Prediction]:
+            self, predictions: List[Prediction]) -> Optional[Prediction]:
         if len(predictions) < 2:
             return None
         if predictions[0].value == "ARR" and self.latest_predictions[0].value != "ARR":
@@ -227,7 +230,7 @@ class MBTA:
             return predictions[1]
         return None
 
-    def get_arriving_banner(self, prediction: Prediction) -> [str]:
+    def get_arriving_banner(self, prediction: Prediction) -> List[str]:
         return [f"{prediction.label} train",
                 "is now arriving."]
 
@@ -239,7 +242,7 @@ class MBTA:
                 label=self.latest_predictions[1].label, value=self.latest_predictions[1].value)
         ]
 
-    def _get_placeholder_predictions(self) -> None:
+    def _get_placeholder_predictions(self) -> List[Prediction]:
         placeholders = [Prediction(), Prediction()]
         placeholders[0].label = "Ashmont"
         placeholders[0].value = ""

@@ -1,4 +1,3 @@
-import random
 import socket
 import config
 import argparse
@@ -9,18 +8,18 @@ import threading
 import time
 import os
 import logging
+from typing import Any
 from common import SignMode, UIMessageType, ClockType, get_next_mode
 from common.broadcaster import StatusBroadcaster
 from common.button import Button
 from datetime import datetime
 from display import Display
-from pprint import pprint
 from providers.music import Spotify
 from providers.music.types import SpotifyResponse
 from providers.widget import WidgetManager, ClockWidget, WeatherWidget
 from providers.game_of_life import GameOfLife
 from server import Server
-from display.types import RenderMessage, Rect
+from display.types import BaseRenderMessage, RenderMessage, Rect
 
 # Constants
 BUTTON_PIN = 25
@@ -28,30 +27,30 @@ REFRESH_RATE = 0.1  # seconds
 DEFAULT_SIGN_MODE = SignMode.MBTA
 
 # Global queues
-ui_queue = queue.Queue(maxsize=16)
-render_queue = queue.Queue(maxsize=32)
+ui_queue: queue.Queue[dict[str, Any]] = queue.Queue(maxsize=16)
+render_queue: queue.Queue[BaseRenderMessage] = queue.Queue(maxsize=32)
 
 mode_broadcaster = StatusBroadcaster()
 
-system_threads = []
-user_threads = []
+system_threads: list[threading.Thread] = []
+user_threads: list[threading.Thread] = []
 
 mbta_client = mbta.MBTA(config.MBTA_API_KEY)
 mta_client = mta.MTA(config.MTA_API_KEY)
 
 logger = logging.getLogger("led-matrix-sign")
 
-def setup_logging():
+def setup_logging() -> None:
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter(
         '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
         datefmt="%Y-%m-%dT%H:%M:%S%z")
-    
+
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
-    
+
     if not config.EMULATE_RGB_MATRIX:
         try:
             from systemd import journal
@@ -62,7 +61,7 @@ def setup_logging():
             logging.warning("Could not import systemd journal handler - logging to console only")
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description='LED Matrix Display Controller')
     parser.add_argument(
@@ -74,7 +73,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def ui_task():
+def ui_task() -> None:
     while True:
         try:
             message = ui_queue.get(timeout=REFRESH_RATE)
@@ -93,7 +92,7 @@ def ui_task():
                     logger.info(f"Mode changed to: {new_mode}")
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 new_station = message.get("station")
-                if mbta.station_by_id(new_station) is not None:
+                if new_station is not None and isinstance(new_station, str) and mbta.station_by_id(new_station) is not None:
                     mbta_client.set_station(new_station)
                     logger.info(f"Station changed to: {new_station}")
                     render_queue.put(RenderMessage.Clear())
@@ -103,18 +102,21 @@ def ui_task():
                 render_queue.put(RenderMessage.MBTABanner(lines=["Alewife train", "is now arriving."]))
             elif message["type"] == UIMessageType.MTA_CHANGE_STATION:
                 new_station = message.get("station")
-                mta_client.set_current_station(new_station)
-                logger.info(f"Station changed to: {new_station}")
-                render_queue.put(RenderMessage.Clear())
-                render_queue.put(
-                    RenderMessage.MTAStationBanner(
-                        station_name=mta.train_station_to_str(new_station),
-                        routes=mta.sort_routes(
-                            mta.station_by_id(new_station).routes)))
+                if new_station is not None and isinstance(new_station, str):
+                    mta_client.set_current_station(new_station)
+                    logger.info(f"Station changed to: {new_station}")
+                    render_queue.put(RenderMessage.Clear())
+                    station = mta.station_by_id(new_station)
+                    if station is not None:
+                        render_queue.put(
+                            RenderMessage.MTAStationBanner(
+                                station_name=mta.train_station_to_str(new_station),
+                                routes=mta.sort_routes(station.routes)))
             elif message["type"] == UIMessageType.MTA_CHANGE_DIRECTION:
                 new_direction = message.get("direction")
-                mta_client.set_current_direction(new_direction)
-                logger.info(f"Direction changed to: {new_direction}")
+                if new_direction is not None and isinstance(new_direction, mta.Direction):
+                    mta_client.set_current_direction(new_direction)
+                    logger.info(f"Direction changed to: {new_direction}")
             elif message["type"] == UIMessageType.TEST:
                 new_message = message.get("content")
                 if new_message == "mta_all_images":
@@ -122,7 +124,9 @@ def ui_task():
                 else:
                     render_queue.put(RenderMessage.Text(text=new_message if new_message is not None else ""))
             elif message["type"] == UIMessageType.MTA_ALERT:
-                render_queue.put(RenderMessage.MTAAlert(text=message.get("content")))
+                content = message.get("content")
+                if content is not None and isinstance(content, str):
+                    render_queue.put(RenderMessage.MTAAlert(text=content))
             elif message["type"] == UIMessageType.SHUTDOWN:
                 mode_broadcaster.set_status(SignMode.TEST)
                 if not config.EMULATE_RGB_MATRIX:
@@ -139,7 +143,7 @@ def ui_task():
             continue
 
 
-def render_task():
+def render_task() -> None:
     display = Display(render_queue)
     while True:
         try:
@@ -149,13 +153,13 @@ def render_task():
             continue
 
 
-def web_server_task():
+def web_server_task() -> None:
     server = Server(ui_queue, mode_broadcaster,
                     mbta_client.station_broadcaster, mta_client.status_broadcaster)
     server.web_server_task()
 
 
-def clock_provider_task():
+def clock_provider_task() -> None:
     while True:
         current_mode = mode_broadcaster.get_status()
         if current_mode == SignMode.CLOCK:
@@ -166,7 +170,7 @@ def clock_provider_task():
         time.sleep(REFRESH_RATE)
 
 
-def mbta_provider_task():
+def mbta_provider_task() -> None:
     while True:
         if mode_broadcaster.get_status() == SignMode.MBTA:
             status, predictions = mbta_client.get_predictions_both_directions()
@@ -191,7 +195,7 @@ def mbta_provider_task():
             time.sleep(REFRESH_RATE)
 
 
-def mta_provider_task():
+def mta_provider_task() -> None:
     last_alert_time = time.time()
     alert_messages = mta.AlertMessages()
     if config.MTA_FAKE_DATA:
@@ -208,7 +212,7 @@ def mta_provider_task():
             station = mta_client.get_current_station()
             direction = mta_client.get_current_direction()
             if station is not None:
-                predictions = []
+                predictions: list[mta.TrainTime] | None = []
                 if not config.MTA_FAKE_DATA:
                     predictions = mta_client.get_predictions(station, direction)
                 else:
@@ -237,7 +241,7 @@ def mta_provider_task():
             time.sleep(REFRESH_RATE)
 
 
-def music_provider_task():
+def music_provider_task() -> None:
     spotify = Spotify(config.SPOTIFY_CLIENT_ID,
                       config.SPOTIFY_CLIENT_SECRET, config.SPOTIFY_REFRESH_TOKEN)
     spotify.setup()
@@ -246,7 +250,7 @@ def music_provider_task():
             status, currently_playing = spotify.get_currently_playing()
             logger.info(status)
             logger.info(currently_playing)
-            if status == SpotifyResponse.OK_NEW_SONG:
+            if status == SpotifyResponse.OK_NEW_SONG and currently_playing is not None:
                 img_status, img = spotify.get_album_cover(currently_playing)
                 if img_status == SpotifyResponse.OK:
                     currently_playing.cover.data = img
@@ -270,7 +274,7 @@ def music_provider_task():
             time.sleep(REFRESH_RATE)
 
 
-def widget_provider_task():
+def widget_provider_task() -> None:
     widget_manager = WidgetManager(render_queue)
     widget_manager.add_widget(ClockWidget(
         Rect(40, 8, 80, 16)
@@ -290,7 +294,7 @@ def widget_provider_task():
         time.sleep(REFRESH_RATE)
 
 
-def game_of_life_provider_task():
+def game_of_life_provider_task() -> None:
     grid_width = 160
     grid_height = 32
     
@@ -308,12 +312,12 @@ def game_of_life_provider_task():
                 game.reset()
         time.sleep(REFRESH_RATE)
 
-def wait_for_network_connection():
+def wait_for_network_connection() -> bool:
     logger.info("Waiting for network connection...")
     connected = False
     start_time = time.time()
     timeout = 30
-    
+
     while not connected:
         if time.time() - start_time > timeout:
             logger.error("Network connection timed out.")
@@ -327,7 +331,7 @@ def wait_for_network_connection():
             time.sleep(1)
     return True
 
-def setup_network():
+def setup_network() -> bool:
     render_queue.put(RenderMessage.Text(text="Waiting for network..."))
 
     if wait_for_network_connection():
@@ -347,7 +351,7 @@ def get_ip_address() -> str:
     return ip_address
 
 
-def startup_animation():
+def startup_animation() -> None:
     # render the startup animation and wait for it to finish
     render_queue.put(RenderMessage.Clear())
     render_queue.put(RenderMessage.MTAStartup())
@@ -355,7 +359,7 @@ def startup_animation():
     render_queue.put(RenderMessage.Clear())
 
 
-def main():
+def main() -> None:
     setup_logging()
     args = parse_args()
     initial_mode = DEFAULT_SIGN_MODE

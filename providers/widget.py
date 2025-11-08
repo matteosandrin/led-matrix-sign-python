@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import threading
 import time
 import queue
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 from datetime import datetime
 from common import Fonts, Colors, Images
 from PIL import Image, ImageDraw
@@ -17,7 +17,7 @@ logger = logging.getLogger("led-matrix-sign")
 
 
 class Widget(ABC):
-    def __init__(self, bbox: Rect, refresh_rate: float = 1.0):
+    def __init__(self, bbox: Rect, refresh_rate: float = 1.0) -> None:
         self.bbox = bbox
         self.refresh_rate = refresh_rate
         self.active = False
@@ -32,19 +32,19 @@ class Widget(ABC):
         """Update widget content. Must be implemented by subclasses."""
         pass
 
-    def start(self):
+    def start(self) -> None:
         """Start the widget's update thread."""
         if not self._thread:
             self.active = True
             self._thread = threading.Thread(target=self._run, daemon=True)
             self._thread.start()
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the widget's update thread."""
         self.active = False
         self._thread = None
 
-    def _run(self):
+    def _run(self) -> None:
         """Main widget loop."""
         while self.active:
             try:
@@ -53,7 +53,7 @@ class Widget(ABC):
                 logger.error(f"Error in widget {self.__class__.__name__}: {e}")
             time.sleep(self.refresh_rate)
 
-    def get_render_data(self) -> dict:
+    def get_render_data(self) -> RenderMessage.Frame:
         """Get the widget's current render data."""
         with self._image_lock:
             return RenderMessage.Frame(
@@ -63,10 +63,10 @@ class Widget(ABC):
 
 
 class ClockWidget(Widget):
-    def __init__(self, bbox: Rect):
+    def __init__(self, bbox: Rect) -> None:
         super().__init__(bbox, refresh_rate=0.1)
 
-    def update(self):
+    def update(self) -> None:
         with self._image_lock:
             self._image.paste((0, 0, 0), (0, 0, self.bbox.w, self.bbox.h))
             now = datetime.now()
@@ -79,11 +79,11 @@ class ClockWidget(Widget):
 
 
 class WeatherWidget(Widget):
-    def __init__(self, bbox: Rect, ipdata_api_key: str):
+    def __init__(self, bbox: Rect, ipdata_api_key: str) -> None:
         super().__init__(bbox, refresh_rate=30)
         self.ipdata_api_key = ipdata_api_key
-        self.location = self.get_location()
-        self.temp_color_map = {
+        self.location: Optional[tuple[float, float, str]] = self.get_location()
+        self.temp_color_map: Dict[int, tuple[int, int, int]] = {
             -20: (0, 60, 98),      # dark blue
             -10: (120, 162, 204),  # darker blue
             0: (164, 195, 210),    # light blue
@@ -93,7 +93,7 @@ class WeatherWidget(Widget):
             40: (255, 192, 159),   # red
         }
 
-    def get_location(self):
+    def get_location(self) -> Optional[tuple[float, float, str]]:
         try:
             response = requests.get("https://api.ipdata.co", params={
                 "api-key": self.ipdata_api_key
@@ -112,14 +112,14 @@ class WeatherWidget(Widget):
             logger.error(f'Error fetching location data: {err}')
             return None
 
-    def get_weather(self):
+    def get_weather(self) -> Optional[Dict[str, Any]]:
         if self.location is not None:
             lat, lon, tz = self.location
         else:
             # New York City
             lat, lon, tz = 40.71427, -74.00597, "America/New_York"
             logger.warning("No location found, using default location (New York City)")
-        params = {
+        params : Dict[str, str | float] = {
             "latitude": lat,
             "longitude": lon,
             "daily": "temperature_2m_max,temperature_2m_min",
@@ -157,7 +157,7 @@ class WeatherWidget(Widget):
                 return (r, g, b)
         return Colors.WHITE
 
-    def update(self):
+    def update(self) -> None:
         weather = self.get_weather()
         if weather is None:
             return
@@ -189,23 +189,23 @@ class WeatherWidget(Widget):
 
 
 class WidgetManager:
-    def __init__(self, render_queue: queue.Queue):
+    def __init__(self, render_queue: queue.Queue) -> None:
         self.render_queue = render_queue
         self.widgets: list[Widget] = []
         self.active = False
         self._thread: Optional[threading.Thread] = None
 
-    def add_widget(self, widget: Widget):
+    def add_widget(self, widget: Widget) -> None:
         """Add a widget to the display."""
         self.widgets.append(widget)
 
-    def remove_widget(self, widget: Widget):
+    def remove_widget(self, widget: Widget) -> None:
         """Remove a widget from the display."""
         if widget in self.widgets:
             widget.stop()
             self.widgets.remove(widget)
 
-    def start(self):
+    def start(self) -> None:
         """Start all widgets and the manager."""
         if not self._thread:
             self.active = True
@@ -214,14 +214,14 @@ class WidgetManager:
             self._thread = threading.Thread(target=self._run, daemon=True)
             self._thread.start()
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop all widgets and the manager."""
         self.active = False
         self._thread = None
         for widget in self.widgets:
             widget.stop()
 
-    def _run(self):
+    def _run(self) -> None:
         """Main loop to collect and send all widget renders."""
         while self.active:
             for widget in self.widgets:

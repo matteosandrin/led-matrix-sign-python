@@ -1,6 +1,6 @@
 from PIL import Image
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional, Tuple
 from common import hex_to_rgb
 
 base_dir = Path(__file__).parent.parent
@@ -119,7 +119,7 @@ route_images: Dict[str, Dict] = {
 }
 
 
-def get_route_image(route_id, is_express: bool = False):
+def get_route_image(route_id: str, is_express: bool = False) -> Optional[Tuple[Image.Image, Tuple[int, int, int]]]:
     if route_id in route_images:
         item = route_images[route_id]
         if is_express and "express_img" in item:
@@ -127,5 +127,5 @@ def get_route_image(route_id, is_express: bool = False):
         return item["img"], hex_to_rgb(item["color"])
     return None
 
-def get_all_route_images():
+def get_all_route_images() -> Dict[str, Dict]:
     return route_images

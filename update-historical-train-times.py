@@ -1,11 +1,11 @@
 import pickle
-import json
 import csv
 import logging
 import os
 import requests
+from typing import Any, Dict, List
 from main import setup_logging
-from providers.mta.types import Station, HistoricalTrainTime, DayType
+from providers.mta.types import HistoricalTrainTime, DayType
 from providers.mta.mta import get_stop_ids, stations
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ GFTS_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip"
 GFTS_FILE = f"{CURRENT_DIR}/providers/mta/gtfs_subway.zip"
 
 
-def downolad_gfts_train_times():
+def downolad_gfts_train_times() -> None:
     logger.info(f"Downloading GTFS zip file to {GFTS_FILE}")
     response = requests.get(GFTS_URL)
     with open(GFTS_FILE, "wb") as f:
@@ -24,23 +24,23 @@ def downolad_gfts_train_times():
     os.system(f"unzip {GFTS_FILE} -d {CURRENT_DIR}/providers/mta/gtfs")
 
 
-def convert_historical_train_times():
+def convert_historical_train_times() -> Dict[str, List[HistoricalTrainTime]]:
     logger.info("Converting historical train times")
 
     stop_times = csv.DictReader(
         open(f"{CURRENT_DIR}/providers/mta/gtfs/stop_times.txt"))
     trips = csv.DictReader(open(f"{CURRENT_DIR}/providers/mta/gtfs/trips.txt"))
 
-    result = {}
+    result: Dict[str, List[HistoricalTrainTime]] = {}
 
-    stop_times_by_id = {}
+    stop_times_by_id: Dict[str, List[Any]] = {}
     for stop_time in stop_times:
         stop_id = stop_time["stop_id"][:-1].strip()
         if stop_id not in stop_times_by_id:
             stop_times_by_id[stop_id] = []
         stop_times_by_id[stop_id].append(stop_time)
 
-    trips_by_id = {}
+    trips_by_id: Dict[str, Any] = {}
     for trip in trips:
         trips_by_id[trip["trip_id"]] = trip
 
@@ -72,7 +72,7 @@ def convert_historical_train_times():
     return result
 
 
-def remove_gtfs_files():
+def remove_gtfs_files() -> None:
     logger.info("Removing GTFS files")
     os.system(f"rm -v {GFTS_FILE}")
     os.system(f"rm -vr {CURRENT_DIR}/providers/mta/gtfs")

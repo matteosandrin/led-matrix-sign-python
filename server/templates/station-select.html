@@ -23,7 +23,7 @@
   <input type="submit" value="Set station">
 </form>
 <script>
-  function {{ namespace }}stationSelector() {
+  function buildStationSelector() {
     const routeSelect = document.querySelector('select[name="{{ namespace }}-route"]');
     const stationSelect = document.getElementById('{{ namespace }}-station');
     const stationsByRoute = JSON.parse('{{ stations_by_route | tojson }}');
@@ -46,6 +46,6 @@
       });
     }
   }
-  {{ namespace }}stationSelector();
+  buildStationSelector();
 </script>
 {% endmacro %}

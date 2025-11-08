@@ -3,20 +3,16 @@ if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
-import numpy as np
-import providers.mbta as mbta
-import providers.mta as mta
 from .animation import AnimationManager
 from .render_mbta import render_mbta_content, render_mbta_banner_content
 from .render_mta import *
 from .render_music import render_music_content
 from .render_game_of_life import render_game_of_life_content
-from .types import RenderMessage, BaseRenderMessage, Rect
+from .types import RenderMessage, BaseRenderMessage
 from common import Fonts, Colors, ClockType
 from PIL import Image, ImageDraw, ImageFont
-from providers.music.types import Song, SpotifyResponse
 from queue import Queue
-from typing import List, Tuple, Any
+from typing import Optional
 import threading
 
 PANEL_WIDTH = 32
@@ -27,7 +23,7 @@ SCREEN_HEIGHT = PANEL_HEIGHT
 
 
 class Display:
-    def __init__(self, render_queue: Queue):
+    def __init__(self, render_queue: Queue[BaseRenderMessage]) -> None:
         options = RGBMatrixOptions()
         options.rows = PANEL_HEIGHT
         options.cols = PANEL_WIDTH
@@ -48,11 +44,11 @@ class Display:
         self.default_font = Fonts.SILKSCREEN
         self.animation_manager = AnimationManager(render_queue)
         self.animation_manager.start()
-        self.last_mbta_image = None
-        self.last_mta_image = None
+        self.last_mbta_image: Optional[Image.Image] = None
+        self.last_mta_image: Optional[Image.Image] = None
         self.matrix_lock = threading.Lock()
 
-    def render(self, message: BaseRenderMessage):
+    def render(self, message: BaseRenderMessage) -> None:
         if isinstance(message, RenderMessage.Clear):
             self.clear()
         elif isinstance(message, RenderMessage.Frame):
@@ -82,25 +78,25 @@ class Display:
         elif isinstance(message, RenderMessage.GameOfLife):
             self.render_game_of_life_content(message)
 
-    def clear(self):
+    def clear(self) -> None:
         self.animation_manager.clear()
         self.canvas.Clear()
         self.swap_canvas()
 
-    def swap_canvas(self):
+    def swap_canvas(self) -> None:
         with self.matrix_lock:
             self.matrix.SwapOnVSync(self.canvas)
 
-    def render_frame_content(self, message: RenderMessage.Frame):
+    def render_frame_content(self, message: RenderMessage.Frame) -> None:
         self.canvas.SetImage(message.frame, int(message.bbox.x), int(message.bbox.y))
 
-    def render_text_content(self, message: RenderMessage.Text):
+    def render_text_content(self, message: RenderMessage.Text) -> None:
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
         draw = self._get_draw_context_antialiased(image)
         draw.text((0, 0), message.text, font=self.default_font, fill=Colors.WHITE)
         self._update_display(image)
 
-    def render_clock_content(self, message: RenderMessage.Clock):
+    def render_clock_content(self, message: RenderMessage.Clock) -> None:
         image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
         if message.clock_type == ClockType.MTA:
@@ -113,27 +109,27 @@ class Display:
                           font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="mt")
         self._update_display(image)
 
-    def _update_display(self, image: Image, x: int = 0, y: int = 0):
+    def _update_display(self, image: Image.Image, x: int = 0, y: int = 0) -> None:
         self.canvas.SetImage(image, int(x), int(y))
         self.swap_canvas()
 
-    def _get_draw_context_antialiased(self, image: Image):
+    def _get_draw_context_antialiased(self, image: Image.Image) -> ImageDraw.ImageDraw:
         draw = ImageDraw.Draw(image)
         draw.fontmode = "1"  # turn off antialiasing
         return draw
 
-    def _get_text_length(self, text: str, font: ImageFont):
+    def _get_text_length(self, text: str, font: ImageFont.FreeTypeFont) -> float:
         draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
         return draw.textlength(text, font=font)
 
     def _trim_text_to_fit(
-            self, text: str, font: ImageFont, max_width: int) -> str:
+            self, text: str, font: ImageFont.FreeTypeFont, max_width: int) -> str:
         draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
         while draw.textlength(text, font=font) > max_width:
             text = text[:-1]
         return text
 
-    def render_game_of_life_content(self, message: RenderMessage.GameOfLife):
+    def render_game_of_life_content(self, message: RenderMessage.GameOfLife) -> None:
         """Render Conway's Game of Life to the display."""
         image = render_game_of_life_content(message, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
         self._update_display(image)

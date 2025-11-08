@@ -3,6 +3,11 @@ pytz
 requests
 flask
 RGBMatrixEmulator
-systemd-python # only for Linux
+systemd-python; sys_platform == "linux" # only install on Linux
 scipy
 numpy
+types-requests
+types-pytz
+types-Pillow
+scipy-stubs
+types-RPi.GPIO

@@ -3,18 +3,20 @@ if not config.EMULATE_RGB_MATRIX:
     import RPi.GPIO as GPIO
 import time
 import threading
+from typing import Callable, Optional
 
 
 class Button:
     def __init__(
-            self, pin, short_press_callback=None, long_press_callback=None,
-            long_press_duration=3.0):
+            self, pin: int, short_press_callback: Optional[Callable[[], None]] = None,
+            long_press_callback: Optional[Callable[[], None]] = None,
+            long_press_duration: float = 3.0) -> None:
         self.pin = pin
         self.short_press_callback = short_press_callback
         self.long_press_callback = long_press_callback
         self.long_press_duration = long_press_duration  # seconds
 
-        self.button_press_time = None
+        self.button_press_time: Optional[float] = None
         self.button_released = True
         self.long_press_triggered = False  # Flag to prevent multiple triggers
         self.running = True  # Control flag for the monitoring thread
@@ -28,7 +30,7 @@ class Button:
                 self.monitor_thread.daemon = True
                 self.monitor_thread.start()
 
-    def setup_gpio(self):
+    def setup_gpio(self) -> None:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(
@@ -38,7 +40,7 @@ class Button:
             bouncetime=50
         )
 
-    def _button_callback(self, channel):
+    def _button_callback(self, channel: int) -> None:
         # Button pressed (falling edge)
         if GPIO.input(self.pin) == GPIO.LOW:
             self.button_press_time = time.time()
@@ -54,7 +56,7 @@ class Button:
                 self.button_released = True
                 self.button_press_time = None
 
-    def _monitor_long_press(self):
+    def _monitor_long_press(self) -> None:
         while self.running:
             if (not self.button_released and
                 self.button_press_time is not None and
@@ -67,7 +69,7 @@ class Button:
 
             time.sleep(0.1)
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         self.running = False  # Stop the monitoring thread
         if not config.EMULATE_RGB_MATRIX:
             GPIO.cleanup()

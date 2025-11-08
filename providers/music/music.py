@@ -14,10 +14,10 @@ SPOTIFY_TOKEN_REFRESH_RATE = 30 * 60 * 1000  # 30 minutes in milliseconds
 
 
 class Spotify:
-    def __init__(self, client_id: str, client_secret: str, refresh_token: str):
+    def __init__(self, client_id: str, client_secret: str, refresh_token: str) -> None:
         self.access_token = ""
         self.last_refresh_time = 0
-        self.current_song = None
+        self.current_song: Optional[Song] = None
         self.session = requests.Session()
         self.secrets = {
             "client_id": client_id,
@@ -25,7 +25,7 @@ class Spotify:
             "refresh_token": refresh_token
         }
 
-    def setup(self):
+    def setup(self) -> None:
         self.refresh_token()
         self.clear_current_song()
 
@@ -138,17 +138,17 @@ class Spotify:
             logger.error(f"Error fetching album cover: {e}")
             return SpotifyResponse.ERROR, None
 
-    def check_refresh_token(self):
+    def check_refresh_token(self) -> None:
         current_time = int(time.time() * 1000)
         if current_time - self.last_refresh_time > SPOTIFY_TOKEN_REFRESH_RATE:
             logger.info("refreshing spotify token after 30min")
             self.refresh_token()
 
-    def update_current_song(self, src: Song):
+    def update_current_song(self, src: Song) -> None:
         self.current_song = src
         self.current_song.progress_ms = 0
 
-    def clear_current_song(self):
+    def clear_current_song(self) -> None:
         self.current_song = None
 
     def is_current_song_new(self, cmp: Song) -> bool:
@@ -157,5 +157,5 @@ class Spotify:
         return (cmp.artist != self.current_song.artist or
                 cmp.title != self.current_song.title)
 
-    def get_current_song(self) -> Song:
+    def get_current_song(self) -> Optional[Song]:
         return self.current_song

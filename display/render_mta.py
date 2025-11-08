@@ -1,11 +1,11 @@
 import providers.mta as mta
 import threading
+from typing import Any
 from .animation import MTAAlertAnimation, MTABlinkAnimation, MTAStartupAnimation
 from .utils import get_image_with_color
 from common import Colors, Fonts
 from datetime import datetime
 from PIL import Image, ImageFont
-from typing import List
 from .types import RenderMessage, Rect
 
 abbreviations = {
@@ -14,7 +14,7 @@ abbreviations = {
 }
 
 
-def render_mta_content(display, message: RenderMessage.MTA):
+def render_mta_content(display: Any, message: RenderMessage.MTA) -> None:
     mta_render_thread = threading.Thread(
         target=_render_mta_content_task,
         args=(display, message)
@@ -22,7 +22,7 @@ def render_mta_content(display, message: RenderMessage.MTA):
     mta_render_thread.start()
 
 
-def _render_mta_content_task(display, message: RenderMessage.MTA):
+def _render_mta_content_task(display: Any, message: RenderMessage.MTA) -> None:
     if message.predictions is None or len(message.predictions) == 0:
         render_mta_empty(display)
         return
@@ -50,7 +50,7 @@ def _render_mta_content_task(display, message: RenderMessage.MTA):
                   font=Fonts.MTA, fill=text_color)
         x_cursor += int(number_str_width)
         route_img_data = mta.get_route_image(
-            train.route_id, train.is_express)
+            train.route_id, bool(train.is_express))
         if route_img_data is not None:
             route_img, color = route_img_data
             route_img = get_image_with_color(route_img, color)
@@ -86,7 +86,7 @@ def _render_mta_content_task(display, message: RenderMessage.MTA):
     display._update_display(image, x, y)
 
 
-def render_mta_alert_content(display, message: RenderMessage.MTAAlert):
+def render_mta_alert_content(display: Any, message: RenderMessage.MTAAlert) -> None:
     half_screen_h = int(display.SCREEN_HEIGHT / 2)
     bbox = Rect(0, half_screen_h, display.SCREEN_WIDTH, half_screen_h)
     last_frame = display.last_mta_image.copy().crop(bbox.to_crop_tuple())
@@ -95,7 +95,7 @@ def render_mta_alert_content(display, message: RenderMessage.MTAAlert):
     display.animation_manager.add_animation("mta_alert", alert_animation)
 
 
-def render_mta_blink(display, text: str):
+def render_mta_blink(display: Any, text: str) -> None:
     text_length = int(display._get_text_length(text, Fonts.MTA))
     x = int(display.SCREEN_WIDTH - text_length)
     bbox = Rect(x, 0, text_length, 16)
@@ -103,7 +103,7 @@ def render_mta_blink(display, text: str):
     display.animation_manager.add_animation("mta_blink", blink_animation)
 
 
-def render_mta_empty(display):
+def render_mta_empty(display: Any) -> None:
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
         Colors.BLACK)
@@ -118,7 +118,7 @@ def render_mta_empty(display):
     display._update_display(image)
 
 
-def render_mta_all_images(display):
+def render_mta_all_images(display: Any) -> None:
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
         Colors.BLACK)
@@ -130,7 +130,10 @@ def render_mta_all_images(display):
         "2", "5", "7", "C", "D", "G", "Z", "L", "GS", "Q",
     ]]
     x, y = 0, 0
-    for route_img, color in route_images:
+    for img_data in route_images:
+        if img_data is None:
+            continue
+        route_img, color = img_data
         color_img = get_image_with_color(route_img, color)
         image.paste(color_img, (x, y))
         x += color_img.width
@@ -140,13 +143,13 @@ def render_mta_all_images(display):
     display._update_display(image)
 
 
-def render_mta_startup(display):
+def render_mta_startup(display: Any) -> None:
     startup_animation = MTAStartupAnimation(
         Rect(0, 0, display.SCREEN_WIDTH, display.SCREEN_HEIGHT))
     display.animation_manager.add_animation("mta_startup", startup_animation)
 
 
-def render_mta_station_banner_content(display, message: RenderMessage.MTAStationBanner):
+def render_mta_station_banner_content(display: Any, message: RenderMessage.MTAStationBanner) -> None:
     image = Image.new(
         'RGB', (display.SCREEN_WIDTH, display.SCREEN_HEIGHT),
         Colors.BLACK)
@@ -163,7 +166,7 @@ def render_mta_station_banner_content(display, message: RenderMessage.MTAStation
 
 
 def _trim_train_name(
-        display, text: str, font: ImageFont, max_width: int) -> str:
+        display: Any, text: str, font: ImageFont.FreeTypeFont, max_width: int) -> str:
     draw = display._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
     if draw.textlength(text, font=font) <= max_width:
         return text

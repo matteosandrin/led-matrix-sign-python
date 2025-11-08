@@ -1,20 +1,21 @@
 import random
 import numpy as np
 from scipy.ndimage import convolve
+from numpy.typing import NDArray
 
 
 class GameOfLife:
-    def __init__(self, width: int, height: int, density: float = 0.3):
+    def __init__(self, width: int, height: int, density: float = 0.3) -> None:
         self.width = width
         self.height = height
-        self.grid = np.zeros((height, width), dtype=bool)
+        self.grid: NDArray[np.bool_] = np.zeros((height, width), dtype=bool)
         self.generation = 0
         self.stable_count = 0
         self.max_stable_generations = 50
         self.density = density
         self._initialize_random_grid()
     
-    def _initialize_random_grid(self):
+    def _initialize_random_grid(self) -> None:
         """Initialize grid with random living cells based on density."""
         for y in range(self.height):
             for x in range(self.width):
@@ -50,11 +51,11 @@ class GameOfLife:
         return (self.stable_count >= self.max_stable_generations or 
                 not np.any(self.grid))
     
-    def reset(self):
+    def reset(self) -> None:
         """Reset the game with a new random configuration."""
         self._initialize_random_grid()
     
-    def get_grid(self) -> np.ndarray:
+    def get_grid(self) -> NDArray[np.bool_]:
         """Get the current grid state."""
         return self.grid.copy()
     
