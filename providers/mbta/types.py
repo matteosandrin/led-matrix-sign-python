@@ -15,6 +15,7 @@ class PredictionStatus(Enum):
     ERROR_SHOW_CACHED = auto()
     ERROR_EMPTY = auto()
 
+
 @dataclass
 class Station:
     stop_id: str

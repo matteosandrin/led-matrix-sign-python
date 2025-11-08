@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional, List
 from enum import Enum
 
+
 @dataclass
 class TrainTime:
     route_id: str
@@ -25,10 +26,12 @@ class Station:
     routes: List[str]
     children: Optional[List[str]] = None
 
+
 class DayType(Enum):
     WEEKDAY = "weekday"
     SATURDAY = "saturday"
     SUNDAY = "sunday"
+
 
 @dataclass
 class HistoricalTrainTime:
@@ -39,10 +42,12 @@ class HistoricalTrainTime:
     trip_id: str
     day_type: DayType
 
+
 class Direction(Enum):
     DIRECTION_UPTOWN = 0
     DIRECTION_DOWNTOWN = 1
     DIRECTION_NONE = 2
+
 
 @dataclass
 class Status:

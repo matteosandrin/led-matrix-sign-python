@@ -46,9 +46,17 @@ class Animation(ABC):
 
 class TextScrollAnimation(Animation):
     def __init__(
-            self, bbox: Rect, speed: float, loop: bool, wrap: bool, text: str,
-            font: ImageFont.FreeTypeFont, color: Tuple[int, int, int],
-            text_pos: Tuple[int, int] = (0, 0), start_blank: bool = False):
+        self,
+        bbox: Rect,
+        speed: float,
+        loop: bool,
+        wrap: bool,
+        text: str,
+        font: ImageFont.FreeTypeFont,
+        color: Tuple[int, int, int],
+        text_pos: Tuple[int, int] = (0, 0),
+        start_blank: bool = False,
+    ):
         super().__init__(bbox, speed, loop)
         self.text = text
         self.text_pos = text_pos
@@ -60,7 +68,7 @@ class TextScrollAnimation(Animation):
         self.start_blank = start_blank
 
     def text_width(self) -> float:
-        image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+        image = Image.new("RGB", (self.bbox.w, self.bbox.h))
         draw = ImageDraw.Draw(image)
         draw.fontmode = "1"  # antialiasing off
         return draw.textlength(self.text, font=self.font)
@@ -72,23 +80,26 @@ class TextScrollAnimation(Animation):
             start = self.bbox.w
         end = -int(max(self.bbox.w, self.text_width()))
         for i in range(start, end, -1):
-            image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+            image = Image.new("RGB", (self.bbox.w, self.bbox.h))
             draw = ImageDraw.Draw(image)
             draw.fontmode = "1"  # antialiasing off
             x_pos1 = i
-            draw.text((i+tx, ty), self.text,
-                      font=self.font, fill=self.color)
+            draw.text((i + tx, ty), self.text, font=self.font, fill=self.color)
             if self.wrap:
                 x_pos2 = i + self.text_width()
-                draw.text((x_pos2+tx, ty), self.text,
-                          font=self.font, fill=self.color)
+                draw.text((x_pos2 + tx, ty), self.text, font=self.font, fill=self.color)
             yield (self.bbox, image)
 
 
 class MoveAnimation(Animation):
     def __init__(
-            self, start_bbox: Rect, end_bbox: Rect,
-            image: Image.Image, speed: float = 60, loop: bool = False):
+        self,
+        start_bbox: Rect,
+        end_bbox: Rect,
+        image: Image.Image,
+        speed: float = 60,
+        loop: bool = False,
+    ):
         super().__init__(start_bbox, speed, loop)
         self.start_bbox = start_bbox
         self.end_bbox = end_bbox
@@ -97,7 +108,7 @@ class MoveAnimation(Animation):
     def frame_generator(self) -> Generator[AnimationFrame, None, None]:
         x_delta = self.end_bbox.x - self.start_bbox.x
         y_delta = self.end_bbox.y - self.start_bbox.y
-        delta = math.sqrt(x_delta ** 2 + y_delta ** 2)
+        delta = math.sqrt(x_delta**2 + y_delta**2)
         frame_count = int(delta)
 
         for i in range(0, frame_count + 1):
@@ -107,11 +118,9 @@ class MoveAnimation(Animation):
 
 
 class MBTABannerAnimation(MoveAnimation):
-    def __init__(
-            self, start_bbox: Rect, end_bbox: Rect,
-            line1: str, line2: str):
+    def __init__(self, start_bbox: Rect, end_bbox: Rect, line1: str, line2: str):
         # Create the banner image first
-        image = Image.new('RGB', (start_bbox.w, start_bbox.h))
+        image = Image.new("RGB", (start_bbox.w, start_bbox.h))
         draw = ImageDraw.Draw(image)
         draw.fontmode = "1"  # antialiasing off
 
@@ -138,9 +147,17 @@ class MTAAlertAnimation(TextScrollAnimation):
         # the last frame is shown right after the text scrolls off the screen,
         # while we wait for the next train update to complete.
         self.last_frame = last_frame
-        super().__init__(bbox=bbox,
-                         speed=60, loop=False, wrap=False, text=text, font=Fonts.MTA,
-                         color=Colors.MTA_RED_AMBER, text_pos=(0, 2), start_blank=True)
+        super().__init__(
+            bbox=bbox,
+            speed=60,
+            loop=False,
+            wrap=False,
+            text=text,
+            font=Fonts.MTA,
+            color=Colors.MTA_RED_AMBER,
+            text_pos=(0, 2),
+            start_blank=True,
+        )
 
     def frame_generator(self) -> Generator[AnimationFrame, None, None]:
         for frame in super().frame_generator():
@@ -154,17 +171,17 @@ class MTABlinkAnimation(Animation):
         self.text_image = self.make_text_image(text)
         self.blank_image = self.make_blank_image()
         # show text 2/3 of the time
-        self.text_time_fraction = 2/3
+        self.text_time_fraction = 2 / 3
 
     def make_text_image(self, text: str) -> Image.Image:
-        image = Image.new('RGB', (self.bbox.w, self.bbox.h))
+        image = Image.new("RGB", (self.bbox.w, self.bbox.h))
         draw = ImageDraw.Draw(image)
         draw.fontmode = "1"  # antialiasing off
         draw.text((1, 2), text, font=Fonts.MTA, fill=Colors.MTA_RED_AMBER)
         return image
 
     def make_blank_image(self) -> Image.Image:
-        image = Image.new('RGB', (self.bbox.w, self.bbox.h), Colors.BLACK)
+        image = Image.new("RGB", (self.bbox.w, self.bbox.h), Colors.BLACK)
         return image
 
     def frame_generator(self) -> Generator[AnimationFrame, None, None]:
@@ -172,7 +189,7 @@ class MTABlinkAnimation(Animation):
         text_frame_number = int(self.text_time_fraction * self.speed)
         for i in range(total_time):
             for k in range(int(self.speed)):
-                if (k < text_frame_number):
+                if k < text_frame_number:
                     yield (self.bbox, self.text_image)
                 else:
                     yield (self.bbox, self.blank_image)
@@ -185,12 +202,13 @@ class MTAStartupAnimation(Animation):
         super().__init__(bbox=bbox, speed=10, loop=False)
         self.route_images = [
             get_image_with_color(item["img"], hex_to_rgb(item["color"]))
-            for _, item in mta.get_all_route_images().items()]
+            for _, item in mta.get_all_route_images().items()
+        ]
 
     def frame_generator(self) -> Generator[AnimationFrame, None, None]:
         random.shuffle(self.route_images)
-        frame = Image.new('RGB', (self.bbox.w, self.bbox.h), Colors.BLACK)
-        black_square = Image.new('RGB', (16, 16), Colors.BLACK)
+        frame = Image.new("RGB", (self.bbox.w, self.bbox.h), Colors.BLACK)
+        black_square = Image.new("RGB", (16, 16), Colors.BLACK)
         for i in range(2):
             for y in range(0, self.bbox.h, 16):
                 for x in range(0, self.bbox.w, 16):
@@ -207,8 +225,7 @@ class AnimationGroup:
         self.speed = speed
         self.animation_keys: list[str] = []
         self.last_update: int = 0
-        self.frames_per_update: int = round(
-            1 / (ANIMATION_REFRESH_RATE * self.speed))
+        self.frames_per_update: int = round(1 / (ANIMATION_REFRESH_RATE * self.speed))
 
     def add_animation(self, key: str) -> None:
         self.animation_keys.append(key)
@@ -230,15 +247,16 @@ class AnimationManager:
         self.animations: Dict[str, Animation] = {}
         self.is_running: bool = False
         self.thread: Optional[threading.Thread] = None
-        self.animation_groups: Dict[float, AnimationGroup] = {}  # speed -> AnimationGroup
+        self.animation_groups: Dict[float, AnimationGroup] = (
+            {}
+        )  # speed -> AnimationGroup
         self.lock = threading.Lock()  # Add lock
 
     def add_animation(self, key: str, animation: Animation) -> None:
         with self.lock:
             self.animations[key] = animation
             if animation.speed not in self.animation_groups:
-                self.animation_groups[animation.speed] = AnimationGroup(
-                    animation.speed)
+                self.animation_groups[animation.speed] = AnimationGroup(animation.speed)
             self.animation_groups[animation.speed].add_animation(key)
 
     def add_animations(self, animations: Dict[str, Animation]) -> None:
@@ -247,7 +265,8 @@ class AnimationManager:
                 self.animations[key] = animation
                 if animation.speed not in self.animation_groups:
                     self.animation_groups[animation.speed] = AnimationGroup(
-                        animation.speed)
+                        animation.speed
+                    )
                 self.animation_groups[animation.speed].add_animation(key)
 
     def remove_animation(self, key: str) -> None:
@@ -267,8 +286,7 @@ class AnimationManager:
     def start(self) -> None:
         if not self.is_running:
             self.is_running = True
-            self.thread = threading.Thread(
-                target=self._run_animations, daemon=True)
+            self.thread = threading.Thread(target=self._run_animations, daemon=True)
             self.thread.start()
 
     def stop(self) -> None:
@@ -307,8 +325,8 @@ class AnimationManager:
                             if frame is not None:
                                 bbox, image = frame
                                 self.render_queue.put(
-                                    RenderMessage.Frame(
-                                        bbox=bbox, frame=image))
+                                    RenderMessage.Frame(bbox=bbox, frame=image)
+                                )
                                 update_count += 1
                             if is_complete:
                                 completed_keys.append(key)

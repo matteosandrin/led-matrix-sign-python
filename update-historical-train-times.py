@@ -28,7 +28,8 @@ def convert_historical_train_times() -> Dict[str, List[HistoricalTrainTime]]:
     logger.info("Converting historical train times")
 
     stop_times = csv.DictReader(
-        open(f"{CURRENT_DIR}/providers/mta/gtfs/stop_times.txt"))
+        open(f"{CURRENT_DIR}/providers/mta/gtfs/stop_times.txt")
+    )
     trips = csv.DictReader(open(f"{CURRENT_DIR}/providers/mta/gtfs/trips.txt"))
 
     result: Dict[str, List[HistoricalTrainTime]] = {}
@@ -82,8 +83,8 @@ if __name__ == "__main__":
     setup_logging()
     downolad_gfts_train_times()
     train_times = convert_historical_train_times()
-    pickle_file_path = f'{CURRENT_DIR}/providers/mta/historical_train_times.pickle'
-    with open(pickle_file_path, 'wb') as f:
+    pickle_file_path = f"{CURRENT_DIR}/providers/mta/historical_train_times.pickle"
+    with open(pickle_file_path, "wb") as f:
         logger.info(f"Writing data to pickle {pickle_file_path}")
         pickle.dump(train_times, f)
     remove_gtfs_files()

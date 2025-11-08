@@ -22,7 +22,9 @@ class Rect:
     def to_crop_tuple(self) -> tuple[int, int, int, int]:
         return (self.x, self.y, self.x + self.w, self.y + self.h)
 
+
 AnimationFrame = Tuple[Rect, Image.Image]
+
 
 @dataclass
 class BaseRenderMessage:
@@ -76,7 +78,7 @@ class RenderMessage:
     class MTAAlert(BaseRenderMessage):
         text: str
         z_index: int = 0
-    
+
     @dataclass
     class MTATestImages(BaseRenderMessage):
         pass

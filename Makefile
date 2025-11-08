@@ -17,6 +17,9 @@ update:
 logs:
 	journalctl -u $(SERVICE_NAME) -f -b --output=cat -xe
 
+format:
+	black .
+
 update-font-images:
 	python3 update-font-images.py
 

@@ -11,3 +11,4 @@ types-pytz
 types-Pillow
 scipy-stubs
 types-RPi.GPIO
+black

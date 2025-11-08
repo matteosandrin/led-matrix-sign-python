@@ -22,13 +22,12 @@ MBTA_PREDICTIONS_URL = "https://api-v3.mbta.com/predictions"
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-station_data = json.load(
-    open(os.path.join(CURRENT_FOLDER, "stations.json")))
+station_data = json.load(open(os.path.join(CURRENT_FOLDER, "stations.json")))
 stations: List[Station] = [Station(**s) for s in station_data]
 
 
-DEFAULT_MBTA_STATION = "place-harsq" # harvard square station
-if hasattr(config, 'DEFAULT_MBTA_STATION'):
+DEFAULT_MBTA_STATION = "place-harsq"  # harvard square station
+if hasattr(config, "DEFAULT_MBTA_STATION"):
     DEFAULT_MBTA_STATION = config.DEFAULT_MBTA_STATION
 
 
@@ -47,6 +46,7 @@ def station_by_id(stop_id: str) -> Optional[Station]:
         if station.stop_id == stop_id:
             return station
     return None
+
 
 def train_station_to_str(station: str) -> str:
     for s in stations:
@@ -67,8 +67,9 @@ class MBTA:
     def station(self) -> str:
         return self.station_broadcaster.get_status()
 
-    def get_predictions(self, num_predictions: int, directions: List[int],
-                        nth_positions: List[int]) -> tuple[PredictionStatus, List[Prediction]]:
+    def get_predictions(
+        self, num_predictions: int, directions: List[int], nth_positions: List[int]
+    ) -> tuple[PredictionStatus, List[Prediction]]:
         dst = [Prediction() for _ in range(num_predictions)]
 
         if self.station == "test":
@@ -90,18 +91,22 @@ class MBTA:
 
         for i in range(num_predictions):
             prediction = self._find_nth_prediction_for_direction(
-                prediction_data, directions[i], nth_positions[i])
+                prediction_data, directions[i], nth_positions[i]
+            )
             trip = self._find_trip_for_prediction(prediction_data, prediction)
             dst[i] = self._format_prediction(prediction, trip)
         return PredictionStatus.OK, dst
 
-    def get_predictions_both_directions(self) -> tuple[PredictionStatus,
-                                                       List[Prediction]]:
+    def get_predictions_both_directions(
+        self,
+    ) -> tuple[PredictionStatus, List[Prediction]]:
         directions = [DIRECTION_SOUTHBOUND, DIRECTION_NORTHBOUND]
         nth_positions = [0, 0]
         return self.get_predictions(2, directions, nth_positions)
 
-    def get_predictions_one_direction(self, direction: int) -> tuple[PredictionStatus, List[Prediction]]:
+    def get_predictions_one_direction(
+        self, direction: int
+    ) -> tuple[PredictionStatus, List[Prediction]]:
         directions = [direction, direction]
         nth_positions = [0, 1]
         return self.get_predictions(2, directions, nth_positions)
@@ -112,21 +117,25 @@ class MBTA:
             if station is None:
                 return None
             routes = station.routes
-            response = requests.get(MBTA_PREDICTIONS_URL, params={
-                "api_key": self.api_key,
-                "filter[stop]": self.station,
-                "filter[route]": ','.join(routes),
-                "fields[prediction]": "arrival_time,departure_time,status,direction_id",
-                "include": "trip"
-            })
+            response = requests.get(
+                MBTA_PREDICTIONS_URL,
+                params={
+                    "api_key": self.api_key,
+                    "filter[stop]": self.station,
+                    "filter[route]": ",".join(routes),
+                    "fields[prediction]": "arrival_time,departure_time,status,direction_id",
+                    "include": "trip",
+                },
+            )
             response.raise_for_status()
             return response.json()
         except Exception as e:
             logger.error(f"Error fetching predictions: {e}")
             return None
 
-    def _find_nth_prediction_for_direction(self, prediction_data: dict,
-                                           direction: int, n: int) -> Optional[dict]:
+    def _find_nth_prediction_for_direction(
+        self, prediction_data: dict, direction: int, n: int
+    ) -> Optional[dict]:
         for prediction in prediction_data["data"]:
             attrs = prediction["attributes"]
             if attrs["direction_id"] == direction:
@@ -144,8 +153,9 @@ class MBTA:
                             n -= 1
         return None
 
-    def _find_trip_for_prediction(self, prediction_data: dict,
-                                  prediction: Optional[dict]) -> Optional[dict]:
+    def _find_trip_for_prediction(
+        self, prediction_data: dict, prediction: Optional[dict]
+    ) -> Optional[dict]:
         if not prediction:
             return None
 
@@ -159,13 +169,13 @@ class MBTA:
 
     def _diff_with_local_time(self, timestring: str) -> int:
         """Calculate difference in seconds between given time and local time"""
-        prediction_time = datetime.fromisoformat(
-            timestring.replace('Z', '+00:00'))
+        prediction_time = datetime.fromisoformat(timestring.replace("Z", "+00:00"))
         local_time = datetime.now(timezone.utc)
         return int((prediction_time - local_time).total_seconds())
 
     def _determine_display_string(
-            self, arr_diff: int, dep_diff: int, status: Optional[str]) -> str:
+        self, arr_diff: int, dep_diff: int, status: Optional[str]
+    ) -> str:
         if status:
             status = status.lower()
             if "stopped" in status:
@@ -183,8 +193,8 @@ class MBTA:
         return "ERROR"
 
     def _format_prediction(
-            self, prediction: Optional[dict],
-            trip: Optional[dict]) -> Prediction:
+        self, prediction: Optional[dict], trip: Optional[dict]
+    ) -> Prediction:
         dst = Prediction()
         if not prediction or not trip:
             dst.label = ""
@@ -204,16 +214,15 @@ class MBTA:
         elif arr_time and dep_time:
             arr_diff = self._diff_with_local_time(arr_time)
             dep_diff = self._diff_with_local_time(dep_time)
-            display_string = self._determine_display_string(
-                arr_diff, dep_diff, None)
+            display_string = self._determine_display_string(arr_diff, dep_diff, None)
         else:
             display_string = "ERROR"
         dst.value = display_string
         return dst
 
     def update_latest_predictions(
-            self, latest: List[Prediction],
-            directions: List[int]) -> None:
+        self, latest: List[Prediction], directions: List[int]
+    ) -> None:
         if directions[0] == directions[1]:
             self.latest_predictions[directions[0]] = latest[0]
         else:
@@ -221,7 +230,8 @@ class MBTA:
             self.latest_predictions[directions[1]] = latest[1]
 
     def find_prediction_with_arriving_banner(
-            self, predictions: List[Prediction]) -> Optional[Prediction]:
+        self, predictions: List[Prediction]
+    ) -> Optional[Prediction]:
         if len(predictions) < 2:
             return None
         if predictions[0].value == "ARR" and self.latest_predictions[0].value != "ARR":
@@ -231,15 +241,18 @@ class MBTA:
         return None
 
     def get_arriving_banner(self, prediction: Prediction) -> List[str]:
-        return [f"{prediction.label} train",
-                "is now arriving."]
+        return [f"{prediction.label} train", "is now arriving."]
 
     def get_cached_predictions(self) -> List[Prediction]:
         return [
             Prediction(
-                label=self.latest_predictions[0].label, value=self.latest_predictions[0].value),
+                label=self.latest_predictions[0].label,
+                value=self.latest_predictions[0].value,
+            ),
             Prediction(
-                label=self.latest_predictions[1].label, value=self.latest_predictions[1].value)
+                label=self.latest_predictions[1].label,
+                value=self.latest_predictions[1].value,
+            ),
         ]
 
     def _get_placeholder_predictions(self) -> List[Prediction]:

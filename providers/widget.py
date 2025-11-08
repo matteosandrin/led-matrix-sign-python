@@ -22,7 +22,7 @@ class Widget(ABC):
         self.refresh_rate = refresh_rate
         self.active = False
         self._thread: Optional[threading.Thread] = None
-        self._image = Image.new('RGB', (bbox.w, bbox.h))
+        self._image = Image.new("RGB", (bbox.w, bbox.h))
         self._image_lock = threading.Lock()  # Add lock for image access
         self._draw = ImageDraw.Draw(self._image)
         self._draw.fontmode = "1"  # turn off antialiasing
@@ -56,10 +56,7 @@ class Widget(ABC):
     def get_render_data(self) -> RenderMessage.Frame:
         """Get the widget's current render data."""
         with self._image_lock:
-            return RenderMessage.Frame(
-                bbox=self.bbox,
-                frame=self._image.copy()
-            )
+            return RenderMessage.Frame(bbox=self.bbox, frame=self._image.copy())
 
 
 class ClockWidget(Widget):
@@ -74,8 +71,7 @@ class ClockWidget(Widget):
                 time_str = now.strftime("%H:%M:%S")
             else:
                 time_str = now.strftime("%H %M %S")
-            self._draw.text((0, 0), time_str, font=Fonts.MBTA,
-                            fill=Colors.WHITE)
+            self._draw.text((0, 0), time_str, font=Fonts.MBTA, fill=Colors.WHITE)
 
 
 class WeatherWidget(Widget):
@@ -84,32 +80,35 @@ class WeatherWidget(Widget):
         self.ipdata_api_key = ipdata_api_key
         self.location: Optional[tuple[float, float, str]] = self.get_location()
         self.temp_color_map: Dict[int, tuple[int, int, int]] = {
-            -20: (0, 60, 98),      # dark blue
+            -20: (0, 60, 98),  # dark blue
             -10: (120, 162, 204),  # darker blue
-            0: (164, 195, 210),    # light blue
-            10: (121, 210, 179),   # turquoise
-            20: (252, 245, 112),   # yellow
-            30: (255, 150, 79),    # orange
-            40: (255, 192, 159),   # red
+            0: (164, 195, 210),  # light blue
+            10: (121, 210, 179),  # turquoise
+            20: (252, 245, 112),  # yellow
+            30: (255, 150, 79),  # orange
+            40: (255, 192, 159),  # red
         }
 
     def get_location(self) -> Optional[tuple[float, float, str]]:
         try:
-            response = requests.get("https://api.ipdata.co", params={
-                "api-key": self.ipdata_api_key
-            })
+            response = requests.get(
+                "https://api.ipdata.co", params={"api-key": self.ipdata_api_key}
+            )
             response.raise_for_status()
-            lat, lon = response.json()["latitude"], response.json()[
-                "longitude"]
+            lat, lon = response.json()["latitude"], response.json()["longitude"]
             tz = response.json()["time_zone"]["name"]
-            description = response.json()["city"] + \
-                ", " + response.json()["region"] + \
-                ", " + response.json()["country_name"]
+            description = (
+                response.json()["city"]
+                + ", "
+                + response.json()["region"]
+                + ", "
+                + response.json()["country_name"]
+            )
             logger.info(f"Weather location: ({lat}, {lon}) {description}")
             logger.info(f"Weather timezone: {tz}")
             return (lat, lon, tz)
         except Exception as err:
-            logger.error(f'Error fetching location data: {err}')
+            logger.error(f"Error fetching location data: {err}")
             return None
 
     def get_weather(self) -> Optional[Dict[str, Any]]:
@@ -119,7 +118,7 @@ class WeatherWidget(Widget):
             # New York City
             lat, lon, tz = 40.71427, -74.00597, "America/New_York"
             logger.warning("No location found, using default location (New York City)")
-        params : Dict[str, str | float] = {
+        params: Dict[str, str | float] = {
             "latitude": lat,
             "longitude": lon,
             "daily": "temperature_2m_max,temperature_2m_min",
@@ -127,15 +126,16 @@ class WeatherWidget(Widget):
             "temporal_resolution": "hourly_3",
             "current": "temperature_2m,weather_code",
             "timezone": tz,
-            "forecast_days": "1"
+            "forecast_days": "1",
         }
         try:
             response = requests.get(
-                "https://api.open-meteo.com/v1/forecast", params=params)
+                "https://api.open-meteo.com/v1/forecast", params=params
+            )
             response.raise_for_status()
             return response.json()
         except Exception as err:
-            logger.error(f'Error fetching weather data: {err}')
+            logger.error(f"Error fetching weather data: {err}")
             return None
 
     def get_temp_color(self, temp: float) -> tuple[int, int, int]:
@@ -161,9 +161,9 @@ class WeatherWidget(Widget):
         weather = self.get_weather()
         if weather is None:
             return
-        current_temp = int(round(weather['current']['temperature_2m']))
-        min_temp = int(round(weather['daily']['temperature_2m_min'][0]))
-        max_temp = int(round(weather['daily']['temperature_2m_max'][0]))
+        current_temp = int(round(weather["current"]["temperature_2m"]))
+        min_temp = int(round(weather["daily"]["temperature_2m_min"][0]))
+        max_temp = int(round(weather["daily"]["temperature_2m_max"][0]))
         right_anchor = int(self._draw.textlength("H-00", font=Fonts.LCD))
         self._image.paste((0, 0, 0), (0, 0, self.bbox.w, self.bbox.h))
         current_color = self.get_temp_color(current_temp)
@@ -175,17 +175,29 @@ class WeatherWidget(Widget):
         deg_symbol_min = get_image_with_color(Images.DEG_SYMBOL, min_color)
         self._draw.text(
             (right_anchor, 0),
-            f"{current_temp}", font=Fonts.MBTA, fill=current_color, anchor="rt")
+            f"{current_temp}",
+            font=Fonts.MBTA,
+            fill=current_color,
+            anchor="rt",
+        )
         self._image.paste(arrow_up, (0, 16))
         self._draw.text(
             (right_anchor, 16),
-            f"{max_temp}", font=Fonts.LCD, fill=max_color, anchor="rt")
+            f"{max_temp}",
+            font=Fonts.LCD,
+            fill=max_color,
+            anchor="rt",
+        )
         self._image.paste(deg_symbol_max, (right_anchor, 16))
-        self._image.paste(arrow_down, (0, 16+8))
+        self._image.paste(arrow_down, (0, 16 + 8))
         self._draw.text(
             (right_anchor, 16 + 8),
-            f"{min_temp}", font=Fonts.LCD, fill=min_color, anchor="rt")
-        self._image.paste(deg_symbol_min, (right_anchor, 16+8))
+            f"{min_temp}",
+            font=Fonts.LCD,
+            fill=min_color,
+            anchor="rt",
+        )
+        self._image.paste(deg_symbol_min, (right_anchor, 16 + 8))
 
 
 class WidgetManager:

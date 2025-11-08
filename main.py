@@ -40,12 +40,14 @@ mta_client = mta.MTA(config.MTA_API_KEY)
 
 logger = logging.getLogger("led-matrix-sign")
 
+
 def setup_logging() -> None:
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter(
-        '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
-        datefmt="%Y-%m-%dT%H:%M:%S%z")
+        "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s",
+        datefmt="%Y-%m-%dT%H:%M:%S%z",
+    )
 
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
@@ -53,23 +55,28 @@ def setup_logging() -> None:
 
     if not config.EMULATE_RGB_MATRIX:
         try:
-            from systemd import journal # type: ignore (only imported for linux)
+            from systemd import journal  # type: ignore (only imported for linux)
+
             journal_handler = journal.JournalHandler()
             journal_handler.setFormatter(formatter)
             logger.addHandler(journal_handler)
         except ImportError:
-            logging.warning("Could not import systemd journal handler - logging to console only")
+            logging.warning(
+                "Could not import systemd journal handler - logging to console only"
+            )
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description='LED Matrix Display Controller')
+    parser = argparse.ArgumentParser(description="LED Matrix Display Controller")
     parser.add_argument(
-        '--mode', type=str, choices=[mode.name for mode in SignMode],
-        help='Set the default sign mode')
+        "--mode",
+        type=str,
+        choices=[mode.name for mode in SignMode],
+        help="Set the default sign mode",
+    )
     parser.add_argument(
-        '--mta-fake-data', action='store_true',
-        help='Use fake MTA data')
+        "--mta-fake-data", action="store_true", help="Use fake MTA data"
+    )
     return parser.parse_args()
 
 
@@ -92,14 +99,24 @@ def ui_task() -> None:
                     logger.info(f"Mode changed to: {new_mode}")
             elif message["type"] == UIMessageType.MBTA_CHANGE_STATION:
                 new_station = message.get("station")
-                if new_station is not None and isinstance(new_station, str) and mbta.station_by_id(new_station) is not None:
+                if (
+                    new_station is not None
+                    and isinstance(new_station, str)
+                    and mbta.station_by_id(new_station) is not None
+                ):
                     mbta_client.set_station(new_station)
                     logger.info(f"Station changed to: {new_station}")
                     render_queue.put(RenderMessage.Clear())
-                    render_queue.put(RenderMessage.Text(text=mbta.train_station_to_str(new_station)))
+                    render_queue.put(
+                        RenderMessage.Text(text=mbta.train_station_to_str(new_station))
+                    )
             elif message["type"] == UIMessageType.MBTA_TEST_BANNER:
                 render_queue.put(RenderMessage.Clear())
-                render_queue.put(RenderMessage.MBTABanner(lines=["Alewife train", "is now arriving."]))
+                render_queue.put(
+                    RenderMessage.MBTABanner(
+                        lines=["Alewife train", "is now arriving."]
+                    )
+                )
             elif message["type"] == UIMessageType.MTA_CHANGE_STATION:
                 new_station = message.get("station")
                 if new_station is not None and isinstance(new_station, str):
@@ -111,10 +128,14 @@ def ui_task() -> None:
                         render_queue.put(
                             RenderMessage.MTAStationBanner(
                                 station_name=mta.train_station_to_str(new_station),
-                                routes=mta.sort_routes(station.routes)))
+                                routes=mta.sort_routes(station.routes),
+                            )
+                        )
             elif message["type"] == UIMessageType.MTA_CHANGE_DIRECTION:
                 new_direction = message.get("direction")
-                if new_direction is not None and isinstance(new_direction, mta.Direction):
+                if new_direction is not None and isinstance(
+                    new_direction, mta.Direction
+                ):
                     mta_client.set_current_direction(new_direction)
                     logger.info(f"Direction changed to: {new_direction}")
             elif message["type"] == UIMessageType.TEST:
@@ -122,7 +143,11 @@ def ui_task() -> None:
                 if new_message == "mta_all_images":
                     render_queue.put(RenderMessage.MTATestImages())
                 else:
-                    render_queue.put(RenderMessage.Text(text=new_message if new_message is not None else ""))
+                    render_queue.put(
+                        RenderMessage.Text(
+                            text=new_message if new_message is not None else ""
+                        )
+                    )
             elif message["type"] == UIMessageType.MTA_ALERT:
                 content = message.get("content")
                 if content is not None and isinstance(content, str):
@@ -154,8 +179,12 @@ def render_task() -> None:
 
 
 def web_server_task() -> None:
-    server = Server(ui_queue, mode_broadcaster,
-                    mbta_client.station_broadcaster, mta_client.status_broadcaster)
+    server = Server(
+        ui_queue,
+        mode_broadcaster,
+        mbta_client.station_broadcaster,
+        mta_client.status_broadcaster,
+    )
     server.web_server_task()
 
 
@@ -163,10 +192,9 @@ def clock_provider_task() -> None:
     while True:
         current_mode = mode_broadcaster.get_status()
         if current_mode == SignMode.CLOCK:
-            render_queue.put(RenderMessage.Clock(
-                clock_type=ClockType.MTA,
-                time=datetime.now()
-            ))
+            render_queue.put(
+                RenderMessage.Clock(clock_type=ClockType.MTA, time=datetime.now())
+            )
         time.sleep(REFRESH_RATE)
 
 
@@ -174,19 +202,20 @@ def mbta_provider_task() -> None:
     while True:
         if mode_broadcaster.get_status() == SignMode.MBTA:
             status, predictions = mbta_client.get_predictions_both_directions()
-            render_queue.put(RenderMessage.MBTA(
-                status=status,
-                predictions=predictions
-            ))
+            render_queue.put(RenderMessage.MBTA(status=status, predictions=predictions))
             logger.info(status)
             logger.info(predictions)
             if status == mbta.PredictionStatus.OK:
-                arr_prediction = mbta_client.find_prediction_with_arriving_banner(predictions)
+                arr_prediction = mbta_client.find_prediction_with_arriving_banner(
+                    predictions
+                )
                 if arr_prediction is not None:
                     logger.info("showing arriving banner")
-                    render_queue.put(RenderMessage.MBTABanner(
-                        lines=mbta_client.get_arriving_banner(arr_prediction)
-                    ))
+                    render_queue.put(
+                        RenderMessage.MBTABanner(
+                            lines=mbta_client.get_arriving_banner(arr_prediction)
+                        )
+                    )
                     # in total this banner is displayed for 3+5 seconds
                     time.sleep(3)
                 mbta_client.update_latest_predictions(predictions, [0, 1])
@@ -202,10 +231,12 @@ def mta_provider_task() -> None:
         logger.info("Using MTA historical data")
         mta_client.load_historical_data()
     # show the station banner for 2 seconds initially
-    ui_queue.put({
-        "type": UIMessageType.MTA_CHANGE_STATION,
-        "station": mta_client.get_current_station()
-    })
+    ui_queue.put(
+        {
+            "type": UIMessageType.MTA_CHANGE_STATION,
+            "station": mta_client.get_current_station(),
+        }
+    )
     time.sleep(2)
     while True:
         if mode_broadcaster.get_status() == SignMode.MTA:
@@ -223,12 +254,15 @@ def mta_provider_task() -> None:
                         render_queue.put(RenderMessage.MTA(predictions=predictions))
                     else:
                         second_train = mta.get_second_train(
-                            predictions, mta_client.last_second_train)
+                            predictions, mta_client.last_second_train
+                        )
                         if second_train is not None:
                             mta.print_predictions([predictions[0], second_train])
-                            render_queue.put(RenderMessage.MTA(
-                                predictions=[predictions[0], second_train]
-                            ))
+                            render_queue.put(
+                                RenderMessage.MTA(
+                                    predictions=[predictions[0], second_train]
+                                )
+                            )
                             mta_client.last_second_train = second_train
                 else:
                     logger.info("No predictions")
@@ -242,8 +276,11 @@ def mta_provider_task() -> None:
 
 
 def music_provider_task() -> None:
-    spotify = Spotify(config.SPOTIFY_CLIENT_ID,
-                      config.SPOTIFY_CLIENT_SECRET, config.SPOTIFY_REFRESH_TOKEN)
+    spotify = Spotify(
+        config.SPOTIFY_CLIENT_ID,
+        config.SPOTIFY_CLIENT_SECRET,
+        config.SPOTIFY_REFRESH_TOKEN,
+    )
     spotify.setup()
     while True:
         if mode_broadcaster.get_status() == SignMode.MUSIC:
@@ -255,7 +292,8 @@ def music_provider_task() -> None:
                 if img_status == SpotifyResponse.OK:
                     currently_playing.cover.data = img
                     logger.info(
-                        f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}")
+                        f"Album cover fetched for {currently_playing.title} by {currently_playing.artist}"
+                    )
                 spotify.update_current_song(currently_playing)
             elif status == SpotifyResponse.OK:
                 pass
@@ -263,10 +301,7 @@ def music_provider_task() -> None:
                 currently_playing = spotify.get_current_song()
             else:
                 spotify.clear_current_song()
-            render_queue.put(RenderMessage.Music(
-                status=status,
-                song=currently_playing
-            ))
+            render_queue.put(RenderMessage.Music(status=status, song=currently_playing))
             time.sleep(1)
         else:
             if spotify.get_current_song() is not None:
@@ -276,13 +311,8 @@ def music_provider_task() -> None:
 
 def widget_provider_task() -> None:
     widget_manager = WidgetManager(render_queue)
-    widget_manager.add_widget(ClockWidget(
-        Rect(40, 8, 80, 16)
-    ))
-    widget_manager.add_widget(WeatherWidget(
-        Rect(0, 0, 32, 32),
-        config.IPDATA_API_KEY
-    ))
+    widget_manager.add_widget(ClockWidget(Rect(40, 8, 80, 16)))
+    widget_manager.add_widget(WeatherWidget(Rect(0, 0, 32, 32), config.IPDATA_API_KEY))
 
     while True:
         if mode_broadcaster.get_status() == SignMode.WIDGET:
@@ -297,20 +327,24 @@ def widget_provider_task() -> None:
 def game_of_life_provider_task() -> None:
     grid_width = 160
     grid_height = 32
-    
+
     game = GameOfLife(grid_width, grid_height, density=0.3)
-    
+
     while True:
         if mode_broadcaster.get_status() == SignMode.GAME_OF_LIFE:
             game.step()
-            render_queue.put(RenderMessage.GameOfLife(
-                grid=game.get_grid(),
-                generation=game.get_generation()
-            ))
+            render_queue.put(
+                RenderMessage.GameOfLife(
+                    grid=game.get_grid(), generation=game.get_generation()
+                )
+            )
             if game.is_stable_or_empty() or game.get_generation() >= 300:
-                logger.info(f"Game of Life: Resetting after {game.get_generation()} generations")
+                logger.info(
+                    f"Game of Life: Resetting after {game.get_generation()} generations"
+                )
                 game.reset()
         time.sleep(REFRESH_RATE)
+
 
 def wait_for_network_connection() -> bool:
     logger.info("Waiting for network connection...")
@@ -331,6 +365,7 @@ def wait_for_network_connection() -> bool:
             time.sleep(1)
     return True
 
+
 def setup_network() -> bool:
     render_queue.put(RenderMessage.Text(text="Waiting for network..."))
 
@@ -342,7 +377,8 @@ def setup_network() -> bool:
     else:
         render_queue.put(RenderMessage.Text(text="Network connection timed out."))
         return False
-    
+
+
 def get_ip_address() -> str:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -363,7 +399,7 @@ def main() -> None:
     setup_logging()
     args = parse_args()
     initial_mode = DEFAULT_SIGN_MODE
-    if hasattr(config, 'DEFAULT_SIGN_MODE'):
+    if hasattr(config, "DEFAULT_SIGN_MODE"):
         initial_mode = config.DEFAULT_SIGN_MODE
     if args.mode:
         initial_mode = SignMode[args.mode]
@@ -375,16 +411,18 @@ def main() -> None:
     button_handler = None
     if not config.EMULATE_RGB_MATRIX:
         button_handler = Button(
-            BUTTON_PIN, short_press_callback=lambda: ui_queue.put(
-                {"type": UIMessageType.MODE_SHIFT}),
-            long_press_callback=lambda: ui_queue.put(
-                {"type": UIMessageType.SHUTDOWN}),
-            long_press_duration=3.0)
+            BUTTON_PIN,
+            short_press_callback=lambda: ui_queue.put(
+                {"type": UIMessageType.MODE_SHIFT}
+            ),
+            long_press_callback=lambda: ui_queue.put({"type": UIMessageType.SHUTDOWN}),
+            long_press_duration=3.0,
+        )
 
     system_threads = [
         threading.Thread(target=ui_task, daemon=True),
         threading.Thread(target=render_task, daemon=True),
-        threading.Thread(target=web_server_task, daemon=True)
+        threading.Thread(target=web_server_task, daemon=True),
     ]
     user_threads = [
         threading.Thread(target=clock_provider_task, daemon=True),

@@ -1,4 +1,5 @@
 import config
+
 if config.EMULATE_RGB_MATRIX:
     from RGBMatrixEmulator import RGBMatrix, RGBMatrixOptions
 else:
@@ -91,22 +92,27 @@ class Display:
         self.canvas.SetImage(message.frame, int(message.bbox.x), int(message.bbox.y))
 
     def render_text_content(self, message: RenderMessage.Text) -> None:
-        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT))
+        image = Image.new("RGB", (SCREEN_WIDTH, SCREEN_HEIGHT))
         draw = self._get_draw_context_antialiased(image)
         draw.text((0, 0), message.text, font=self.default_font, fill=Colors.WHITE)
         self._update_display(image)
 
     def render_clock_content(self, message: RenderMessage.Clock) -> None:
-        image = Image.new('RGB', (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
+        image = Image.new("RGB", (SCREEN_WIDTH, SCREEN_HEIGHT), Colors.BLACK)
         draw = self._get_draw_context_antialiased(image)
         if message.clock_type == ClockType.MTA:
             lines = [
                 message.time.strftime("%a, %b %-d, %Y"),
-                message.time.strftime("%-I:%M:%S %p")
+                message.time.strftime("%-I:%M:%S %p"),
             ]
             for i, line in enumerate(lines):
-                draw.text((SCREEN_WIDTH / 2, 2 + 16 * i), line,
-                          font=Fonts.MTA, fill=Colors.MTA_GREEN, anchor="mt")
+                draw.text(
+                    (SCREEN_WIDTH / 2, 2 + 16 * i),
+                    line,
+                    font=Fonts.MTA,
+                    fill=Colors.MTA_GREEN,
+                    anchor="mt",
+                )
         self._update_display(image)
 
     def _update_display(self, image: Image.Image, x: int = 0, y: int = 0) -> None:
@@ -119,17 +125,20 @@ class Display:
         return draw
 
     def _get_text_length(self, text: str, font: ImageFont.FreeTypeFont) -> float:
-        draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
+        draw = self._get_draw_context_antialiased(Image.new("RGB", (0, 0)))
         return draw.textlength(text, font=font)
 
     def _trim_text_to_fit(
-            self, text: str, font: ImageFont.FreeTypeFont, max_width: int) -> str:
-        draw = self._get_draw_context_antialiased(Image.new('RGB', (0, 0)))
+        self, text: str, font: ImageFont.FreeTypeFont, max_width: int
+    ) -> str:
+        draw = self._get_draw_context_antialiased(Image.new("RGB", (0, 0)))
         while draw.textlength(text, font=font) > max_width:
             text = text[:-1]
         return text
 
     def render_game_of_life_content(self, message: RenderMessage.GameOfLife) -> None:
         """Render Conway's Game of Life to the display."""
-        image = render_game_of_life_content(message, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
+        image = render_game_of_life_content(
+            message, self.SCREEN_WIDTH, self.SCREEN_HEIGHT
+        )
         self._update_display(image)

@@ -22,7 +22,7 @@ class Spotify:
         self.secrets = {
             "client_id": client_id,
             "client_secret": client_secret,
-            "refresh_token": refresh_token
+            "refresh_token": refresh_token,
         }
 
     def setup(self) -> None:
@@ -31,7 +31,7 @@ class Spotify:
 
     def get_refresh_bearer_token(self) -> str:
         bearer = f"{self.secrets['client_id']}:{self.secrets['client_secret']}"
-        bearer_bytes = bearer.encode('ascii')
+        bearer_bytes = bearer.encode("ascii")
         base64_bytes = base64.b64encode(bearer_bytes)
         return f"Basic {base64_bytes.decode('ascii')}"
 
@@ -48,16 +48,17 @@ class Spotify:
     def fetch_refresh_token(self) -> SpotifyResponse:
         headers = {
             "Authorization": self.get_refresh_bearer_token(),
-            "content-type": "application/x-www-form-urlencoded"
+            "content-type": "application/x-www-form-urlencoded",
         }
         data = {
             "grant_type": "refresh_token",
-            "refresh_token": self.secrets["refresh_token"]
+            "refresh_token": self.secrets["refresh_token"],
         }
 
         try:
             response = self.session.post(
-                SPOTIFY_REFRESH_TOKEN_URL, headers=headers, data=data)
+                SPOTIFY_REFRESH_TOKEN_URL, headers=headers, data=data
+            )
             response.raise_for_status()
             data = response.json()
             self.access_token = data["access_token"]
@@ -113,8 +114,7 @@ class Spotify:
         headers = {"Authorization": self.get_api_bearer_token()}
 
         try:
-            response = self.session.get(
-                SPOTIFY_CURRENTLY_PLAYING_URL, headers=headers)
+            response = self.session.get(SPOTIFY_CURRENTLY_PLAYING_URL, headers=headers)
             if response.status_code == 204:
                 return SpotifyResponse.EMPTY
 
@@ -125,8 +125,9 @@ class Spotify:
             logger.error(f"Error fetching currently playing: {e}")
             return SpotifyResponse.ERROR
 
-    def get_album_cover(self, currently_playing: Song) -> tuple[SpotifyResponse,
-                                                                Optional[bytes]]:
+    def get_album_cover(
+        self, currently_playing: Song
+    ) -> tuple[SpotifyResponse, Optional[bytes]]:
         return self.fetch_album_cover(currently_playing.cover.url)
 
     def fetch_album_cover(self, url: str) -> tuple[SpotifyResponse, Optional[bytes]]:
@@ -154,8 +155,10 @@ class Spotify:
     def is_current_song_new(self, cmp: Song) -> bool:
         if self.current_song is None:
             return True
-        return (cmp.artist != self.current_song.artist or
-                cmp.title != self.current_song.title)
+        return (
+            cmp.artist != self.current_song.artist
+            or cmp.title != self.current_song.title
+        )
 
     def get_current_song(self) -> Optional[Song]:
         return self.current_song

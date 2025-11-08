@@ -3,8 +3,8 @@ from PIL import Image, ImageFont
 from pathlib import Path
 
 CURRENT_FOLDER = Path(__file__).parent
-fonts_dir = CURRENT_FOLDER.parent / 'fonts'
-img_dir = CURRENT_FOLDER.parent / 'img'
+fonts_dir = CURRENT_FOLDER.parent / "fonts"
+img_dir = CURRENT_FOLDER.parent / "img"
 
 
 class SignMode(Enum):
@@ -16,9 +16,11 @@ class SignMode(Enum):
     WIDGET = 5
     GAME_OF_LIFE = 6
 
+
 # These modes will not be cycled through, but will be available to be selected
 # manually from the web interface
 DISABLED_MODES = [SignMode.TEST, SignMode.WIDGET]
+
 
 class UIMessageType(Enum):
     TEST = 0
@@ -39,21 +41,16 @@ class ClockType(Enum):
 
 
 class Fonts:
-    MBTA = ImageFont.truetype(str(fonts_dir / 'MBTASans-Regular.otf'), 8)
-    SILKSCREEN = ImageFont.truetype(
-        str(fonts_dir / 'Silkscreen-Normal.ttf'), 8)
-    PICOPIXEL = ImageFont.truetype(str(fonts_dir / 'Picopixel.ttf'), 7)
-    LCD = ImageFont.truetype(str(fonts_dir / 'LCD.ttf'), 8)
-    MTA = ImageFont.truetype(str(fonts_dir / 'MTASans-Medium.otf'), 10)
+    MBTA = ImageFont.truetype(str(fonts_dir / "MBTASans-Regular.otf"), 8)
+    SILKSCREEN = ImageFont.truetype(str(fonts_dir / "Silkscreen-Normal.ttf"), 8)
+    PICOPIXEL = ImageFont.truetype(str(fonts_dir / "Picopixel.ttf"), 7)
+    LCD = ImageFont.truetype(str(fonts_dir / "LCD.ttf"), 8)
+    MTA = ImageFont.truetype(str(fonts_dir / "MTASans-Medium.otf"), 10)
 
 
 def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
-    hex_color = hex_color.lstrip('#')
-    return (
-        int(hex_color[0:2], 16),
-        int(hex_color[2:4], 16),
-        int(hex_color[4:6], 16)
-    )
+    hex_color = hex_color.lstrip("#")
+    return (int(hex_color[0:2], 16), int(hex_color[2:4], 16), int(hex_color[4:6], 16))
 
 
 class Colors:
@@ -66,9 +63,10 @@ class Colors:
 
 
 class Images:
-    ARROW_UP = Image.open(img_dir / 'arrow-up.png')
-    ARROW_DOWN = Image.open(img_dir / 'arrow-down.png')
-    DEG_SYMBOL = Image.open(img_dir / 'deg-symbol.png')
+    ARROW_UP = Image.open(img_dir / "arrow-up.png")
+    ARROW_DOWN = Image.open(img_dir / "arrow-down.png")
+    DEG_SYMBOL = Image.open(img_dir / "deg-symbol.png")
+
 
 def get_next_mode(current_mode: SignMode) -> SignMode:
     modes = list(SignMode)

@@ -18,13 +18,12 @@ logger = logging.getLogger("led-matrix-sign")
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_MTA_STATION = "121"  # 86 St 1,2,3 station
-if hasattr(config, 'DEFAULT_MTA_STATION'):
+if hasattr(config, "DEFAULT_MTA_STATION"):
     DEFAULT_MTA_STATION = config.DEFAULT_MTA_STATION
 MAX_NUM_PREDICTIONS = 6
 
 
-station_data = json.load(
-    open(os.path.join(CURRENT_FOLDER, "stations.json")))
+station_data = json.load(open(os.path.join(CURRENT_FOLDER, "stations.json")))
 stations: List[Station] = [Station(**s) for s in station_data]
 
 alert_messages: List[str] = [
@@ -33,7 +32,8 @@ alert_messages: List[str] = [
     "Please be careful. Do not put your hand or your bag in a train door that is closing.",
     "The next train to arrive on the uptown local track is not in service. Please stand away from the platform edge.",
     "Please help us keep trains moving. Let customers leave the train before you enter the train; please do not hold train doors open.",
-    "Hey New York, Subway surfing is dangerous and can be fatal. Do not lose your life. Ride inside and stay alive!"]
+    "Hey New York, Subway surfing is dangerous and can be fatal. Do not lose your life. Ride inside and stay alive!",
+]
 
 
 def stations_by_route() -> Dict[str, List[Station]]:
@@ -59,6 +59,7 @@ def train_station_to_str(station: str) -> str:
             return s.stop_name
     return ""
 
+
 def direction_to_str(direction: Direction) -> str:
     if direction == Direction.DIRECTION_NONE:
         return "None"
@@ -71,15 +72,43 @@ def direction_to_str(direction: Direction) -> str:
 
 def sort_routes(routes: List[str]) -> List[str]:
     ideal_sort = [
-        "1", "2", "3", "4", "5", "6", "A", "C", "E", "SI", "G", "7", "7X", "B",
-        "D", "F", "M", "J", "Z", "N", "Q", "R", "W", "L", "GS", "FS", "H"]
-    return sorted(routes, key=lambda x: ideal_sort.index(x)
-                  if x in ideal_sort else len(ideal_sort))
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "A",
+        "C",
+        "E",
+        "SI",
+        "G",
+        "7",
+        "7X",
+        "B",
+        "D",
+        "F",
+        "M",
+        "J",
+        "Z",
+        "N",
+        "Q",
+        "R",
+        "W",
+        "L",
+        "GS",
+        "FS",
+        "H",
+    ]
+    return sorted(
+        routes,
+        key=lambda x: ideal_sort.index(x) if x in ideal_sort else len(ideal_sort),
+    )
 
 
 def get_second_train(
-        predictions: List[TrainTime],
-        last_second_train: Optional[TrainTime]) -> Optional[TrainTime]:
+    predictions: List[TrainTime], last_second_train: Optional[TrainTime]
+) -> Optional[TrainTime]:
     """
     The second train slot on the board rotates between the next couple of
     trains. This function returns the next train in the rotation. It always
@@ -102,12 +131,13 @@ def get_second_train(
 def print_predictions(predictions: List[TrainTime]) -> None:
     for train in predictions:
         logger.info(
-            f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}")
+            f"{train.display_order+1}. ({train.route_id}) {train.long_name} {int(round(train.time / 60.0))}min ({train.time}s) {train.trip_id}"
+        )
     logger.info("")
 
 
 def combine_stop_ids(stop_ids: List[str]) -> str:
-    return ','.join(f"MTASBWY:{stop_id}" for stop_id in stop_ids)
+    return ",".join(f"MTASBWY:{stop_id}" for stop_id in stop_ids)
 
 
 def get_stop_ids(stop: Station) -> List[str]:
@@ -117,28 +147,30 @@ def get_stop_ids(stop: Station) -> List[str]:
     return stop_ids
 
 
-class MTA():
+class MTA:
     def __init__(self, api_key: str) -> None:
-        self.domain = 'https://otp-mta-prod.camsys-apps.com/otp/routers/default'
+        self.domain = "https://otp-mta-prod.camsys-apps.com/otp/routers/default"
         self.api_key = api_key
         self.status_broadcaster = StatusBroadcaster()
         self.status_broadcaster.set_status(Status(station=DEFAULT_MTA_STATION))
         # The last train to be shown in the second slot on the board.
         self.last_second_train: Optional[TrainTime] = None
 
-    def get_predictions(self, stop_id: str, direction: Direction = Direction.DIRECTION_NONE) -> Optional[List[TrainTime]]:
+    def get_predictions(
+        self, stop_id: str, direction: Direction = Direction.DIRECTION_NONE
+    ) -> Optional[List[TrainTime]]:
         try:
             stop = station_by_id(stop_id)
             if stop is None:
                 logger.error(f"Stop {stop_id} not found")
                 return []
             stop_ids = get_stop_ids(stop)
-            params : Dict[str, str | int] = {
-                'stops': combine_stop_ids(stop_ids),
-                'apikey': self.api_key,
-                'groupByParent': 'true',
-                'routes': '',
-                'timeRange': 60 * 60
+            params: Dict[str, str | int] = {
+                "stops": combine_stop_ids(stop_ids),
+                "apikey": self.api_key,
+                "groupByParent": "true",
+                "routes": "",
+                "timeRange": 60 * 60,
             }
             if direction != Direction.DIRECTION_NONE:
                 params["direction"] = str(direction.value)
@@ -146,48 +178,50 @@ class MTA():
             status_per_station = response.json()
             train_times: List[TrainTime] = []
             for station in status_per_station:
-                groups = station['groups']
-                groups = [g for g in groups if g['times']]
+                groups = station["groups"]
+                groups = [g for g in groups if g["times"]]
                 for route_entry in groups:
-                    route_id = route_entry['route']['id'].replace(
-                        'MTASBWY:', '')
-                    for train in route_entry['times']:
-                        wait_time = train['realtimeDeparture'] - \
-                            (train['timestamp'] - train['serviceDay'])
+                    route_id = route_entry["route"]["id"].replace("MTASBWY:", "")
+                    for train in route_entry["times"]:
+                        wait_time = train["realtimeDeparture"] - (
+                            train["timestamp"] - train["serviceDay"]
+                        )
                         if wait_time >= 0:
                             train_times.append(
                                 TrainTime(
                                     route_id=route_id,
-                                    direction_id=train['directionId'],
-                                    long_name=train['tripHeadsign'],
-                                    stop_headsign=route_entry['headsign'],
-                                    time=wait_time, trip_id=train.get(
-                                        'tripId', '').replace(
-                                        'MTASBWY:', ''),
-                                    is_express='express'
-                                    in route_entry['route']
-                                    ['longName'].lower(),
-                                    display_order=0))
+                                    direction_id=train["directionId"],
+                                    long_name=train["tripHeadsign"],
+                                    stop_headsign=route_entry["headsign"],
+                                    time=wait_time,
+                                    trip_id=train.get("tripId", "").replace(
+                                        "MTASBWY:", ""
+                                    ),
+                                    is_express="express"
+                                    in route_entry["route"]["longName"].lower(),
+                                    display_order=0,
+                                )
+                            )
             train_times = sorted(train_times, key=lambda x: x.time)
             for i, train in enumerate(train_times):
                 train.display_order = i
             return train_times[:MAX_NUM_PREDICTIONS]
         except Exception as err:
-            logger.error('unable to fetch nearby api', exc_info=err)
+            logger.error("unable to fetch nearby api", exc_info=err)
             return None
 
     def _seconds_since_midnight(self) -> int:
         # this function will always be in EST timezone, since the historical
         # data is in EST timezone
-        now = datetime.now(pytz.timezone('America/New_York'))
+        now = datetime.now(pytz.timezone("America/New_York"))
         midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
         return int((now - midnight).total_seconds())
 
     def _filter_historical_train_times(
-            self, train_times: List[HistoricalTrainTime]) -> List[
-            HistoricalTrainTime]:
+        self, train_times: List[HistoricalTrainTime]
+    ) -> List[HistoricalTrainTime]:
         # The historical data is in EST timezone
-        now = datetime.now(pytz.timezone('America/New_York'))
+        now = datetime.now(pytz.timezone("America/New_York"))
         day_type = DayType.WEEKDAY
         if now.weekday() == 5:
             day_type = DayType.SATURDAY
@@ -195,11 +229,11 @@ class MTA():
             day_type = DayType.SUNDAY
         seconds_since_midnight = self._seconds_since_midnight()
         train_times = [
-            t for t in train_times
-            if t.day_type == day_type
-            and t.departure_time > seconds_since_midnight]
-        train_times.sort(
-            key=lambda x: x.departure_time - seconds_since_midnight)
+            t
+            for t in train_times
+            if t.day_type == day_type and t.departure_time > seconds_since_midnight
+        ]
+        train_times.sort(key=lambda x: x.departure_time - seconds_since_midnight)
         return train_times
 
     def get_fake_predictions(self, stop_id: str) -> List[TrainTime]:
@@ -215,36 +249,40 @@ class MTA():
             if stop_id in self.historical_data:
                 historical_train_times.extend(self.historical_data[stop_id])
         historical_train_times = self._filter_historical_train_times(
-            historical_train_times)
+            historical_train_times
+        )
         seconds_since_midnight = self._seconds_since_midnight()
-        return [TrainTime(
-            route_id=t.route_id,
-            direction_id=t.direction_id,
-            long_name=t.long_name,
-            time=int(t.departure_time - seconds_since_midnight),
-            trip_id=t.trip_id,
-            display_order=i,
-            stop_headsign=None,
-            is_express=None
-        ) for i, t in enumerate(historical_train_times[:MAX_NUM_PREDICTIONS])]
+        return [
+            TrainTime(
+                route_id=t.route_id,
+                direction_id=t.direction_id,
+                long_name=t.long_name,
+                time=int(t.departure_time - seconds_since_midnight),
+                trip_id=t.trip_id,
+                display_order=i,
+                stop_headsign=None,
+                is_express=None,
+            )
+            for i, t in enumerate(historical_train_times[:MAX_NUM_PREDICTIONS])
+        ]
 
     def get_current_station(self) -> Optional[str]:
-        status : Status = self.status_broadcaster.get_status()
+        status: Status = self.status_broadcaster.get_status()
         return status.station
 
     def set_current_station(self, station: str) -> None:
         self.clear()
-        status : Status = self.status_broadcaster.get_status()
+        status: Status = self.status_broadcaster.get_status()
         status.station = station
         self.status_broadcaster.set_status(status)
 
     def get_current_direction(self) -> Direction:
-        status : Status = self.status_broadcaster.get_status()
+        status: Status = self.status_broadcaster.get_status()
         return status.direction
 
     def set_current_direction(self, direction: Direction) -> None:
         self.clear()
-        status : Status = self.status_broadcaster.get_status()
+        status: Status = self.status_broadcaster.get_status()
         status.direction = direction
         self.status_broadcaster.set_status(status)
 
@@ -252,14 +290,14 @@ class MTA():
         self.last_second_train = None
 
     def load_historical_data(self) -> None:
-        if not os.path.exists(f'{CURRENT_FOLDER}/historical_train_times.pickle'):
+        if not os.path.exists(f"{CURRENT_FOLDER}/historical_train_times.pickle"):
             logger.error(
-                f"Historical train times file not found at {CURRENT_FOLDER}/historical_train_times.pickle")
-            logger.error(
-                "Run update-historical-train-times.py to generate this file")
+                f"Historical train times file not found at {CURRENT_FOLDER}/historical_train_times.pickle"
+            )
+            logger.error("Run update-historical-train-times.py to generate this file")
             self.historical_data = {}
             return
-        with open(f'{CURRENT_FOLDER}/historical_train_times.pickle', 'rb') as f:
+        with open(f"{CURRENT_FOLDER}/historical_train_times.pickle", "rb") as f:
             self.historical_data = pickle.load(f)
 
 
@@ -274,7 +312,8 @@ class AlertMessages:
         # twice in a row.
         if len(self.available_messages) == 0:
             self.available_messages = [
-                m for m in self.used_messages if m != self.last_message]
+                m for m in self.used_messages if m != self.last_message
+            ]
             self.used_messages = []
             if self.last_message:
                 self.used_messages.append(self.last_message)

@@ -1,4 +1,5 @@
 from config import config
+
 if not config.EMULATE_RGB_MATRIX:
     import RPi.GPIO as GPIO
 import time
@@ -8,9 +9,12 @@ from typing import Callable, Optional
 
 class Button:
     def __init__(
-            self, pin: int, short_press_callback: Optional[Callable[[], None]] = None,
-            long_press_callback: Optional[Callable[[], None]] = None,
-            long_press_duration: float = 3.0) -> None:
+        self,
+        pin: int,
+        short_press_callback: Optional[Callable[[], None]] = None,
+        long_press_callback: Optional[Callable[[], None]] = None,
+        long_press_duration: float = 3.0,
+    ) -> None:
         self.pin = pin
         self.short_press_callback = short_press_callback
         self.long_press_callback = long_press_callback
@@ -25,8 +29,7 @@ class Button:
             self.setup_gpio()
             # Only start the monitoring thread if there's a long press callback
             if self.long_press_callback:
-                self.monitor_thread = threading.Thread(
-                    target=self._monitor_long_press)
+                self.monitor_thread = threading.Thread(target=self._monitor_long_press)
                 self.monitor_thread.daemon = True
                 self.monitor_thread.start()
 
@@ -34,10 +37,7 @@ class Button:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(
-            self.pin,
-            GPIO.BOTH,
-            callback=self._button_callback,
-            bouncetime=50
+            self.pin, GPIO.BOTH, callback=self._button_callback, bouncetime=50
         )
 
     def _button_callback(self, channel: int) -> None:
@@ -58,12 +58,17 @@ class Button:
 
     def _monitor_long_press(self) -> None:
         while self.running:
-            if (not self.button_released and
-                self.button_press_time is not None and
-                    not self.long_press_triggered):
+            if (
+                not self.button_released
+                and self.button_press_time is not None
+                and not self.long_press_triggered
+            ):
 
                 press_duration = time.time() - self.button_press_time
-                if press_duration >= self.long_press_duration and self.long_press_callback:
+                if (
+                    press_duration >= self.long_press_duration
+                    and self.long_press_callback
+                ):
                     self.long_press_callback()
                     self.long_press_triggered = True
 
