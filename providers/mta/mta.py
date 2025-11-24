@@ -149,7 +149,7 @@ def get_stop_ids(stop: Station) -> List[str]:
 
 class MTA:
     def __init__(self, api_key: str) -> None:
-        self.domain = "https://otp-mta-prod.camsys-apps.com/otp/routers/default"
+        self.domain = "https://otp-mta-prod.camsys-apps.com"
         self.api_key = api_key
         self.status_broadcaster = StatusBroadcaster()
         self.status_broadcaster.set_status(Status(station=DEFAULT_MTA_STATION))
@@ -174,7 +174,7 @@ class MTA:
             }
             if direction != Direction.DIRECTION_NONE:
                 params["direction"] = str(direction.value)
-            response = requests.get(f"{self.domain}/nearby", params)
+            response = requests.get(f"{self.domain}/otp/routers/default/nearby", params)
             status_per_station = response.json()
             train_times: List[TrainTime] = []
             for station in status_per_station:
